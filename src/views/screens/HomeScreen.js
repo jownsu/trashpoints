@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { StyleSheet, Text, View, Image, TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { AuthContext } from '../../AuthProvider'
 import COLORS from '../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import CategoryList from '../components/CategoryList'
@@ -17,7 +18,7 @@ const HomeScreen = ({navigation}) => {
 
     const [index, setIndex] = useState(1)
     const [item, setItem] = useState([])
-
+    const { user } = useContext(AuthContext)
 
     useEffect(() => {
         setItem(foods)
@@ -29,7 +30,7 @@ const HomeScreen = ({navigation}) => {
                 <View>
                     <View style={styles.textContainer}>
                         <Text style={styles.headerTitle}>Hello, </Text>
-                        <Text style={{...styles.headerTitle, fontWeight: 'bold'}}>Jhones</Text>
+                        <Text style={{...styles.headerTitle, fontWeight: 'bold'}}>{ `${user.firstname} ${user.lastname}` }</Text>
                     </View>
                     <Text style={styles.headerMessage}>What do you want today</Text>
                 </View>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     headerTitle: {
-        fontSize: 30,
+        fontSize: 26,
         color: "black"
     },
     headerMessage: {

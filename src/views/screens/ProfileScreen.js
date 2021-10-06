@@ -14,6 +14,12 @@ const ProfileScreen = () => {
     return (
         <SafeAreaView>
             <Text>This is Profile</Text>
+            <Text>Email: {user.email}</Text>
+            <Text>Firstname: {user.firstname}</Text>
+            <Text>Middlename: {user.middlename}</Text>
+            <Text>Lastname: {user.lastname}</Text>
+            <Text>Address: {user.address}</Text>
+            <Text>Contact No.: {user.contact_no}</Text>
             <Button
                 title={'Log Out'}
                 onPress={() => { logout() }}

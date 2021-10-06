@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../../consts/colors'
 import { BtnSecondary } from '../../components/Button'
@@ -15,10 +15,13 @@ const SigninScreen = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { login } = useContext(AuthContext) 
+    const { login, loading, setLoading } = useContext(AuthContext) 
 
     return (
         <SafeAreaView style={styles.container}>
+            
+            { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+
             <View style={styles.topView}>
                 <Image style={styles.imageLogo} source={require('../../../assets/onboardImage.png')} />
                 <View style={styles.indicatorContainer}>
@@ -27,28 +30,27 @@ const SigninScreen = ({navigation}) => {
                     <View style={styles.indicator}></View>
                 </View>
             </View>
+                <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 1.5 }}>
 
-            <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 1.5 }}>
-
-                <View style={styles.formContainer}>
-                    {
-                        signinShow 
-                            ? <SigninForm
-                                email={email}
-                                emailOnChange={email => setEmail(email)}
-                                password={password}
-                                passOnChange={pass => setPassword(pass)}
-                                onSubmit={() => { login(email, password) }}
-                                signUpPress={() => { setSigninShow(false) }}
-                            />
-                            : <SignupForm
-                                backOnPress={() => { setSigninShow(true) }}
-                            />
-                    }
-
-
+                    <View style={styles.formContainer}>
+                        {
+                            signinShow 
+                                ? <SigninForm
+                                    email={email}
+                                    emailOnChange={email => setEmail(email)}
+                                    password={password}
+                                    passOnChange={pass => setPassword(pass)}
+                                    onSubmit={() => { 
+                                        login(email, password) 
+                                    }}
+                                    signUpPress={() => { setSigninShow(false) }}
+                                />
+                                : <SignupForm
+                                    backOnPress={() => { setSigninShow(true) }}
+                                />
+                        }
+                    </View>
                 </View>
-            </View>
         </SafeAreaView>
     )
 }
@@ -74,7 +76,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
-        padding: 20,
+        paddingHorizontal: 20,
+        paddingVertical: 10
     },
     formContainer: {
         flex: 1,
@@ -101,6 +104,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         marginHorizontal: 5,
     },
+    loading:{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: 100
+    }
 
 
 })
