@@ -18,21 +18,21 @@ const WalletScreen = () => {
                 <View style={styles.actionContainer}>
                     <View style={styles.btn}>
                         <View style={{ ...styles.btnIcon, backgroundColor: '#52b788' }}>
-                            <FontAwesome name="recycle" size={28} color={COLORS.white} />
+                            <FontAwesome name="recycle" size={21} color={COLORS.white} />
                         </View>
                         <Text>Recycle</Text>
                     </View>
 
                     <View style={styles.btn}>
                         <View style={{ ...styles.btnIcon, backgroundColor: '#168aad' }}>
-                            <FontAwesome name="qrcode" size={28} color={COLORS.white} />
+                            <FontAwesome name="qrcode" size={21} color={COLORS.white} />
                         </View>
                         <Text>Scan QR</Text>
                     </View>
 
                     <View style={styles.btn}>
                         <View style={{ ...styles.btnIcon, backgroundColor: '#bc4749' }}>
-                            <FontAwesome name="history" size={28} color={COLORS.white} />
+                            <FontAwesome name="history" size={21} color={COLORS.white} />
                         </View>
                         <Text>Activities</Text>
                     </View>
@@ -84,17 +84,17 @@ const styles = StyleSheet.create({
         marginTop: 75,
         borderTopRightRadius: 50,
         borderTopLeftRadius: 50,
-        paddingHorizontal: 40
+        paddingHorizontal: 20
     },
     actionContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
         paddingVertical: 35,
     },
     btn: {
         backgroundColor: COLORS.white,
-        height: 100,
-        width: 100,
+        height: 75,
+        width: 75,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 20,
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     },
     btnIcon: {
         borderRadius: 50,
-        height: 50,
-        width: 50,
+        height: 35,
+        width: 35,
         justifyContent: 'center',
         alignItems: 'center'
     },
