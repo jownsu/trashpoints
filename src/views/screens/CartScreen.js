@@ -20,7 +20,7 @@ const CartScreen = () => {
             <View style={styles.checkoutContainer}>
                 <View style={styles.totalContainer}>
                     <Text style={styles.totalPrice}>Total Price</Text>
-                    <Text style={styles.price}>$50</Text>
+                    <Text style={styles.price}>TP 50</Text>
                 </View>
 
                 <View style={styles.btn}>

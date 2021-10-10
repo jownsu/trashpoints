@@ -31,22 +31,20 @@ export default CategoryList
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 20,
-        marginVertical: 10
     },
     btnContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         borderRadius: 50,
         paddingHorizontal: 5,
-        height: 45,
+        height: 35,
         minWidth: 120,
-        marginRight: 10,
+        marginLeft: 15,
     },
     imageContainer: {
         backgroundColor: COLORS.white,
-        height: 35,
-        width: 35,
+        height: 25,
+        width: 25,
         borderRadius: 20,
         marginRight: 10
     },

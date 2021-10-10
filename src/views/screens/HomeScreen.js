@@ -6,6 +6,7 @@ import COLORS from '../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import CategoryList from '../components/CategoryList'
 import ItemCard from '../components/ItemCard'
+import Avatar from '../components/Avatar'
 
 import foods from '../../consts/foods'
 import drinks from '../../consts/drinks'
@@ -26,16 +27,6 @@ const HomeScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.headerContainer}>
-                <View>
-                    <View style={styles.textContainer}>
-                        <Text style={styles.headerTitle}>Hello, </Text>
-                        <Text style={{...styles.headerTitle, fontWeight: 'bold'}}>{ `${user.firstname} ${user.lastname}` }</Text>
-                    </View>
-                    <Text style={styles.headerMessage}>What do you want today</Text>
-                </View>
-                <Image style={styles.headerImg} source={require('../../assets/person.jpg')} />
-            </View>
             
             <View style={styles.searchContainer}>
                 <View style={styles.inputSearch}>
@@ -98,31 +89,8 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: COLORS.white
     },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: "center",
-        paddingHorizontal: 20,
-        paddingVertical: 30,
-        marginVertical: 20
-    },
-    textContainer:{
-        flexDirection: 'row'
-    },
-    headerTitle: {
-        fontSize: 26,
-        color: "black"
-    },
-    headerMessage: {
-        fontSize: 18,
-        color: COLORS.grey
-    },
-    headerImg: {
-        borderRadius: 50,
-        height: 60,
-        width: 60,
-    },
     searchContainer: {
+        marginVertical: 20,
         paddingHorizontal: 20,
         flexDirection: 'row',
     },
