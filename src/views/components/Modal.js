@@ -37,7 +37,9 @@ export default MyModal
 const styles = StyleSheet.create({
     modalContainer: {
         backgroundColor: COLORS.white,
-        elevation: 11
+        elevation: 11,
+        borderTopRightRadius: 15,
+        borderTopLeftRadius: 15
     },
     modalFooter:{
         flexDirection: 'row',

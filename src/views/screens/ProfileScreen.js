@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput } from 'react-native'
+import React, { useContext, useEffect, useState, useReducer } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../AuthProvider'
 import TPserver from '../../api/TPserver'
@@ -12,26 +12,111 @@ import MyModal from '../components/Modal'
 import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
 
 const ProfileScreen = () => {
-    const { logout, user } = useContext(AuthContext)
+    //functions
+
+    const getMyInfo = async () => {
+        setLoading(true)
+        await TPserver.get('/me')
+            .then(response => {
+                let userInfo = response.data.data
+                setInputUserInfo({field: 'all', values: userInfo})
+                setUserInfo(userInfo)
+                setLoading(false)
+            })
+            .catch(error => {
+                setLoading(false)
+            })
+    }
+
+    const updateMyInfo = async () => {
+        setLoading(true)
+        await TPserver.put(`/users/${inputUserInfo.id}`, inputUserInfo)
+            .then(response => {
+                if(response.data.success == true){
+                    setUserInfo(inputUserInfo)
+                    // setInputUserInfo({field: 'confirm_password', values: ""})
+                    getMyInfo() 
+                }
+            setLoading(false)
+            })
+            .catch(error => {
+                let errMsg = error.response.data;
+                if(errMsg.errors){
+                    alert(errMsg.errors.confirm_password[0])
+                }else{
+                    alert(errMsg.message)
+                }
+                setInputUserInfo({field: 'all', values: userInfo})
+                setLoading(false)
+            })
+    }
+
+    const changePassword = async () => {
+        setLoading(true)
+        await TPserver.post('/changepassword', password)
+            .then(response => {
+                if(response.data.success == true){
+                    alert(response.data.data.message)
+                }
+            setLoading(false)
+            })
+            .catch(error => {
+                    alert(error.response.data.message)
+                    setLoading(false)
+            })
+    }
+    
+    const getFullName = () => userInfo.firstname + " " + (userInfo.middlename ? userInfo.middlename + " " : '') + userInfo.lastname
+    
+    //end of functions
+
+    const { logout, user, loading, setLoading } = useContext(AuthContext)
+
 
     const [showModal, setShowModal] = useState(false)
     const [modalToShow, setModalToShow] = useState('')
-
+    const [userInfo, setUserInfo] = useState({
+        firstname: "",
+        middlename: "",
+        lastname: "",
+        email: "",
+        contact_no: "",
+        address: ""
+    })
+    
     useEffect(() => {
         TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+         getMyInfo()
     }, [])    
+
+    const [inputUserInfo, setInputUserInfo] = useReducer(InputUserReducer, {
+        id: "",
+        firstname: "",
+        middlename: "",
+        lastname: "",
+        email: "",
+        contact_no: "",
+        address: "",
+        confirm_password: ""
+    })
     
+    const [password, setPassword] = useReducer(passwordReducer, {
+        current_password: "",
+        new_password: "",
+        new_password_confirmation: ""
+    })
+    //which modal will show on screen
     const renderInputModal = (modalToShow) => {
         
         switch (modalToShow) {
             case 'displayName':
-                return displayNameInputModal({firstname: user.firstname, middlename: user.middlename, lastname: user.lastname})
+                return displayNameInputModal({firstname: inputUserInfo.firstname, middlename: inputUserInfo.middlename, lastname: inputUserInfo.lastname})
             case 'email':
-                return oneInputModal('Email', user.email)
+                return oneInputModal('Email', 'email' ,inputUserInfo.email)
             case 'contactNo':
-                return oneInputModal('Contact Number', user.contact_no)
+                return oneInputModal('Contact Number', 'contact_no', inputUserInfo.contact_no)
             case 'address':
-                return oneInputModal('Address', user.address)
+                return oneInputModal('Address', 'address', inputUserInfo.address)
             case 'password':
                 return displayPasswordInputModal()
             default:
@@ -39,9 +124,136 @@ const ProfileScreen = () => {
         }
     }
 
+    //for one liner modal
+    const oneInputModal = (label, field, values) => {
+        return(
+            <View>
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>{label}</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={values}
+                        onChangeText={text => setInputUserInfo({field, values: text})}
+                    />
+                </View>
+
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Confirm Password</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={inputUserInfo.confirm_password}
+                        onChangeText={ text => setInputUserInfo({field: 'confirm_password', values: text})}
+                        secureTextEntry
+                    />
+                </View>
+
+            </View>
+        )
+    }
+    //for multi line modal specific for name *firstname *middlename *lastname
+    const displayNameInputModal = (value) => {
+        return(
+            <View>
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Firstname</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={value.firstname}
+                        onChangeText={text => setInputUserInfo({field: 'firstname', values: text})}
+                    />
+                </View>
+    
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Middlename</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={value.middlename}
+                        onChangeText={text => setInputUserInfo({field: 'middlename', values: text})}
+                    />
+                </View>
+    
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Lastname</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={value.lastname}
+                        onChangeText={text => setInputUserInfo({field: 'lastname', values: text})}
+                    />
+                </View>
+
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Confirm Password</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={inputUserInfo.confirm_password}
+                        onChangeText={ text => setInputUserInfo({field: 'confirm_password', values: text})}
+                        secureTextEntry
+                    />
+                </View>
+    
+            </View>
+        )
+    }
+    //for password modal *old/new/confirm pass
+    const displayPasswordInputModal = () => {
+        return(
+            <View>
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Current Password</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={password.current_password}
+                        onChangeText={text => setPassword({field: 'current_password', values: text})}
+                        secureTextEntry
+                    />
+                </View>
+    
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>New Password</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={password.new_password}
+                        onChangeText={text => setPassword({field: 'new_password', values: text})}
+                        secureTextEntry
+                    />
+                </View>
+    
+                <View style={styles.modalInputContainer}>
+                    <View style={styles.modalInfoLabel}>
+                        <Text>Confirm New Password</Text>
+                    </View>
+                    <TextInput 
+                        style={styles.modalInfoVal}
+                        value={password.new_password_confirmation}
+                        onChangeText={text => setPassword({field: 'new_password_confirmation', values: text})}
+                        secureTextEntry
+                    />
+                </View>
+            </View>
+    
+        )
+    }
 
     return (
         <ScrollView>
+                { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+
             <SafeAreaView style={styles.container}>
 
                 <View style={styles.headerContainer}>
@@ -58,7 +270,7 @@ const ProfileScreen = () => {
                     </View>
 
                     <View style={styles.headerInfo}>
-                        <Text style={styles.headerName}>{`${user.firstname} ${user.middlename} ${user.lastname}`}</Text>
+                        <Text style={styles.headerName}>{getFullName()}</Text>
                         <View style={styles.chipContainer}>
                             <Text style={styles.chipText}>Verified</Text>
                         </View>
@@ -69,7 +281,7 @@ const ProfileScreen = () => {
 
                     <InfoColumn 
                         label={'Display Name'}
-                        value={`${user.firstname} ${user.middlename} ${user.lastname}`}
+                        value={getFullName()}
                         onEditPress={() => {
                             setModalToShow('displayName')
                             setShowModal(true)
@@ -77,7 +289,7 @@ const ProfileScreen = () => {
                     />
                     <InfoColumn 
                         label={'Email'}
-                        value={user.email}
+                        value={userInfo.email}
                         onEditPress={() => {
                             setModalToShow('email')
                             setShowModal(true)
@@ -85,7 +297,7 @@ const ProfileScreen = () => {
                     />
                     <InfoColumn 
                         label={'Contact Number'}
-                        value={user.contact_no}
+                        value={userInfo.contact_no}
                         onEditPress={() => {
                             setModalToShow('contactNo')
                             setShowModal(true)
@@ -93,7 +305,7 @@ const ProfileScreen = () => {
                     />
                     <InfoColumn 
                         label={'Address'}
-                        value={user.address}
+                        value={userInfo.address}
                         onEditPress={() => {
                             setModalToShow('address')
                             setShowModal(true)
@@ -153,10 +365,23 @@ const ProfileScreen = () => {
 
                 </View>            
 
+
                 <MyModal 
                     visible={showModal}
-                    onCancelPress={() => setShowModal(false)}        
-                    onSavePress={() => setShowModal(false)}        
+                    onCancelPress={() => {
+                        setShowModal(false)
+                        setModalToShow('')
+                        setInputUserInfo({field: 'all', values: userInfo})
+                    }}        
+                    onSavePress={() => {
+                        
+                        modalToShow == 'password'
+                        ? changePassword() 
+                        : updateMyInfo()
+
+                        setShowModal(false)
+                        setModalToShow('')
+                    }}        
                 >
                     { renderInputModal(modalToShow) }
                 </MyModal>
@@ -164,6 +389,7 @@ const ProfileScreen = () => {
             </SafeAreaView>
         </ScrollView>
     )
+
 }
 
 export default ProfileScreen
@@ -243,96 +469,51 @@ const styles = StyleSheet.create({
     },
     modalInputContainer: {
         paddingVertical: 10
+    },
+    loading:{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: 100
     }
 })
 
-const oneInputModal = (label, value) => {
-    return(
-        <View style={styles.modalInputContainer}>
-            <View style={styles.modalInfoLabel}>
-                <Text>{label}</Text>
-            </View>
-            <TextInput 
-                style={styles.modalInfoVal}
-                value={value}
-            />
-        </View>
-    )
+const InputUserReducer = (inputUserInfo, action) => {
+    //action = field,values
+
+    switch (action.field) {
+        case 'all':
+            return {...action.values}
+        case 'email':
+            return {...inputUserInfo, email: action.values}
+        case 'firstname':
+            return {...inputUserInfo, firstname: action.values}
+        case 'middlename':
+            return {...inputUserInfo, middlename: action.values}
+        case 'lastname':
+            return {...inputUserInfo, lastname: action.values}
+        case 'contact_no':
+            return {...inputUserInfo, contact_no: action.values}
+        case 'address':
+            return {...inputUserInfo, address: action.values}
+        case 'confirm_password':
+            return {...inputUserInfo, confirm_password: action.values}
+    }
 }
 
-const displayNameInputModal = (value) => {
-    return(
-        <View>
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Firstname</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    value={value.firstname}
-                />
-            </View>
+const passwordReducer = (password, action) => {
+    //action = field,values
 
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Middlename</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    value={value.middlename}
-                />
-            </View>
-
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Lastname</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    value={value.lastname}
-                />
-            </View>
-
-        </View>
-    )
-}
-
-const displayPasswordInputModal = () => {
-    return(
-        <View>
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Current Password</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    // value={}
-                    secureTextEntry
-                />
-            </View>
-
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Cofirm Password</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    // value={}
-                    secureTextEntry
-                />
-            </View>
-
-            <View style={styles.modalInputContainer}>
-                <View style={styles.modalInfoLabel}>
-                    <Text>Confirm New Password</Text>
-                </View>
-                <TextInput 
-                    style={styles.modalInfoVal}
-                    // value={}
-                    secureTextEntry
-                />
-            </View>
-        </View>
-
-    )
+    switch (action.field) {
+        case 'current_password':
+            return {...password, current_password: action.values}
+        case 'new_password':
+            return {...password, new_password: action.values}
+        case 'new_password_confirmation':
+            return {...password, new_password_confirmation: action.values}
+        default:
+            return password
+    }
 }
