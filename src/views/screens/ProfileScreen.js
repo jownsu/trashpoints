@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState, useReducer } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../AuthProvider'
 import TPserver from '../../api/TPserver'
@@ -7,6 +7,8 @@ import COLORS from '../../consts/colors'
 import Avatar from '../components/Avatar'
 import InfoColumn from '../components/InfoColumn'
 
+import mime from 'mime'
+import * as ImagePicker from 'expo-image-picker';
 import MyModal from '../components/Modal'
 
 import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
@@ -65,6 +67,32 @@ const ProfileScreen = () => {
                     setLoading(false)
             })
     }
+
+    const updateAvatar = async (img) => {
+        setLoading(true)
+        const newImageUri =  "file:///" + img.split("file:/").join("");
+        const data = new FormData()
+
+        data.append('avatar', {
+            uri: newImageUri,
+            type: mime.getType(newImageUri),
+            name: newImageUri.split("/").pop()
+        })
+
+        data.append('_method', 'put')
+
+        await TPserver.post('/uploadavatar', data).then(response => {
+            console.log(response.data)
+            if(response.data.success == true){
+                getMyInfo()
+            }
+            setLoading(false)
+        })
+            .catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
+    }
     
     const getFullName = () => userInfo.firstname + " " + (userInfo.middlename ? userInfo.middlename + " " : '') + userInfo.lastname
     
@@ -75,13 +103,15 @@ const ProfileScreen = () => {
 
     const [showModal, setShowModal] = useState(false)
     const [modalToShow, setModalToShow] = useState('')
+    const [image, setImage] = useState('')
     const [userInfo, setUserInfo] = useState({
         firstname: "",
         middlename: "",
         lastname: "",
         email: "",
         contact_no: "",
-        address: ""
+        address: "",
+        avatar: ""
     })
     
     useEffect(() => {
@@ -250,6 +280,27 @@ const ProfileScreen = () => {
         )
     }
 
+    const pickImage = async () => {
+        await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          allowsEditing: true,
+          aspect: [3, 3],
+          quality: 1,
+        }).then(response => {
+            if (!response.cancelled) {
+                    // setImage(response.uri)
+                    updateAvatar(response.uri)
+                }
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    
+    
+
+      };
+    
+
     return (
         <ScrollView>
                 { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
@@ -259,8 +310,8 @@ const ProfileScreen = () => {
                 <View style={styles.headerContainer}>
                     <View style={styles.avatar}>
                         <Avatar 
-                            imgPath = {() => require('../../assets/person.jpg') }
-                            onPress = { () => { alert('clicked') } }
+                            imgPath = { userInfo.avatar }
+                            onPress = { () => pickImage() }
                             height = { 100 }
                             width = { 100 }
                             editHeight = { 35 }
