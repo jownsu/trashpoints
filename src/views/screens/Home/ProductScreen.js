@@ -1,33 +1,52 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, ToastAndroid } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AuthContext } from '../../AuthProvider'
-import COLORS from '../../consts/colors'
+
+import COLORS from '../../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import CategoryList from '../components/CategoryList'
-import ItemCard from '../components/ItemCard'
-import Avatar from '../components/Avatar'
 
-import foods from '../../consts/foods'
-import drinks from '../../consts/drinks'
-import health from '../../consts/health'
-import hygiene from '../../consts/hygiene'
+import CategoryList from '../../components/CategoryList'
+import ItemCards from '../../components/ItemCards'
 
-import category from '../../consts/categories'
+import { OrderContext } from '../../../providers/OrderProvider' 
 
-const HomeScreen = ({navigation}) => {
+import foods from '../../../consts/foods'
+import drinks from '../../../consts/drinks'
+import health from '../../../consts/health'
+import hygiene from '../../../consts/hygiene'
+
+import category from '../../../consts/categories'
+
+const ProductScreen = ({route, navigation}) => {
+
+    const { addOrder, orders, addQuantity } = useContext(OrderContext)
+
+    let {category} = route.params
 
     const [index, setIndex] = useState(1)
     const [item, setItem] = useState([])
-    const { user } = useContext(AuthContext)
 
     useEffect(() => {
-        setItem(foods)
+        switch (category) {
+            case 'Foods':
+                setItem(foods)
+                break;
+            case 'Drinks':
+                setItem(drinks)
+                break;
+            case 'Hygiene':
+                setItem(hygiene)
+                break;
+            case 'Health':
+                setItem(health)
+                break;
+            default:
+                setItem(foods)
+        }
     },[])
 
     return (
         <SafeAreaView style={styles.container}>
-            
             <View style={styles.searchContainer}>
                 <View style={styles.inputSearch}>
                     <Icon name="search" size={28} color={COLORS.dark} style={styles.searchIcon}/>
@@ -46,35 +65,15 @@ const HomeScreen = ({navigation}) => {
 
             </View>
 
-                <CategoryList 
-                    categories={category}
-                    currentIndex={index}
-                    onPress={(id, name) => {
-                        setIndex(id)
-                        switch (name) {
-                            case 'Foods':
-                                setItem(foods)
-                                break;
-                            case 'Drinks':
-                                setItem(drinks)
-                                break;
-                            case 'Hygiene':
-                                setItem(hygiene)
-                                break;
-                            case 'Health':
-                                setItem(health)
-                                break;
-                            default:
-                                setItem(foods)
-                                break;
-                        }
-                    }}
-                />
 
-                <ItemCard 
+                <ItemCards 
                     items={item}
                     onPress={(item) => {
                         navigation.navigate('Details', item)
+                    }}
+                    addToCartOnPress={(item) => {
+                        ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
+                        addOrder({...item, quantity: 1})
                     }}
                 />
 
@@ -82,12 +81,17 @@ const HomeScreen = ({navigation}) => {
     )
 }
 
-export default HomeScreen
+export default ProductScreen
  
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white
+    },
+    headerTitle:{
+        textAlign: 'center',
+        fontSize: 32,
+
     },
     searchContainer: {
         marginVertical: 20,
@@ -116,6 +120,3 @@ const styles = StyleSheet.create({
     }
 })
 
-const reducer = ({state, action}) => {
-
-}

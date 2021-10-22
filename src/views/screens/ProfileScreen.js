@@ -103,7 +103,6 @@ const ProfileScreen = () => {
 
     const [showModal, setShowModal] = useState(false)
     const [modalToShow, setModalToShow] = useState('')
-    const [image, setImage] = useState('')
     const [userInfo, setUserInfo] = useState({
         firstname: "",
         middlename: "",

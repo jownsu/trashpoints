@@ -7,11 +7,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import 'react-native-gesture-handler'
 
-import HomeScreen from '../screens/HomeScreen'
 import CartScreen from '../screens/CartScreen'
 import WalletScreen from '../screens/WalletScreen'
 import FavoriteScreen from '../screens/FavoriteScreen'
 import ProfileScreen from '../screens/ProfileScreen'
+
+import HomeScreenStack from '../screens/Stacks/HomeScreenStack'
 
 
 
@@ -19,52 +20,46 @@ const Tab = createBottomTabNavigator()
 
 const BottomNavigator = () => {
     return (
-        <Tab.Navigator 
-            screenOptions={{
-                tabBarStyle:{
-                    borderTopWidth: 0,
-                    height: 55,
-                    elevation: 0
-                },
-                headerShown: false, 
-                tabBarShowLabel: false,
-                tabBarActiveTintColor: COLORS.primary
-             }}
-        >
-            <Tab.Screen 
-                name={'navHome'} 
-                component={HomeScreen}
-                options={{ tabBarIcon: ({color}) => <Icon name="home-filled" color={color} size={28} /> }}
-            />
-            
-            <Tab.Screen 
-                name={'navFavorite'} 
-                component={FavoriteScreen}
-                options={{ tabBarIcon: ({color}) => <Icon name="favorite" color={color} size={28} /> }}
-            />
-            <Tab.Screen 
-                name={'navWallet'} 
-                component={WalletScreen}
-                options={{ tabBarIcon: ({color}) => (
-                            <View style={styles.searchIcon}>
-                                <AntDesign name="wallet" size={28} color={color} />
-                            </View>
-                        ) 
-                    }}
-            />
-            <Tab.Screen 
-                name={'navCart'} 
-                component={CartScreen}
-                options={{ tabBarIcon: ({color}) => <Icon name="shopping-cart" color={color} size={28} /> }}
-            />
-            <Tab.Screen 
-                name={'navProfile'} 
-                component={ProfileScreen}
-                options={{ tabBarIcon: ({color}) => <FontAwesome name="user" size={28} color={color} /> }}
-            />
-
-
-        </Tab.Navigator>
+            <Tab.Navigator 
+                screenOptions={{
+                    tabBarStyle: styles.tabBarStyle,
+                    headerShown: false, 
+                    tabBarShowLabel: true,
+                    tabBarActiveTintColor: COLORS.primary
+                }}
+            >
+                <Tab.Screen 
+                    name={'Shop'} 
+                    component={HomeScreenStack}
+                    options={{ tabBarIcon: ({color}) => <Icon name="home-filled" color={color} size={28} /> }}
+                />
+                
+                <Tab.Screen 
+                    name={'Favorite'} 
+                    component={FavoriteScreen}
+                    options={{ tabBarIcon: ({color}) => <Icon name="favorite" color={color} size={28} /> }}
+                />
+                <Tab.Screen 
+                    name={'Wallet'} 
+                    component={WalletScreen}
+                    options={{ tabBarIcon: ({color}) => (
+                                <View style={styles.searchIcon}>
+                                    <AntDesign name="wallet" size={28} color={color} />
+                                </View>
+                            ) 
+                        }}
+                />
+                <Tab.Screen 
+                    name={'Cart'} 
+                    component={CartScreen}
+                    options={{ tabBarIcon: ({color}) => <Icon name="shopping-cart" color={color} size={28} /> }}
+                />
+                <Tab.Screen 
+                    name={'Profile'}
+                    component={ProfileScreen}
+                    options={{ tabBarIcon: ({color}) => <FontAwesome name="user" size={28} color={color} /> }}
+                />
+            </Tab.Navigator>
     )
 }
 
@@ -79,9 +74,13 @@ const styles = StyleSheet.create({
         width: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        top: -25,
+        top: -15,
         backgroundColor: COLORS.white,
         elevation: 5
-
+    },
+    tabBarStyle:{
+        borderTopWidth: 0,
+        height: 55,
+        elevation: 0,
     }
 })

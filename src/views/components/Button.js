@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     primaryBtn: {
         backgroundColor: COLORS.primary,
         borderRadius: 30,
-        height: 50,
+        height: 35,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: COLORS.primary,
         backgroundColor: COLORS.white,
-        borderRadius: 30,
+        borderRadius: 15,
         height: 50,
         justifyContent: 'center',
         alignItems: 'center'
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     secondaryBtnTitle: {
         color: COLORS.primary,
         fontWeight: 'bold',
-        fontSize: 18
+        fontSize: 16
     },
 })
 

@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;
 
-const ItemCard = ({items, onPress}) => {
+const ItemCards = ({items, onPress, addToCartOnPress}) => {
     return (
         <View style={styles.container}>
             <FlatList 
@@ -23,11 +23,12 @@ const ItemCard = ({items, onPress}) => {
 
                                     <View style={styles.cardFooter}>
                                         <Text style={styles.cardPrice}>TP {item.price}</Text>
-                                        <View style={styles.addToCartBtn}>
-                                            <AntDesign style={styles.plusIcon} name="pluscircle" size={32} color={COLORS.primary} />
-                                        </View>
+                                        <TouchableOpacity onPress={() => addToCartOnPress(item)}>
+                                            <View style={styles.addToCartBtn}>
+                                                <AntDesign style={styles.plusIcon} name="pluscircle" size={32} color={COLORS.primary} />
+                                            </View>
+                                        </TouchableOpacity>
                                     </View>
-
                             </TouchableOpacity>
                         </View>
 
@@ -38,12 +39,12 @@ const ItemCard = ({items, onPress}) => {
     )
 }
 
-export default ItemCard
+export default ItemCards
 
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        marginVertical: 10,
+        marginTop: 10,
     },
     cardContainer:{
         minHeight: 220,

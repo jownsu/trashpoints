@@ -1,15 +1,17 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Touchable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../../consts/colors'
 
 const OrderItem = ({orders}) => {
+
     return (
         <View>
             <FlatList 
                 data={orders}
                 keyExtractor={order => order.id}
                 renderItem={({item}) => {
+
                     return (
                         <View style={styles.orderContainer}>
                             <Image style={styles.orderImage} source={item.image} />
@@ -19,13 +21,13 @@ const OrderItem = ({orders}) => {
                                 <Text style={styles.orderPrice}>TP {item.price}</Text>
                             </View>
                             <View style={styles.quantityContainer}>
-                                <Text style={styles.quantityCount}>1</Text>
+                                <Text style={styles.quantityCount}>{item.quantity}</Text>
                                 <View style={styles.quantityController}>
 
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => alert('minus')}>
                                         <AntDesign name="minus" size={21} color={COLORS.white} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => { alert('plus') }}>
                                         <AntDesign name="plus" size={21} color={COLORS.white} />
                                     </TouchableOpacity>
                                 </View>

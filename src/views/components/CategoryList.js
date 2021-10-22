@@ -8,17 +8,14 @@ const CategoryList = ({categories, currentIndex, onPress}) => {
             <FlatList 
                 data={categories}
                 keyExtractor={categories => categories.id}
-                horizontal
-                showsHorizontalScrollIndicator={false}
+                numColumns={3}  
                 renderItem={({item}) => {
                     return (
-                        <TouchableOpacity activeOpacity={0.8} onPress={ () => onPress(item.id, item.name) }>
-                            <View style={{ ...styles.btnContainer, backgroundColor : item.id == currentIndex ? COLORS.primary : COLORS.secondary }} >
-                                <View style={styles.imageContainer}>
+                        <TouchableOpacity style={styles.btnContainer} activeOpacity={0.8} onPress={ () => onPress(item.name) }>
+                            <View style={styles.imgContainer} >
                                     <Image style={styles.categoryImage} source={item.image}/>
-                                </View>
-                                <Text style={{ ...styles.categoryName, color : item.id == currentIndex ? COLORS.white : COLORS.primary }}>{item.name}</Text>
                             </View>
+                            <Text style={styles.categoryName}>{item.name}</Text>
                         </TouchableOpacity>
                     )
                 }}
@@ -31,30 +28,35 @@ export default CategoryList
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+        borderTopRightRadius: 35,
+        borderTopLeftRadius: 35,
+        alignItems: 'center',
+        paddingTop: 20,
+        backgroundColor: COLORS.white
     },
     btnContainer: {
+    },
+    imgContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        borderRadius: 50,
-        paddingHorizontal: 5,
-        height: 35,
-        minWidth: 120,
-        marginLeft: 15,
-    },
-    imageContainer: {
-        backgroundColor: COLORS.white,
-        height: 25,
-        width: 25,
+        justifyContent: 'center',
         borderRadius: 20,
-        marginRight: 10
+        padding: 5,
+        margin: 5,
+        height: 100,
+        width: 100,
+        backgroundColor: COLORS.secondary,
+        elevation: 7
     },
     categoryImage: {
-        height: '100%',
-        width: '100%',
+        height: '75%',
+        width: '75%',
     },
     categoryName: {
         fontSize: 14,
-        fontWeight: 'bold'
-
+        fontWeight: 'bold',
+        color: COLORS.primary,
+        textAlign: 'center'
     }
 })

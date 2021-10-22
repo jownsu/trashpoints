@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useContext, useEffect} from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import OrderItem from '../components/OrderItem'
@@ -6,14 +6,17 @@ import foods from '../../consts/foods'
 import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
 
+import { OrderContext } from '../../providers/OrderProvider'
 const CartScreen = () => {
+
+    const { orders } = useContext(OrderContext)
 
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={{ flex: 4 }}>
                 <OrderItem 
-                    orders={foods}
+                    orders={orders}
                 />
             </View>
 
@@ -46,14 +49,15 @@ const styles = StyleSheet.create({
     checkoutContainer: {
         borderTopWidth: 1,
         borderColor: COLORS.grey,
-        flex: 1,
-        justifyContent: "space-around"
+        paddingVertical: 10,
+        justifyContent: "space-around",
+        alignItems: 'center'
     },
     totalContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginHorizontal: 20
+        width: '80%'
     },
     totalPrice: {
         fontSize: 18,
@@ -64,7 +68,8 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     btn: {
-        marginHorizontal: 50
+        marginVertical: 10,
+        width: 250
     }
 
 })

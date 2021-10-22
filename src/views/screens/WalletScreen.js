@@ -115,9 +115,9 @@ const styles = StyleSheet.create({
     },
     filler:{
         backgroundColor: COLORS.white,
-        height: 50,
+        height: 35,
         marginVertical: 10,
-        borderRadius: 25,
+        borderRadius: 5,
         elevation: 12
     }
 })
