@@ -11,7 +11,7 @@ const AppStack = () => {
     return (
         <OrderProvider>
             <Stack.Navigator>
-                <Stack.Screen options={{ headerShown: false }} name={'Home'} component={BottomNavigator}></Stack.Screen> 
+                <Stack.Screen options={{ headerShown: false }} name={'BottomNav'} component={BottomNavigator}></Stack.Screen> 
                 {/* <Stack.Screen name={'Details'} component={DetailsScreen}></Stack.Screen> */}
             </Stack.Navigator>
         </OrderProvider>

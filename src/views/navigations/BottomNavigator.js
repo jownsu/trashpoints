@@ -4,15 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import COLORS from '../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { FontAwesome } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Fontisto } from '@expo/vector-icons';
 import 'react-native-gesture-handler'
-
 import CartScreen from '../screens/CartScreen'
-import WalletScreen from '../screens/WalletScreen'
-import FavoriteScreen from '../screens/FavoriteScreen'
+import WalletStack from '../screens/Stacks/WalletStack'
+import HomeScreen from '../screens/HomeScreen'
 import ProfileScreen from '../screens/ProfileScreen'
 
-import HomeScreenStack from '../screens/Stacks/HomeScreenStack'
+import ShopScreenStack from '../screens/Stacks/ShopScreenStack'
 
 
 
@@ -25,26 +24,26 @@ const BottomNavigator = () => {
                     tabBarStyle: styles.tabBarStyle,
                     headerShown: false, 
                     tabBarShowLabel: true,
-                    tabBarActiveTintColor: COLORS.primary
+                    tabBarActiveTintColor: COLORS.primary,
                 }}
+                initialRouteName={'Wallet'}
             >
                 <Tab.Screen 
-                    name={'Shop'} 
-                    component={HomeScreenStack}
+                    name={'Home'} 
+                    component={HomeScreen}
                     options={{ tabBarIcon: ({color}) => <Icon name="home-filled" color={color} size={28} /> }}
                 />
-                
                 <Tab.Screen 
-                    name={'Favorite'} 
-                    component={FavoriteScreen}
-                    options={{ tabBarIcon: ({color}) => <Icon name="favorite" color={color} size={28} /> }}
+                    name={'Shop'} 
+                    component={ShopScreenStack}
+                    options={{ tabBarIcon: ({color}) => <Fontisto name="shopping-store" size={24} color={color} /> }}
                 />
                 <Tab.Screen 
                     name={'Wallet'} 
-                    component={WalletScreen}
+                    component={WalletStack}
                     options={{ tabBarIcon: ({color}) => (
                                 <View style={styles.searchIcon}>
-                                    <AntDesign name="wallet" size={28} color={color} />
+                                    <AntDesign name="wallet" size={32} color={color} />
                                 </View>
                             ) 
                         }}

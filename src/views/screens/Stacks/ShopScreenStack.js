@@ -1,13 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import CategoryScreen from '../Home/CategoryScreen'
-import ProductScreen from "../Home/ProductScreen"
+import CategoryScreen from '../Shop/CategoryScreen'
+import ProductScreen from "../Shop/ProductScreen"
 import DetailsScreen from "../DetailsScreen";
 
 const Stack = createStackNavigator();
 
-const HomeScreenStack = () => {
+const ShopScreenStack = () => {
 
     return(
         <Stack.Navigator>
@@ -19,4 +19,4 @@ const HomeScreenStack = () => {
 
 }
 
-export default HomeScreenStack
+export default ShopScreenStack

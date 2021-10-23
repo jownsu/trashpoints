@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import COLORS from '../../consts/colors'
 
-const CategoryList = ({categories, currentIndex, onPress}) => {
+const CategoryList = ({categories, onPress}) => {
     return (
         <View style={styles.container}>
             <FlatList 

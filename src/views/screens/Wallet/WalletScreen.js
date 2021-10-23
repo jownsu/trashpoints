@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { FontAwesome } from '@expo/vector-icons';
-import COLORS from '../../consts/colors'
-import health from '../../consts/health';
+import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const WalletScreen = () => {
+import COLORS from '../../../consts/colors'
+import health from '../../../consts/health';
+
+const WalletScreen = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.balanceContainer}>
@@ -16,30 +17,24 @@ const WalletScreen = () => {
 
             <View style={styles.bottomContainer}>
                 <View style={styles.actionContainer}>
-                    <View style={styles.btn}>
-                        <View style={{ ...styles.btnIcon, backgroundColor: '#52b788' }}>
-                            <FontAwesome name="recycle" size={21} color={COLORS.white} />
-                        </View>
-                        <Text>Recycle</Text>
-                    </View>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('TrashCategory') }}>
+                        <MaterialCommunityIcons name="bottle-soda-classic-outline" size={28} color={COLORS.primary} />
+                        <Text style={styles.btnText}>Categories</Text>
+                    </TouchableOpacity>
 
-                    <View style={styles.btn}>
-                        <View style={{ ...styles.btnIcon, backgroundColor: '#168aad' }}>
-                            <FontAwesome name="qrcode" size={21} color={COLORS.white} />
-                        </View>
-                        <Text>Scan QR</Text>
-                    </View>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+                            <FontAwesome name="qrcode" size={28} color={COLORS.primary} />
+                        <Text style={styles.btnText}>Earn</Text>
+                    </TouchableOpacity>
 
-                    <View style={styles.btn}>
-                        <View style={{ ...styles.btnIcon, backgroundColor: '#bc4749' }}>
-                            <FontAwesome name="history" size={21} color={COLORS.white} />
-                        </View>
-                        <Text>Activities</Text>
-                    </View>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+                        <Feather name="camera" size={28} color={COLORS.primary} />
+                        <Text style={styles.btnText}>Scan</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.fillerContainer}>
-                    <Text>Previous Transactions:</Text>
+                    <Text>Redeem History</Text>
                         <View style={styles.filler}>
                         </View>
                         <View style={styles.filler}>
@@ -93,21 +88,17 @@ const styles = StyleSheet.create({
     },
     btn: {
         backgroundColor: COLORS.white,
-        height: 75,
-        width: 75,
+        height: 70,
+        width: 70,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 20,
+        borderRadius: 8,
         elevation: 7
     },
-    btnIcon: {
-        borderRadius: 50,
-        height: 35,
-        width: 35,
-        justifyContent: 'center',
-        alignItems: 'center'
+    btnText: {
+        color: COLORS.primary,
+        fontSize: 12  
     },
-
     fillerContainer:{
         flex: 1,
         marginTop: 30
