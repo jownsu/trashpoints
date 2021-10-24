@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Touchable } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../../consts/colors'
+import XText from './XText'
 
 const OrderItem = ({orders}) => {
 
@@ -16,12 +17,12 @@ const OrderItem = ({orders}) => {
                         <View style={styles.orderContainer}>
                             <Image style={styles.orderImage} source={item.image} />
                             <View style={styles.orderDetailsContainer}>
-                                <Text style={styles.orderName}>{item.name}</Text>
-                                <Text style={styles.orderIngredients}>{item.ingredients}</Text>
-                                <Text style={styles.orderPrice}>TP {item.price}</Text>
+                                <XText style={styles.orderName} bold >{item.name}</XText>
+                                <XText style={styles.orderIngredients}>{item.ingredients}</XText>
+                                <XText style={styles.orderPrice} bold>TP {item.price}</XText>
                             </View>
                             <View style={styles.quantityContainer}>
-                                <Text style={styles.quantityCount}>{item.quantity}</Text>
+                                <XText style={styles.quantityCount} bold>{item.quantity}</XText>
                                 <View style={styles.quantityController}>
 
                                     <TouchableOpacity onPress={() => alert('minus')}>
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
     orderDetailsContainer: {
     },
     orderName: {
-        fontWeight: 'bold',
         fontSize: 18,
     },
     orderIngredients: {
@@ -70,7 +70,6 @@ const styles = StyleSheet.create({
         color: COLORS.grey
     },
     orderPrice: {
-        fontWeight: 'bold',
         fontSize: 18,
     },
     quantityContainer: {
@@ -78,7 +77,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     quantityCount: {
-        fontWeight: 'bold',
         fontSize: 18,
         marginBottom: 12
     },

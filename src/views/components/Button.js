@@ -1,12 +1,13 @@
 import React from 'react'
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import COLORS from '../../consts/colors'
+import XText from './XText'
 
 const BtnPrimary = ({title, onPress}) => {
     return (
         <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
             <View style={styles.primaryBtn}>
-                <Text style={styles.primaryBtnTitle}>{title}</Text>
+                <XText style={styles.primaryBtnTitle} bold>{title}</XText>
             </View>
         </TouchableOpacity>
     )
@@ -16,7 +17,7 @@ const BtnSecondary = ({title, onPress}) => {
     return (
         <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
             <View style={styles.secondaryBtn}>
-                <Text style={styles.secondaryBtnTitle}>{title}</Text>
+                <XText style={styles.secondaryBtnTitle} bold>{title}</XText>
             </View>
         </TouchableOpacity>
     )
@@ -34,7 +35,6 @@ const styles = StyleSheet.create({
     },
     primaryBtnTitle: {
         color: COLORS.white,
-        fontWeight: 'bold',
         fontSize: 18
     },
     secondaryBtn: {
@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
     },
     secondaryBtnTitle: {
         color: COLORS.primary,
-        fontWeight: 'bold',
         fontSize: 16
     },
 })

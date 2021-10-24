@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import COLORS from '../../consts/colors'
 
+import XText from './XText'
+
 const CategoryList = ({categories, onPress}) => {
     return (
         <View style={styles.container}>
@@ -15,7 +17,7 @@ const CategoryList = ({categories, onPress}) => {
                             <View style={styles.imgContainer} >
                                     <Image style={styles.categoryImage} source={item.image}/>
                             </View>
-                            <Text style={styles.categoryName}>{item.name}</Text>
+                            <XText style={styles.categoryName} bold >{item.name}</XText>
                         </TouchableOpacity>
                     )
                 }}
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
     },
     categoryName: {
         fontSize: 14,
-        fontWeight: 'bold',
         color: COLORS.primary,
         textAlign: 'center'
     }

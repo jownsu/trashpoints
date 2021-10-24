@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react
 
 import COLORS from '../../../consts/colors'
 
+import XText from '../XText'
+
 const TrashCategoryList = ({categories, onPress, currentIndex}) => {
     return (
         <View style={styles.container}>
@@ -18,7 +20,7 @@ const TrashCategoryList = ({categories, onPress, currentIndex}) => {
                             <View style={styles.imgContainer}>
                                 <Image source={item.image} style={styles.img} />
                             </View>
-                            <Text style={{ ...styles.btnText, color : item.id == currentIndex ? COLORS.white : COLORS.primary }} >{item.name}</Text>                
+                            <XText style={{ ...styles.btnText, color : item.id == currentIndex ? COLORS.white : COLORS.primary }} bold >{item.name}</XText>                
                         </TouchableOpacity>
                     )
                 }}
@@ -56,6 +58,5 @@ const styles = StyleSheet.create({
     },
     btnText:{
         fontSize: 14,
-        fontWeight: 'bold'
     }
 })

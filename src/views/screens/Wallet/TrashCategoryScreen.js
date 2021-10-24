@@ -11,8 +11,9 @@ import metal from '../../../consts/trash/metal'
 import paper from '../../../consts/trash/paper'
 import organic from '../../../consts/trash/organic'
 import glass from '../../../consts/trash/glass'
-import prohibited from '../../../consts/trash/prohibited'
-import toxic from '../../../consts/trash/toxic'
+import clothing from '../../../consts/trash/cloathing'
+// import prohibited from '../../../consts/trash/prohibited'
+// import toxic from '../../../consts/trash/toxic'
 
 const TrashCategoryScreen = () => {
     const [index, setIndex] = useState(1)
@@ -33,23 +34,20 @@ const TrashCategoryScreen = () => {
                         case 'Plastic':
                             setItem(plastic)
                             break;
-                        case 'Metal':
-                            setItem(metal)
-                            break;
                         case 'Paper':
                             setItem(paper)
                             break;
                         case 'Organic':
                             setItem(organic)
                             break;
+                        case 'Clothing':
+                            setItem(clothing)
+                            break;
+                        case 'Metal':
+                            setItem(metal)
+                            break;
                         case 'Glass':
                             setItem(glass)
-                            break;
-                        case 'Prohibited':
-                            setItem(prohibited)
-                            break;
-                        case 'Toxic Items':
-                            setItem(toxic)
                             break;
                         default:
                             setItem(plastic)

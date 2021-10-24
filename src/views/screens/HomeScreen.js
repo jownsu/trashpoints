@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../consts/colors'
 
+import XText from '../components/XText'
+
 import WeCollectCard from '../components/home/WeCollectCard'
 
 const HomeScreen = () => {
@@ -17,7 +19,7 @@ const HomeScreen = () => {
                     />
                 </View>
             </View>
-            <Text style={styles.bodyTitle}>What we collect</Text>
+            <XText style={styles.bodyTitle} bold >What we collect</XText>
             <ScrollView style={styles.body}>
                 <WeCollectCard 
                     title={'Plastic'}
@@ -72,7 +74,6 @@ const styles = StyleSheet.create({
     bodyTitle:{
         fontSize: 24,
         textAlign: 'center',
-        fontWeight: 'bold',
         color: COLORS.primary
     },
 })

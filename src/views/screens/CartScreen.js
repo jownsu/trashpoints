@@ -6,6 +6,8 @@ import foods from '../../consts/foods'
 import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
 
+import XText from '../components/XText'
+
 import { OrderContext } from '../../providers/OrderProvider'
 const CartScreen = () => {
 
@@ -22,8 +24,8 @@ const CartScreen = () => {
 
             <View style={styles.checkoutContainer}>
                 <View style={styles.totalContainer}>
-                    <Text style={styles.totalPrice}>Total Price</Text>
-                    <Text style={styles.price}>TP 50</Text>
+                    <XText style={styles.totalPrice} bold>Total Price</XText>
+                    <XText style={styles.price} bold>TP 50</XText>
                 </View>
 
                 <View style={styles.btn}>
@@ -61,11 +63,9 @@ const styles = StyleSheet.create({
     },
     totalPrice: {
         fontSize: 18,
-        fontWeight: 'bold',
     },
     price: {
         fontSize: 24,
-        fontWeight: 'bold',
     },
     btn: {
         marginVertical: 10,

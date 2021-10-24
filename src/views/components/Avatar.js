@@ -7,7 +7,7 @@ const Avatar = ({ imgPath, onPress, height = 60, width = 60, editHeight = 25, ed
 
     return (
         <View style={{...styles.container, height, width}}>
-            <Image style={styles.headerImg} source={{uri: 'http://192.168.1.6:80/img/' + imgPath}} />
+            <Image style={styles.headerImg} source={{uri: 'http://192.168.1.13:80/img/' + imgPath}} />
                 <TouchableOpacity style={{ ...styles.editContainer, height:editHeight, width:editWidth }} onPress={onPress} >
                     <Feather name="edit" size={iconSize} color="black" />
                 </TouchableOpacity>

@@ -1,17 +1,17 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import COLORS from '../../consts/colors'
-
+import XText from './XText'
 const InfoColumn = ({label, value, onEditPress}) => {
     return (
         <View style={styles.infoContainer}>
             <View style={styles.info}>
-                <Text style={styles.infoLabel}>{label}</Text>                        
-                <Text style={styles.infoVal}>{value}</Text>
+                <XText style={styles.infoLabel}>{label}</XText>                        
+                <XText style={styles.infoVal} bold numberOfLines={1}>{value}</XText>
             </View>
 
             <TouchableOpacity style={styles.btnAction} onPress={onEditPress}>
-                <Text style={styles.btnText}>Edit</Text>
+                <XText style={styles.btnText}>Edit</XText>
             </TouchableOpacity>
 
         </View>
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     },
     infoVal:{
         fontSize: 16,
-        fontWeight: 'bold',
         borderBottomWidth: 1,
         borderColor: COLORS.grey
     },

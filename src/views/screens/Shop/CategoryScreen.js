@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TextInput } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import COLORS from '../../../consts/colors'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import CategoryList from '../../components/CategoryList'
-import ItemCards from '../../components/ItemCards'
 
 import foods from '../../../consts/foods'
-import drinks from '../../../consts/drinks'
-import health from '../../../consts/health'
-import hygiene from '../../../consts/hygiene'
 
 import category from '../../../consts/categories'
+import XText from '../../components/XText';
+
 
 const CategoryScreen = ({navigation}) => {
 
@@ -28,7 +25,7 @@ const CategoryScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
 
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>Categories</Text>
+                    <XText style={styles.headerText} bold>Categories</XText>
                 </View>
 
                 <CategoryList 

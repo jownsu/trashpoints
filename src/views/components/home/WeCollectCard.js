@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 
 import COLORS from '../../../consts/colors'
+import XText from '../XText'
 
 const WeCollectCard = ({title, info, img}) => {
     return (
@@ -10,8 +11,8 @@ const WeCollectCard = ({title, info, img}) => {
                 <Image source={styles.cardImg} source={img} style={styles.cardImg} />
             </View>
             <View style={styles.cardTextContainer}>
-                <Text style={styles.cardTitle}>{title}</Text>
-                <Text style={styles.cardInfo}>{info}</Text>
+                <XText style={styles.cardTitle} bold >{title}</XText>
+                <XText style={styles.cardInfo}>{info}</XText>
             </View>
         </View>
     )
@@ -44,7 +45,6 @@ const styles = StyleSheet.create({
     },
     cardTitle:{
         fontSize: 23,
-        fontWeight: 'bold'
     },
     cardInfo:{
     }

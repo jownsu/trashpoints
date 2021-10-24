@@ -5,6 +5,8 @@ import COLORS from '../../../consts/colors'
 import { BtnSecondary } from '../../components/Button'
 import { Ionicons } from '@expo/vector-icons';
 
+import XText from '../../components/XText'
+
 const SignupScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
@@ -19,7 +21,7 @@ const SignupScreen = () => {
 
             <View style={styles.bottomView}>
                 <View style={styles.headerContainer}>
-                    <Text style={styles.headerText}>Sign Up</Text>
+                    <XText style={styles.headerText}>Sign Up</XText>
                 </View>
 
                 <View style={styles.formContainer}>

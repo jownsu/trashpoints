@@ -5,7 +5,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
-import CategoryList from '../../components/CategoryList'
 import ItemCards from '../../components/ItemCards'
 
 import { OrderContext } from '../../../providers/OrderProvider' 
@@ -15,7 +14,7 @@ import drinks from '../../../consts/drinks'
 import health from '../../../consts/health'
 import hygiene from '../../../consts/hygiene'
 
-import category from '../../../consts/categories'
+import XText from '../../components/XText'
 
 const ProductScreen = ({route, navigation}) => {
 

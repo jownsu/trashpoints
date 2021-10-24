@@ -2,6 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
 import COLORS from '../../consts/colors'
 
+import XText from './XText'
+
 const MyModal = ({children, visible, onCancelPress, onSavePress}) => {
     return (
         <Modal
@@ -18,10 +20,10 @@ const MyModal = ({children, visible, onCancelPress, onSavePress}) => {
 
                     <View style={styles.modalFooter}>
                         <TouchableOpacity style={styles.modalBtnCancel} onPress={onCancelPress}>
-                            <Text style={styles.modalTextCancel}>Cancel</Text>
+                            <XText style={styles.modalTextCancel}>Cancel</XText>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.modalBtnSave} onPress={onSavePress}>
-                            <Text style={styles.modalTextSave}>Save</Text>
+                            <XText style={styles.modalTextSave}>Save</XText>
                         </TouchableOpacity>
                     </View>
 

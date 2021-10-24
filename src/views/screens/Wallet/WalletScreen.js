@@ -5,36 +5,39 @@ import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons
 
 import COLORS from '../../../consts/colors'
 import health from '../../../consts/health';
+import XText from '../../components/XText';
 
 const WalletScreen = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.balanceContainer}>
-                <Text style={styles.title}>My Wallet</Text>
-                <Text style={styles.balance}>TP 20.749</Text>
-                <Text style={styles.label}>Current Balance</Text>
+                <XText style={styles.title}>My Wallet</XText>
+                <XText style={styles.balance} bold={true}>TP 20.749</XText>
+                <XText style={styles.label}>Current Balance</XText>
             </View>
 
             <View style={styles.bottomContainer}>
                 <View style={styles.actionContainer}>
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('TrashCategory') }}>
                         <MaterialCommunityIcons name="bottle-soda-classic-outline" size={28} color={COLORS.primary} />
-                        <Text style={styles.btnText}>Categories</Text>
+                        <XText style={styles.btnText}>Categories</XText>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
                             <FontAwesome name="qrcode" size={28} color={COLORS.primary} />
-                        <Text style={styles.btnText}>Earn</Text>
+                        <XText style={styles.btnText}>Earn</XText>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
                         <Feather name="camera" size={28} color={COLORS.primary} />
-                        <Text style={styles.btnText}>Scan</Text>
+                        <XText style={styles.btnText}>Scan</XText>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.fillerContainer}>
-                    <Text>Redeem History</Text>
+                    <XText>
+                        Redeem History
+                    </XText>
                         <View style={styles.filler}>
                         </View>
                         <View style={styles.filler}>
@@ -60,15 +63,14 @@ const styles = StyleSheet.create({
     },
     title: {
         color: COLORS.white,
-        fontSize: 21
+        fontSize: 21,
+        fontFamily: 'Montserrat-bold',
     },
     balance: {
         marginTop: 50,
         marginBottom: 20,
         color: COLORS.white,
-        fontWeight: 'bold',
         fontSize: 42
-
     },
     label: {
         color: COLORS.white,

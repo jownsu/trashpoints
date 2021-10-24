@@ -7,6 +7,8 @@ import COLORS from '../../consts/colors'
 import Avatar from '../components/Avatar'
 import InfoColumn from '../components/InfoColumn'
 
+import XText from '../components/XText'
+
 import mime from 'mime'
 import * as ImagePicker from 'expo-image-picker';
 import MyModal from '../components/Modal'
@@ -159,7 +161,7 @@ const ProfileScreen = () => {
             <View>
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>{label}</Text>
+                        <XText>{label}</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -170,7 +172,7 @@ const ProfileScreen = () => {
 
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Confirm Password</Text>
+                        <XText>Confirm Password</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -189,7 +191,7 @@ const ProfileScreen = () => {
             <View>
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Firstname</Text>
+                        <XText>Firstname</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -200,7 +202,7 @@ const ProfileScreen = () => {
     
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Middlename</Text>
+                        <XText>Middlename</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -211,7 +213,7 @@ const ProfileScreen = () => {
     
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Lastname</Text>
+                        <XText>Lastname</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -222,7 +224,7 @@ const ProfileScreen = () => {
 
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Confirm Password</Text>
+                        <XText>Confirm Password</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -241,7 +243,7 @@ const ProfileScreen = () => {
             <View>
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Current Password</Text>
+                        <XText>Current Password</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -253,7 +255,7 @@ const ProfileScreen = () => {
     
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>New Password</Text>
+                        <XText>New Password</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -265,7 +267,7 @@ const ProfileScreen = () => {
     
                 <View style={styles.modalInputContainer}>
                     <View style={styles.modalInfoLabel}>
-                        <Text>Confirm New Password</Text>
+                        <XText>Confirm New Password</XText>
                     </View>
                     <TextInput 
                         style={styles.modalInfoVal}
@@ -320,9 +322,9 @@ const ProfileScreen = () => {
                     </View>
 
                     <View style={styles.headerInfo}>
-                        <Text style={styles.headerName}>{getFullName()}</Text>
+                        <XText style={styles.headerName}>{getFullName()}</XText>
                         <View style={styles.chipContainer}>
-                            <Text style={styles.chipText}>Verified</Text>
+                            <XText style={styles.chipText}>Verified</XText>
                         </View>
                     </View>
                 </View>
@@ -376,7 +378,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <Ionicons style={styles.actionIcon} name="help" size={24} color="black" />
-                            <Text style={styles.actionText}>Help</Text>
+                            <XText style={styles.actionText}>Help</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
@@ -384,7 +386,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <Octicons style={styles.actionIcon} name="info" size={24} color="black" />
-                            <Text style={styles.actionText}>About Us</Text>
+                            <XText style={styles.actionText}>About Us</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
@@ -392,7 +394,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <MaterialIcons style={styles.actionIcon} name="privacy-tip" size={24} color="black" />
-                            <Text style={styles.actionText}>Privacy Policy</Text>
+                            <XText style={styles.actionText}>Privacy Policy</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
@@ -400,7 +402,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <Ionicons style={styles.actionIcon} name="settings-sharp" size={24} color="black" />
-                            <Text style={styles.actionText}>Settings</Text>
+                            <XText style={styles.actionText}>Settings</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
@@ -408,7 +410,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity style={styles.actionBtn} onPress={ () => logout() }>
                         <View style={styles.actionInfo}>
                             <MaterialIcons style={styles.actionIcon} name="logout" size={24} color={COLORS.red} />
-                            <Text style={styles.actionText}>Logout</Text>
+                            <XText style={styles.actionText}>Logout</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
@@ -462,7 +464,6 @@ const styles = StyleSheet.create({
     },
     headerName:{
         fontSize: 21,
-        fontWeight: 'bold',
         color: COLORS.white
     },
     chipContainer:{
@@ -475,7 +476,6 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     chipText:{
-        fontWeight: 'bold',
         color: COLORS.white
     },
     infoContainer:{
@@ -513,7 +513,6 @@ const styles = StyleSheet.create({
         fontSize: 14
     },
     modalInfoVal:{
-        fontWeight: 'bold',
         fontSize: 16,
         borderBottomWidth: 1
     },

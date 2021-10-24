@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, FlatList, Dimensions, Image, TouchableOpacity} 
 import COLORS from '../../consts/colors';
 import { AntDesign } from '@expo/vector-icons';
 
+import XText from './XText';
+
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;
 
@@ -18,11 +20,11 @@ const ItemCards = ({items, onPress, addToCartOnPress}) => {
                         <View style={styles.cardContainer}>
                             <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(item)}>
                                     <Image style={styles.cardImage} source={item.image} />
-                                    <Text style={styles.cardName} adjustsFontSizeToFit>{item.name}</Text>
-                                    <Text style={styles.cardIngredients}>{item.ingredients}</Text>
+                                    <XText style={styles.cardName} bold adjustsFontSizeToFit>{item.name}</XText>
+                                    <XText style={styles.cardIngredients}>{item.ingredients}</XText>
 
                                     <View style={styles.cardFooter}>
-                                        <Text style={styles.cardPrice}>TP {item.price}</Text>
+                                        <XText style={styles.cardPrice} bold>TP {item.price}</XText>
                                         <TouchableOpacity onPress={() => addToCartOnPress(item)}>
                                             <View style={styles.addToCartBtn}>
                                                 <AntDesign style={styles.plusIcon} name="pluscircle" size={32} color={COLORS.primary} />
@@ -66,7 +68,6 @@ const styles = StyleSheet.create({
     },
     cardName: {
         fontSize: 16,
-        fontWeight: 'bold',
     },
     cardIngredients: {
         fontSize: 12,
@@ -74,7 +75,6 @@ const styles = StyleSheet.create({
     },
     cardPrice: {
         fontSize: 16,
-        fontWeight: 'bold'
     },
     plusIcon: {
     },

@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
 import COLORS from '../../../consts/colors'
+import XText from '../XText'
 
 const TrashItem = ({items}) => {
     return (
@@ -15,7 +16,7 @@ const TrashItem = ({items}) => {
                             <View style={styles.imgContainer}>
                                 <Image style={styles.img} source={item.image} />
                             </View>
-                            <Text adjustsFontSizeToFit={true} numberOfLines={1} style={styles.itemText}>{item.name}</Text>
+                            <XText adjustsFontSizeToFit numberOfLines={1} style={styles.itemText}>{item.name}</XText>
                         </View>
                     )
                 }}
