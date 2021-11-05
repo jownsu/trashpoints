@@ -28,7 +28,7 @@ const HomeScreen = () => {
                 />
                 <WeCollectCard 
                     title={'Organic'}
-                    info={'Oragnic waste include green waste, food waste, food-soiled paper. non-hazardous wood waste, green waste and landscape and pruning'}
+                    info={'Organic waste include green waste, food waste, food-soiled paper. non-hazardous wood waste, green waste and landscape and pruning'}
                     img={require('../../assets/trashcans/organic.png')}
                 />
                 <WeCollectCard 
@@ -57,12 +57,17 @@ export default HomeScreen
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1
+        flex: 1,
     },
     header:{
+        alignItems: 'center',
+        backgroundColor: COLORS.secondary,
+        borderBottomRightRadius: 50,
+        borderBottomLeftRadius: 50
     },
     imgContainer:{
         height: 200,
+        width: '75%',
     },
     img:{
         height: '100%',

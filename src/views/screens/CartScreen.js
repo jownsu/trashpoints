@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react'
+import React, {useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import OrderItem from '../components/OrderItem'
@@ -7,11 +7,29 @@ import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
 
 import XText from '../components/XText'
+import TPserver from '../../api/TPserver'
 
 import { OrderContext } from '../../providers/OrderProvider'
-const CartScreen = () => {
+import { AuthContext } from '../../AuthProvider'
 
-    const { orders } = useContext(OrderContext)
+const CartScreen = ({navigation}) => {
+
+    const { orders, getOrders, totalPrice } = useContext(OrderContext)
+    const { user } = useContext(AuthContext)
+
+    // const [orders, setOrders] = useState({});
+
+    useEffect(() => {
+        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+        getOrders()
+
+        const listener = navigation.addListener('focus', () => {
+            getOrders()
+        })
+
+        // console.log(orders);
+        return listener
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -25,12 +43,13 @@ const CartScreen = () => {
             <View style={styles.checkoutContainer}>
                 <View style={styles.totalContainer}>
                     <XText style={styles.totalPrice} bold>Total Price</XText>
-                    <XText style={styles.price} bold>TP 50</XText>
+                    <XText style={styles.price} bold>TP {totalPrice()}</XText>
                 </View>
 
                 <View style={styles.btn}>
                     <BtnPrimary 
                         title={'CHECKOUT'}
+                        onPress={() => console.log(orders)}
                     />
                 </View>
 

@@ -32,10 +32,17 @@ const AuthProvider = ({children}) => {
                     SecureStore.setItemAsync('user', JSON.stringify(userData))
                     setLoading(false)
                 }).catch(error => {
-                    const errData = error.response.data
-                    setError(errData)
+
                     setLoading(false)
-                    alert(errData.message)
+
+                    if(error.message === 'Network Error'){
+                        alert('No Internet Access')
+                    }else{
+                        const errData = error.response.data
+                        setError(errData)
+                        alert(errData.message)
+                    }
+
                 })
         },
         logout: async () => {

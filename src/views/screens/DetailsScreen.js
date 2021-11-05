@@ -7,6 +7,7 @@ import COLORS from '../../consts/colors';
 import { FontAwesome } from '@expo/vector-icons';
 
 import { OrderContext } from '../../providers/OrderProvider';
+import config from '../../api/config';
 const DetailsScreen = ({navigation, route}) => {
 
 
@@ -19,12 +20,16 @@ const DetailsScreen = ({navigation, route}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image style={styles.itemImage} source={item.image} />
+            <Image style={styles.itemImage} source={{ uri: config.imgPath + '/' + item.image }} />
             <View style={styles.detailsContainer} >
                 <View style={styles.detailsHeader}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <View style={styles.quantityContainer}>
-                        <TouchableOpacity style={styles.quantityMinus} onPress={() => setQuantity(quantity - 1)}>
+                        <TouchableOpacity style={styles.quantityMinus} onPress={() => {
+                            if(quantity > 1){
+                                setQuantity(quantity - 1)
+                            }
+                        }}>
                             <FontAwesome name="minus" size={18} color={COLORS.primary} />
                         </TouchableOpacity>
                         <Text style={styles.quantityCount}>{quantity}</Text>
@@ -52,7 +57,7 @@ const DetailsScreen = ({navigation, route}) => {
                         <BtnSecondary
                             title={'Add To Cart'}
                             onPress={() => {
-                                addOrder({...item, quantity})
+                                addOrder({id: item.id, quantity})
                                 navigation.pop()
                             }} 
                         />

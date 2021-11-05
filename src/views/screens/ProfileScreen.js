@@ -28,6 +28,9 @@ const ProfileScreen = () => {
                 setLoading(false)
             })
             .catch(error => {
+                if(error.response.data){
+                    alert("Something went wrong")
+                }
                 setLoading(false)
             })
     }
@@ -45,8 +48,13 @@ const ProfileScreen = () => {
             })
             .catch(error => {
                 let errMsg = error.response.data;
+                console.log(errMsg)
                 if(errMsg.errors){
-                    alert(errMsg.errors.confirm_password[0])
+                    if(errMsg.errors.confirm_password){
+                        alert(errMsg.errors.confirm_password[0])
+                    }else{
+                        alert(errMsg.message)
+                    }
                 }else{
                     alert(errMsg.message)
                 }
@@ -117,7 +125,7 @@ const ProfileScreen = () => {
     
     useEffect(() => {
         TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
-         getMyInfo()
+        getMyInfo()
     }, [])    
 
     const [inputUserInfo, setInputUserInfo] = useReducer(InputUserReducer, {

@@ -5,6 +5,8 @@ import { AntDesign } from '@expo/vector-icons';
 
 import XText from './XText';
 
+import config from '../../api/config'
+
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;
 
@@ -19,13 +21,13 @@ const ItemCards = ({items, onPress, addToCartOnPress}) => {
                     return (
                         <View style={styles.cardContainer}>
                             <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(item)}>
-                                    <Image style={styles.cardImage} source={item.image} />
+                                    <Image style={styles.cardImage} source={{ uri: config.imgPath + '/' + item.image }} />
                                     <XText style={styles.cardName} bold adjustsFontSizeToFit>{item.name}</XText>
-                                    <XText style={styles.cardIngredients}>{item.ingredients}</XText>
+                                    <XText style={styles.cardIngredients}>{item.description}</XText>
 
                                     <View style={styles.cardFooter}>
                                         <XText style={styles.cardPrice} bold>TP {item.price}</XText>
-                                        <TouchableOpacity onPress={() => addToCartOnPress(item)}>
+                                        <TouchableOpacity onPress={() => addToCartOnPress(item.id)}>
                                             <View style={styles.addToCartBtn}>
                                                 <AntDesign style={styles.plusIcon} name="pluscircle" size={32} color={COLORS.primary} />
                                             </View>

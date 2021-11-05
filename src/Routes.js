@@ -20,6 +20,7 @@ const Routes = () => {
             .catch(error => {
                 console.log(error)
             })
+        // SecureStore.deleteItemAsync('user')
     }, [])
 
     return (

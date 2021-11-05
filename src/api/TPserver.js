@@ -1,5 +1,6 @@
 import axios from "axios";
+import config from "../api/config"
 
-axios.defaults.baseURL = "http://192.168.1.13:80/api";
+axios.defaults.baseURL = config.api
 
 export default axios;

@@ -1,62 +1,70 @@
-import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 
 import TrashCategoryList from '../../components/trashCategories/TrashCategoryList'
-import CategoryList from '../../components/CategoryList'
 import TrashItem from '../../components/trashCategories/TrashItem'
 
-import trashCategories from '../../../consts/trashCategories'
-import plastic from '../../../consts/trash/plastic'
-import metal from '../../../consts/trash/metal'
-import paper from '../../../consts/trash/paper'
-import organic from '../../../consts/trash/organic'
-import glass from '../../../consts/trash/glass'
-import clothing from '../../../consts/trash/cloathing'
-// import prohibited from '../../../consts/trash/prohibited'
-// import toxic from '../../../consts/trash/toxic'
+import TPserver from '../../../api/TPserver'
+import { AuthContext } from '../../../AuthProvider'
 
 const TrashCategoryScreen = () => {
     const [index, setIndex] = useState(1)
-    const [item, setItem] = useState([]);
+    const { user, loading, setLoading } = useContext(AuthContext)
 
+    const [trashes, setTrashes] = useState([])
+    const [trashCategories, setTrashCategories] = useState([])
     useEffect(() => {
-        setItem(plastic)
+        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+        // setItem(plastic)
+        getTrashCategories()
+        getTrash(1)
     }, [])
+
+    const getTrashCategories = async() => {
+        setLoading(true)
+
+        await TPserver.get('/trashCategories')
+            .then(response => {
+                let data = response.data.data
+                setTrashCategories(data)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error.response.data);
+                setLoading(false)
+            })
+    }
+
+    const getTrash = async(id) => {
+        setLoading(true)
+
+        await TPserver.get(`/trashCategories/${id}`)
+            .then(response => {
+                let data = response.data.data
+                setTrashes(data)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error.response.data);
+                setLoading(false)
+            })
+    }
 
     return (
         <View>
+            { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+
             <TrashCategoryList
                 categories={trashCategories}
                 currentIndex={index}
-                onPress={(id, name) => {
+                onPress={(id) => {
                     setIndex(id)
-                    switch (name) {
-                        case 'Plastic':
-                            setItem(plastic)
-                            break;
-                        case 'Paper':
-                            setItem(paper)
-                            break;
-                        case 'Organic':
-                            setItem(organic)
-                            break;
-                        case 'Clothing':
-                            setItem(clothing)
-                            break;
-                        case 'Metal':
-                            setItem(metal)
-                            break;
-                        case 'Glass':
-                            setItem(glass)
-                            break;
-                        default:
-                            setItem(plastic)
-                    }
+                    getTrash(id)
                 }}
             />
 
             <TrashItem
-                items={item}
+                items={trashes}
             />
 
 
@@ -66,4 +74,13 @@ const TrashCategoryScreen = () => {
 
 export default TrashCategoryScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+    loading:{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: 100
+    }
+})

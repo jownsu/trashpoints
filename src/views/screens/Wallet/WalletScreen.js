@@ -23,7 +23,7 @@ const WalletScreen = ({navigation}) => {
                         <XText style={styles.btnText}>Categories</XText>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('Earn') }}>
                             <FontAwesome name="qrcode" size={28} color={COLORS.primary} />
                         <XText style={styles.btnText}>Earn</XText>
                     </TouchableOpacity>

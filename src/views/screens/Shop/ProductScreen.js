@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, ToastAndroid } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, ToastAndroid, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import COLORS from '../../../consts/colors'
@@ -9,43 +9,44 @@ import ItemCards from '../../components/ItemCards'
 
 import { OrderContext } from '../../../providers/OrderProvider' 
 
-import foods from '../../../consts/foods'
-import drinks from '../../../consts/drinks'
-import health from '../../../consts/health'
-import hygiene from '../../../consts/hygiene'
+import TPserver from '../../../api/TPserver'
+import { AuthContext } from '../../../AuthProvider'
 
 import XText from '../../components/XText'
 
 const ProductScreen = ({route, navigation}) => {
 
-    const { addOrder, orders, addQuantity } = useContext(OrderContext)
-
-    let {category} = route.params
+    const { orders, addOrder } = useContext(OrderContext)
+    const { user, loading, setLoading } = useContext(AuthContext)
+    let {categoryId} = route.params
 
     const [index, setIndex] = useState(1)
     const [item, setItem] = useState([])
+    const [products, setProducts] = useState([])
 
     useEffect(() => {
-        switch (category) {
-            case 'Foods':
-                setItem(foods)
-                break;
-            case 'Drinks':
-                setItem(drinks)
-                break;
-            case 'Hygiene':
-                setItem(hygiene)
-                break;
-            case 'Health':
-                setItem(health)
-                break;
-            default:
-                setItem(foods)
-        }
+        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
+        getProduct()
     },[])
+
+    const getProduct = async() => {
+        setLoading(true)
+        await TPserver.get(`/productCategories/${categoryId}`)
+            .then(response => {
+                let data = response.data.data;
+                setProducts(data)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error.response.data)
+                setLoading(false)
+            })
+    }
 
     return (
         <SafeAreaView style={styles.container}>
+            { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+
             <View style={styles.searchContainer}>
                 <View style={styles.inputSearch}>
                     <Icon name="search" size={28} color={COLORS.dark} style={styles.searchIcon}/>
@@ -64,17 +65,18 @@ const ProductScreen = ({route, navigation}) => {
 
             </View>
 
-
-                <ItemCards 
-                    items={item}
-                    onPress={(item) => {
-                        navigation.navigate('Details', item)
-                    }}
-                    addToCartOnPress={(item) => {
-                        ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
-                        addOrder({...item, quantity: 1})
-                    }}
-                />
+            <ItemCards 
+                items={products}
+                onPress={(item) => {
+                    navigation.navigate('Details', item)
+                    // console.log(item)
+                }}
+                addToCartOnPress={(id) => {
+                    addOrder({id, quantity: 1})
+                    ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
+                    // console.log({id, quantity: 1})
+                }}
+            />
 
         </SafeAreaView>
     )
@@ -116,6 +118,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10
+    },
+    loading:{
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        right: 0,
+        left: 0,
+        zIndex: 100
     }
 })
 

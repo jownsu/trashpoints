@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react
 import COLORS from '../../consts/colors'
 
 import XText from './XText'
+import config from '../../api/config'
 
 const CategoryList = ({categories, onPress}) => {
     return (
@@ -13,9 +14,9 @@ const CategoryList = ({categories, onPress}) => {
                 numColumns={3}  
                 renderItem={({item}) => {
                     return (
-                        <TouchableOpacity style={styles.btnContainer} activeOpacity={0.8} onPress={ () => onPress(item.name) }>
+                        <TouchableOpacity style={styles.btnContainer} activeOpacity={0.8} onPress={ () => onPress(item.id) }>
                             <View style={styles.imgContainer} >
-                                    <Image style={styles.categoryImage} source={item.image}/>
+                                <Image style={styles.categoryImage} source={{uri: config.imgPath + '/' + item.image}}/>
                             </View>
                             <XText style={styles.categoryName} bold >{item.name}</XText>
                         </TouchableOpacity>

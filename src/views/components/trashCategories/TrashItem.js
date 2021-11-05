@@ -3,20 +3,23 @@ import { StyleSheet, Text, View, FlatList, Image } from 'react-native'
 import COLORS from '../../../consts/colors'
 import XText from '../XText'
 
+import config from '../../../api/config'
+
 const TrashItem = ({items}) => {
     return (
         <View style={styles.container}>
             <FlatList 
                 data={items}
-                keyExtractor={item => item.id}
+                keyExtractor={item => item.id.toString()}
                 numColumns={3}
                 renderItem={({item}) => {
                     return (
                         <View style={styles.itemContainer}>
                             <View style={styles.imgContainer}>
-                                <Image style={styles.img} source={item.image} />
+                                <Image style={styles.img} source={{uri: config.imgPath + '/' + item.image}} />
                             </View>
                             <XText adjustsFontSizeToFit numberOfLines={1} style={styles.itemText}>{item.name}</XText>
+                            <XText adjustsFontSizeToFit numberOfLines={1} style={styles.itemText}>{`TP ${item.points} / ${item.unit}`}</XText>
                         </View>
                     )
                 }}

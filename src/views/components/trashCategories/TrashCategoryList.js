@@ -5,12 +5,14 @@ import COLORS from '../../../consts/colors'
 
 import XText from '../XText'
 
+import config from '../../../api/config'
+
 const TrashCategoryList = ({categories, onPress, currentIndex}) => {
     return (
         <View style={styles.container}>
             <FlatList 
                 data={categories}
-                keyExtractor={category => category.id}
+                keyExtractor={category => category.id.toString()}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 renderItem={({item}) => {
@@ -18,7 +20,7 @@ const TrashCategoryList = ({categories, onPress, currentIndex}) => {
                         <TouchableOpacity style={{...styles.btnContainer, backgroundColor : item.id == currentIndex ? COLORS.primary : COLORS.secondary}} 
                                             onPress={() => onPress(item.id, item.name)}>
                             <View style={styles.imgContainer}>
-                                <Image source={item.image} style={styles.img} />
+                                <Image source={{ uri: config.imgPath + '/' + item.image }} style={styles.img} />
                             </View>
                             <XText style={{ ...styles.btnText, color : item.id == currentIndex ? COLORS.white : COLORS.primary }} bold >{item.name}</XText>                
                         </TouchableOpacity>
