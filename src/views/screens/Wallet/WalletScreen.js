@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 
 import COLORS from '../../../consts/colors'
-import health from '../../../consts/health';
 import XText from '../../components/XText';
 
 const WalletScreen = ({navigation}) => {

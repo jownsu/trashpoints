@@ -1,24 +1,48 @@
-import React, {useReducer} from "react";
+import React, {useReducer, useContext} from "react";
 
-import TPserver from '../api/TPserver'
+import api from "../api/api";
 import { ToastAndroid } from "react-native";
+import { AuthContext } from "./AuthProvider";
 
 const OrderContext = React.createContext()
 
 const OrderProvider = ({children}) => {
 
     const [orders, dispatch] = useReducer(reducer, [])
+    const {user} = useContext(AuthContext)
 
     const addQuantity = async(order, quantity) => {
-        await TPserver.put(`/carts/${order.id}`, {quantity: order.quantity + quantity})
+        await api({token: user.token}).put(`/carts/${order.id}`, {quantity: order.quantity + quantity})
             .then(response => console.log(response.data))
             .catch(error => console.log(error))
+    }
+
+    const addToCart = async(order) => {
+        await api({token: user.token}).post('/carts', {product_id: order.id, quantity: order.quantity})
+            .then(response => console.log(response.data.data))
+            .catch(error => console.log(error.response.data))
+    }
+    
+    const findProductInCart = async (productId) => {
+        return await api({token: user.token}).get(`/carts/${productId}`)
+            .then(response => {
+    
+                if(response.data.data){
+                    return response.data.data
+                }else{
+                    return false
+                }
+    
+            })
+            .catch(error => {
+                console.log(error.response.data)
+            })
     }
 
      const orderFunctions = {
          orders,
         getOrders: async() => {
-            await TPserver.get('/carts')
+            await api({token: user.token}).get('/carts')
             .then(response => {
                 dispatch({type: 'getOrder', orders: response.data.data })
             })
@@ -42,7 +66,7 @@ const OrderProvider = ({children}) => {
         },
         removeOrder: async(order) => {
 
-            await TPserver.delete(`/carts/${order.id}`)
+            await api({token: user.token}).delete(`/carts/${order.id}`)
                 .then(response => {
                     console.log(response.data.data)
                     dispatch({type: 'removeOrder', order})
@@ -92,26 +116,4 @@ const reducer = (orders, action) => {
 
 }
 
-const addToCart = async(order) => {
-    await TPserver.post('/carts', {product_id: order.id, quantity: order.quantity})
-        .then(response => console.log(response.data.data))
-        .catch(error => console.log(error.response.data))
-}
 
-
-
-const findProductInCart = async (productId) => {
-    return await TPserver.get(`/carts/${productId}`)
-        .then(response => {
-
-            if(response.data.data){
-                return response.data.data
-            }else{
-                return false
-            }
-
-        })
-        .catch(error => {
-            console.log(error.response.data)
-        })
-}

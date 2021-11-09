@@ -1,7 +1,6 @@
 import React from 'react';
 import Routes from "./src/Routes";
-import { AuthProvider } from './src/AuthProvider';
-
+import { AuthProvider } from "./src/providers/AuthProvider";
 import AppLoading from 'expo-app-loading';
 import { useFonts } from 'expo-font';
 

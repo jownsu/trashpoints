@@ -1,48 +1,23 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
-import { AuthContext } from '../../../AuthProvider'
-
+import { AuthContext } from '../../../providers/AuthProvider'
 import COLORS from '../../../consts/colors'
-
 import CategoryList from '../../components/CategoryList'
-
-import foods from '../../../consts/foods'
-
-import category from '../../../consts/categories'
-
-import TPserver from '../../../api/TPserver'
-
 import XText from '../../components/XText';
-
+import useProductCategory from '../../../api/hooks/useProductCategory'
 
 const CategoryScreen = ({navigation}) => {
 
     const [index, setIndex] = useState(1)
-    const [categories, setCategories] = useState([])
 
-    const { user, loading, setLoading } = useContext(AuthContext)
+    const { loading } = useContext(AuthContext)
+
+    const [productCategories, getProductCategories] = useProductCategory()
 
     useEffect(() => {
-        // setItem(foods)
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
-        getCategory();
+        getProductCategories();
     },[])
-
-    const getCategory = async () => {
-        setLoading(true)
-        await TPserver.get('/productCategories')
-            .then(response => {
-                let data = response.data.data
-                setCategories(response.data.data)
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error.response.data)
-                setLoading(false)
-            })
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -53,11 +28,10 @@ const CategoryScreen = ({navigation}) => {
                 </View>
 
                 <CategoryList 
-                    categories={categories}
+                    categories={productCategories}
                     currentIndex={index}
                     onPress={ (categoryId) => navigation.navigate('Product', {categoryId})}
                 />
-
         </SafeAreaView>
     )
 }

@@ -1,11 +1,9 @@
 import React, {useState, useContext} from 'react'
 import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Feather } from '@expo/vector-icons';
 import { BtnSecondary } from '../components/Button';
 import COLORS from '../../consts/colors';
 import { FontAwesome } from '@expo/vector-icons';
-
 import { OrderContext } from '../../providers/OrderProvider';
 import config from '../../api/config';
 const DetailsScreen = ({navigation, route}) => {

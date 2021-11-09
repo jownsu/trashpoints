@@ -2,15 +2,13 @@ import React, {useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import OrderItem from '../components/OrderItem'
-import foods from '../../consts/foods'
 import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
 
 import XText from '../components/XText'
-import TPserver from '../../api/TPserver'
 
 import { OrderContext } from '../../providers/OrderProvider'
-import { AuthContext } from '../../AuthProvider'
+import { AuthContext } from '../../providers/AuthProvider'
 
 const CartScreen = ({navigation}) => {
 
@@ -20,7 +18,6 @@ const CartScreen = ({navigation}) => {
     // const [orders, setOrders] = useState({});
 
     useEffect(() => {
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
         getOrders()
 
         const listener = navigation.addListener('focus', () => {

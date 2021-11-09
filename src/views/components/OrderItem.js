@@ -6,7 +6,6 @@ import XText from './XText'
 
 import { OrderContext } from '../../providers/OrderProvider'
 
-import TPserver from '../../api/TPserver'
 import config from '../../api/config'
 
 const OrderItem = ({orders}) => {

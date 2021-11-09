@@ -7,41 +7,21 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import ItemCards from '../../components/ItemCards'
 
-import { OrderContext } from '../../../providers/OrderProvider' 
+import { AuthContext } from '../../../providers/AuthProvider'
+import { OrderContext } from '../../../providers/OrderProvider'
 
-import TPserver from '../../../api/TPserver'
-import { AuthContext } from '../../../AuthProvider'
-
-import XText from '../../components/XText'
+import useProduct from '../../../api/hooks/useProduct'
 
 const ProductScreen = ({route, navigation}) => {
-
+    let {categoryId} = route.params
     const { orders, addOrder } = useContext(OrderContext)
     const { user, loading, setLoading } = useContext(AuthContext)
-    let {categoryId} = route.params
 
-    const [index, setIndex] = useState(1)
-    const [item, setItem] = useState([])
-    const [products, setProducts] = useState([])
+    const [ products, getProduct ] = useProduct();
 
-    useEffect(() => {
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
-        getProduct()
+    useEffect(()=>{
+        getProduct(categoryId)
     },[])
-
-    const getProduct = async() => {
-        setLoading(true)
-        await TPserver.get(`/productCategories/${categoryId}`)
-            .then(response => {
-                let data = response.data.data;
-                setProducts(data)
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error.response.data)
-                setLoading(false)
-            })
-    }
 
     return (
         <SafeAreaView style={styles.container}>

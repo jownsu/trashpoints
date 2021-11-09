@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import TPserver from './api/TPserver'
+import api from '../api/api'
 import * as SecureStore from 'expo-secure-store'
 
 const AuthContext = React.createContext();
@@ -19,7 +19,7 @@ const AuthProvider = ({children}) => {
         login: async (email, password) => {
             setLoading(true)
 
-            await TPserver.post('/login', {
+            await api().post('/login', {
                 email,
                 password
             }).then(response => {
@@ -46,7 +46,7 @@ const AuthProvider = ({children}) => {
                 })
         },
         logout: async () => {
-            await TPserver.post('/logout', {})
+            await api().post('/logout', {})
                 .then(response => {
                     SecureStore.deleteItemAsync('user')
                     setUser(null)
@@ -58,7 +58,7 @@ const AuthProvider = ({children}) => {
         },
         signup: async (signUpInfo) => {
             setLoading(true)
-            await TPserver.post('/register', signUpInfo)
+            await api().post('/register', signUpInfo)
                 .then( response => {
                     const userData = {
                         ...response.data.data.user,

@@ -4,7 +4,7 @@ import AppStack from './AppStack'
 import AuthStack from './AuthStack'
 import { StatusBar } from 'expo-status-bar'
 import colors from './consts/colors'
-import { AuthContext } from './AuthProvider'
+import { AuthContext } from './providers/AuthProvider'
 import * as SecureStore from 'expo-secure-store'
 
 const Routes = () => {

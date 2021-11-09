@@ -4,51 +4,21 @@ import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import TrashCategoryList from '../../components/trashCategories/TrashCategoryList'
 import TrashItem from '../../components/trashCategories/TrashItem'
 
-import TPserver from '../../../api/TPserver'
-import { AuthContext } from '../../../AuthProvider'
+import { AuthContext } from '../../../providers/AuthProvider'
+import useTrashCategory from '../../../api/hooks/useTrashCategory'
+import useTrash from '../../../api/hooks/useTrash'
 
 const TrashCategoryScreen = () => {
     const [index, setIndex] = useState(1)
-    const { user, loading, setLoading } = useContext(AuthContext)
+    const { loading } = useContext(AuthContext)
 
-    const [trashes, setTrashes] = useState([])
-    const [trashCategories, setTrashCategories] = useState([])
+    const [trashes, getTrashes] = useTrash()
+    const [trashCategories, getTrashCategories] = useTrashCategory()
+
     useEffect(() => {
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
-        // setItem(plastic)
         getTrashCategories()
-        getTrash(1)
+        getTrashes(1)
     }, [])
-
-    const getTrashCategories = async() => {
-        setLoading(true)
-
-        await TPserver.get('/trashCategories')
-            .then(response => {
-                let data = response.data.data
-                setTrashCategories(data)
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error.response.data);
-                setLoading(false)
-            })
-    }
-
-    const getTrash = async(id) => {
-        setLoading(true)
-
-        await TPserver.get(`/trashCategories/${id}`)
-            .then(response => {
-                let data = response.data.data
-                setTrashes(data)
-                setLoading(false)
-            })
-            .catch(error => {
-                console.log(error.response.data);
-                setLoading(false)
-            })
-    }
 
     return (
         <View>
@@ -59,15 +29,13 @@ const TrashCategoryScreen = () => {
                 currentIndex={index}
                 onPress={(id) => {
                     setIndex(id)
-                    getTrash(id)
+                    getTrashes(id)
                 }}
             />
 
             <TrashItem
                 items={trashes}
             />
-
-
         </View>
     )
 }

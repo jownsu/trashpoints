@@ -5,9 +5,8 @@ import QRCode from 'react-native-qrcode-svg'
 import XText from '../../components/XText'
 import COLORS from '../../../consts/colors'
 
-import TPserver from '../../../api/TPserver'
-import { AuthContext } from '../../../AuthProvider'
-// import { useEffect } from 'react/cjs/react.development'
+import { AuthContext } from '../../../providers/AuthProvider'
+import api from '../../../api/api'
 
 
 const EarnScreen = () => {
@@ -18,7 +17,7 @@ const EarnScreen = () => {
 
     const getMyInfo = async () => {
         setLoading(true)
-        await TPserver.get('/me')
+        await api({token: user.token}).get('/me')
             .then(response => {
                 let userInfo = response.data.data
                 setUserId(userInfo.id)
@@ -30,7 +29,6 @@ const EarnScreen = () => {
     }
 
     useEffect(() => {
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
          getMyInfo()
     }, [])    
 

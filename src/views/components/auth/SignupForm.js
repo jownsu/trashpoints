@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator 
 import COLORS from '../../../consts/colors'
 import SignUp1 from './signupForms/SignUp1';
 import SignUp2 from './signupForms/SignUp2'
-import { AuthContext } from '../../../AuthProvider';
+import { AuthContext } from '../../../providers/AuthProvider';
 
 const SignupForm = ({backOnPress}) => {
 

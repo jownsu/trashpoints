@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'reac
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../../consts/colors'
 import { BtnSecondary } from '../../components/Button'
-import { Ionicons } from '@expo/vector-icons';
 
 import XText from '../../components/XText'
 

@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState, useReducer } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AuthContext } from '../../AuthProvider'
-import TPserver from '../../api/TPserver'
+import { AuthContext } from '../../providers/AuthProvider'
+import api from '../../api/api'
+
 import COLORS from '../../consts/colors'
 import Avatar from '../components/Avatar'
 import InfoColumn from '../components/InfoColumn'
@@ -20,7 +21,7 @@ const ProfileScreen = () => {
 
     const getMyInfo = async () => {
         setLoading(true)
-        await TPserver.get('/me')
+        await api({token: user.token}).get('/me')
             .then(response => {
                 let userInfo = response.data.data
                 setInputUserInfo({field: 'all', values: userInfo})
@@ -37,7 +38,7 @@ const ProfileScreen = () => {
 
     const updateMyInfo = async () => {
         setLoading(true)
-        await TPserver.put(`/users/${inputUserInfo.id}`, inputUserInfo)
+        await api({token: user.token}).put(`/users/${inputUserInfo.id}`, inputUserInfo)
             .then(response => {
                 if(response.data.success == true){
                     setUserInfo(inputUserInfo)
@@ -65,7 +66,7 @@ const ProfileScreen = () => {
 
     const changePassword = async () => {
         setLoading(true)
-        await TPserver.post('/changepassword', password)
+        await api({token: user.token}).post('/changepassword', password)
             .then(response => {
                 if(response.data.success == true){
                     alert(response.data.data.message)
@@ -91,7 +92,7 @@ const ProfileScreen = () => {
 
         data.append('_method', 'put')
 
-        await TPserver.post('/uploadavatar', data).then(response => {
+        await api({token: user.token}).post('/uploadavatar', data).then(response => {
             console.log(response.data)
             if(response.data.success == true){
                 getMyInfo()
@@ -124,7 +125,6 @@ const ProfileScreen = () => {
     })
     
     useEffect(() => {
-        TPserver.defaults.headers.common['Authorization'] = `Bearer ${user.token}`
         getMyInfo()
     }, [])    
 
