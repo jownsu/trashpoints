@@ -8,7 +8,7 @@ const useProductCategory = () => {
 
     const getProductCategory = async () => {
         setLoading(true)
-        await api({token: user.token}).get('/productCategories')
+        await api({token: user.token}).get('/users/productCategories')
             .then(response => {
                 setProductCategories(response.data.data)
                 setLoading(false)

@@ -4,7 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { BtnSecondary } from '../components/Button';
 import COLORS from '../../consts/colors';
 import { FontAwesome } from '@expo/vector-icons';
-import { OrderContext } from '../../providers/OrderProvider';
 import config from '../../api/config';
 const DetailsScreen = ({navigation, route}) => {
 

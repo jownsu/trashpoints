@@ -10,7 +10,7 @@ import config from '../../api/config'
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;
 
-const ItemCards = ({items, onPress, addToCartOnPress}) => {
+const ItemCards = ({items, addToCartOnPress}) => {
     return (
         <View style={styles.container}>
             <FlatList 
@@ -20,10 +20,11 @@ const ItemCards = ({items, onPress, addToCartOnPress}) => {
                 renderItem={({item}) => {
                     return (
                         <View style={styles.cardContainer}>
-                            <TouchableOpacity activeOpacity={0.8} onPress={() => onPress(item)}>
+                            <View>
                                     <Image style={styles.cardImage} source={{ uri: config.imgPath + '/' + item.image }} />
                                     <XText style={styles.cardName} bold adjustsFontSizeToFit>{item.name}</XText>
                                     <XText style={styles.cardIngredients}>{item.description}</XText>
+                                    <XText style={styles.cardIngredients}>{item.quantity} Pcs Available</XText>
 
                                     <View style={styles.cardFooter}>
                                         <XText style={styles.cardPrice} bold>TP {item.price}</XText>
@@ -33,7 +34,7 @@ const ItemCards = ({items, onPress, addToCartOnPress}) => {
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                            </TouchableOpacity>
+                            </View>
                         </View>
 
                     )

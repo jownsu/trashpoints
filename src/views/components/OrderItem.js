@@ -4,20 +4,34 @@ import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../../consts/colors'
 import XText from './XText'
 
-import { OrderContext } from '../../providers/OrderProvider'
-
 import config from '../../api/config'
 
-const OrderItem = ({orders}) => {
+const OrderItem = ({orders, onAddPress, onMinusPress, onDeletePress}) => {
 
-    const { addOrder, removeOrder, dispatch } = useContext(OrderContext)
-    
+    const [isRender, setIsRender] = useState(false)
+    const [itemId, setItemId] = useState(0)
+
+    const handleAddPress = item => {
+        onAddPress(item)
+        setIsRender(!isRender);
+    }
+
+    const handleMinusPress = item => {
+        onMinusPress(item)
+        setIsRender(!isRender)
+    }
+
+    const handleDeletePress = item => {
+        onDeletePress(item)
+        setIsRender(!isRender)
+    }
 
     return (
         <View>
             <FlatList 
                 data={orders}
                 keyExtractor={order => order.id.toString()}
+                extraData={isRender}
                 renderItem={({item}) => {
                     return (
                         <View style={styles.orderContainer}>
@@ -33,19 +47,11 @@ const OrderItem = ({orders}) => {
                             </View>
                             <View style={styles.quantityContainer}>
                                 <View style={styles.quantityController}>
-                                    <TouchableOpacity style={{ ...styles.quantityBtn, borderWidth: 1, borderColor: COLORS.primary }} onPress={() => {
-                                            if(item.quantity > 1){
-                                                addOrder({id: item.products.id, quantity: -1})
-                                                dispatch({type: 'addQuantity', order: {...item, quantity: -1}})
-                                            }
-                                        }}>
+                                    <TouchableOpacity style={{ ...styles.quantityBtn, borderWidth: 1, borderColor: COLORS.primary }} onPress={() => handleMinusPress(item)}>
                                         <AntDesign name="minus" size={12} color="#000" />
                                     </TouchableOpacity>
                                         <XText style={styles.quantityCount} bold>{item.quantity}</XText>
-                                    <TouchableOpacity style={{...styles.quantityBtn, backgroundColor: COLORS.primary }} onPress={() => {
-                                                addOrder({id: item.products.id, quantity: 1})
-                                                dispatch({type: 'addQuantity', order: {...item, quantity: 1}})
-                                        }}>
+                                    <TouchableOpacity style={{...styles.quantityBtn, backgroundColor: COLORS.primary }} onPress={() => handleAddPress(item)}>
                                         <AntDesign name="plus" size={16} color={COLORS.white} />
                                     </TouchableOpacity>
                                 </View>
@@ -56,7 +62,7 @@ const OrderItem = ({orders}) => {
                                 name="close" 
                                 size={18} 
                                 color={COLORS.red} 
-                                onPress={() => removeOrder(item)}
+                                onPress={() => handleDeletePress(item)}
                             />
                         </View>
                     )

@@ -32,28 +32,29 @@ const AuthProvider = ({children}) => {
                     SecureStore.setItemAsync('user', JSON.stringify(userData))
                     setLoading(false)
                 }).catch(error => {
-
-                    setLoading(false)
+                    console.log(error);
 
                     if(error.message === 'Network Error'){
                         alert('No Internet Access')
                     }else{
-                        const errData = error.response.data
-                        setError(errData)
-                        alert(errData.message)
+                        console.log(error);
+                        const errData = error.message
+                        //setError(errData)
+                        alert(errData)
                     }
+                    setLoading(false)
+
 
                 })
         },
         logout: async () => {
-            await api().post('/logout', {})
+            await api({token: user.token}).post('/logout', {})
                 .then(response => {
                     SecureStore.deleteItemAsync('user')
                     setUser(null)
                 })
                 .catch(err => {
-                    console.log(err.response.data.message)
-                    setError(err.response.data.message)
+                    console.log(err)
                 })
         },
         signup: async (signUpInfo) => {
@@ -71,13 +72,14 @@ const AuthProvider = ({children}) => {
                 })
                 .catch( error => {
                     const errorList = []
-                    let errors = error.response.data.errors
+                    let errors = error.errors
                     for (const key in errors) {
                         errorList.push(errors[key][0])                           
                     }
-                    const errData = error.response.data
-                    setError(errData)
+                    //const errData = error
+                    //setError(errData)
                     alert(errorList.join('\n'))
+                    console.log(error);
                     setLoading(false)
                 })
         }

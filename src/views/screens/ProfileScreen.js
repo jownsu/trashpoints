@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState, useReducer } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../providers/AuthProvider'
+import useUser from '../../api/hooks/useUser'
 import api from '../../api/api'
 
 import COLORS from '../../consts/colors'
@@ -10,7 +11,6 @@ import InfoColumn from '../components/InfoColumn'
 
 import XText from '../components/XText'
 
-import mime from 'mime'
 import * as ImagePicker from 'expo-image-picker';
 import MyModal from '../components/Modal'
 
@@ -19,279 +19,35 @@ import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
 const ProfileScreen = () => {
     //functions
 
-    const getMyInfo = async () => {
-        setLoading(true)
-        await api({token: user.token}).get('/me')
-            .then(response => {
-                let userInfo = response.data.data
-                setInputUserInfo({field: 'all', values: userInfo})
-                setUserInfo(userInfo)
-                setLoading(false)
-            })
-            .catch(error => {
-                if(error.response.data){
-                    alert("Something went wrong")
-                }
-                setLoading(false)
-            })
-    }
+    const { userInfo, getUserInfo, updateUserInfo, changePassword, updateAvatar } = useUser();
 
-    const updateMyInfo = async () => {
-        setLoading(true)
-        await api({token: user.token}).put(`/users/${inputUserInfo.id}`, inputUserInfo)
-            .then(response => {
-                if(response.data.success == true){
-                    setUserInfo(inputUserInfo)
-                    // setInputUserInfo({field: 'confirm_password', values: ""})
-                    getMyInfo() 
-                }
-            setLoading(false)
-            })
-            .catch(error => {
-                let errMsg = error.response.data;
-                console.log(errMsg)
-                if(errMsg.errors){
-                    if(errMsg.errors.confirm_password){
-                        alert(errMsg.errors.confirm_password[0])
-                    }else{
-                        alert(errMsg.message)
-                    }
-                }else{
-                    alert(errMsg.message)
-                }
-                setInputUserInfo({field: 'all', values: userInfo})
-                setLoading(false)
-            })
-    }
-
-    const changePassword = async () => {
-        setLoading(true)
-        await api({token: user.token}).post('/changepassword', password)
-            .then(response => {
-                if(response.data.success == true){
-                    alert(response.data.data.message)
-                }
-            setLoading(false)
-            })
-            .catch(error => {
-                    alert(error.response.data.message)
-                    setLoading(false)
-            })
-    }
-
-    const updateAvatar = async (img) => {
-        setLoading(true)
-        const newImageUri =  "file:///" + img.split("file:/").join("");
-        const data = new FormData()
-
-        data.append('avatar', {
-            uri: newImageUri,
-            type: mime.getType(newImageUri),
-            name: newImageUri.split("/").pop()
-        })
-
-        data.append('_method', 'put')
-
-        await api({token: user.token}).post('/uploadavatar', data).then(response => {
-            console.log(response.data)
-            if(response.data.success == true){
-                getMyInfo()
-            }
-            setLoading(false)
-        })
-            .catch(error => {
-                console.log(error)
-                setLoading(false)
-            })
-    }
-    
-    const getFullName = () => userInfo.firstname + " " + (userInfo.middlename ? userInfo.middlename + " " : '') + userInfo.lastname
-    
     //end of functions
 
     const { logout, user, loading, setLoading } = useContext(AuthContext)
 
+    const [firstname, setFirstname] = useState('')
+    const [middlename, setMiddlename] = useState('')
+    const [lastname, setLastname] = useState('')
+    const [email, setEmail] = useState('')
+    const [contactNo, setContactNo] = useState('')
+    const [address, setAddress] = useState('')
+    const [currentPassword, setCurrentPassword] = useState('')
+    const [newPassword, setNewPassword] = useState('')
+    const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-    const [showModal, setShowModal] = useState(false)
-    const [modalToShow, setModalToShow] = useState('')
-    const [userInfo, setUserInfo] = useState({
-        firstname: "",
-        middlename: "",
-        lastname: "",
-        email: "",
-        contact_no: "",
-        address: "",
-        avatar: ""
-    })
-    
+    const [emailModal, setEmailModal] = useState(false)
+    const [contactNoModal, setContactNoModal] = useState(false)
+    const [addressModal, setAddressModal] = useState(false)
+    const [changePasswordModal, setChangePasswordModal] = useState(false)
+    const [fullnameModal, setFullnameModal] = useState(false)
+
     useEffect(() => {
-        getMyInfo()
-    }, [])    
-
-    const [inputUserInfo, setInputUserInfo] = useReducer(InputUserReducer, {
-        id: "",
-        firstname: "",
-        middlename: "",
-        lastname: "",
-        email: "",
-        contact_no: "",
-        address: "",
-        confirm_password: ""
-    })
-    
-    const [password, setPassword] = useReducer(passwordReducer, {
-        current_password: "",
-        new_password: "",
-        new_password_confirmation: ""
-    })
-    //which modal will show on screen
-    const renderInputModal = (modalToShow) => {
-        
-        switch (modalToShow) {
-            case 'displayName':
-                return displayNameInputModal({firstname: inputUserInfo.firstname, middlename: inputUserInfo.middlename, lastname: inputUserInfo.lastname})
-            case 'email':
-                return oneInputModal('Email', 'email' ,inputUserInfo.email)
-            case 'contactNo':
-                return oneInputModal('Contact Number', 'contact_no', inputUserInfo.contact_no)
-            case 'address':
-                return oneInputModal('Address', 'address', inputUserInfo.address)
-            case 'password':
-                return displayPasswordInputModal()
-            default:
-                return;
-        }
-    }
-
-    //for one liner modal
-    const oneInputModal = (label, field, values) => {
-        return(
-            <View>
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>{label}</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={values}
-                        onChangeText={text => setInputUserInfo({field, values: text})}
-                    />
-                </View>
-
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Confirm Password</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={inputUserInfo.confirm_password}
-                        onChangeText={ text => setInputUserInfo({field: 'confirm_password', values: text})}
-                        secureTextEntry
-                    />
-                </View>
-
-            </View>
-        )
-    }
-    //for multi line modal specific for name *firstname *middlename *lastname
-    const displayNameInputModal = (value) => {
-        return(
-            <View>
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Firstname</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={value.firstname}
-                        onChangeText={text => setInputUserInfo({field: 'firstname', values: text})}
-                    />
-                </View>
-    
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Middlename</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={value.middlename}
-                        onChangeText={text => setInputUserInfo({field: 'middlename', values: text})}
-                    />
-                </View>
-    
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Lastname</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={value.lastname}
-                        onChangeText={text => setInputUserInfo({field: 'lastname', values: text})}
-                    />
-                </View>
-
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Confirm Password</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={inputUserInfo.confirm_password}
-                        onChangeText={ text => setInputUserInfo({field: 'confirm_password', values: text})}
-                        secureTextEntry
-                    />
-                </View>
-    
-            </View>
-        )
-    }
-    //for password modal *old/new/confirm pass
-    const displayPasswordInputModal = () => {
-        return(
-            <View>
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Current Password</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={password.current_password}
-                        onChangeText={text => setPassword({field: 'current_password', values: text})}
-                        secureTextEntry
-                    />
-                </View>
-    
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>New Password</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={password.new_password}
-                        onChangeText={text => setPassword({field: 'new_password', values: text})}
-                        secureTextEntry
-                    />
-                </View>
-    
-                <View style={styles.modalInputContainer}>
-                    <View style={styles.modalInfoLabel}>
-                        <XText>Confirm New Password</XText>
-                    </View>
-                    <TextInput 
-                        style={styles.modalInfoVal}
-                        value={password.new_password_confirmation}
-                        onChangeText={text => setPassword({field: 'new_password_confirmation', values: text})}
-                        secureTextEntry
-                    />
-                </View>
-            </View>
-    
-        )
-    }
+        getUserInfo()
+    }, [])
 
     const pickImage = async () => {
         await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
           allowsEditing: true,
           aspect: [3, 3],
           quality: 1,
@@ -304,11 +60,11 @@ const ProfileScreen = () => {
         .catch(error => {
             console.log(error)
         })
-    
-    
+
+
 
       };
-    
+
 
     return (
         <ScrollView>
@@ -318,7 +74,7 @@ const ProfileScreen = () => {
 
                 <View style={styles.headerContainer}>
                     <View style={styles.avatar}>
-                        <Avatar 
+                        <Avatar
                             imgPath = { userInfo.avatar }
                             onPress = { () => pickImage() }
                             height = { 100 }
@@ -330,7 +86,7 @@ const ProfileScreen = () => {
                     </View>
 
                     <View style={styles.headerInfo}>
-                        <XText style={styles.headerName}>{getFullName()}</XText>
+                        <XText bold style={styles.headerName}>{userInfo.fullname}</XText>
                         <View style={styles.chipContainer}>
                             <XText style={styles.chipText}>Verified</XText>
                         </View>
@@ -339,44 +95,45 @@ const ProfileScreen = () => {
 
                 <View style={styles.infoContainer}>
 
-                    <InfoColumn 
+                    <InfoColumn
                         label={'Display Name'}
-                        value={getFullName()}
+                        value={userInfo.fullname}
                         onEditPress={() => {
-                            setModalToShow('displayName')
-                            setShowModal(true)
+                            setFirstname(userInfo.firstname)
+                            setMiddlename(userInfo.middlename)
+                            setLastname(userInfo.lastname)
+                            setFullnameModal(true)
                         }}
                     />
-                    <InfoColumn 
+                    <InfoColumn
                         label={'Email'}
                         value={userInfo.email}
                         onEditPress={() => {
-                            setModalToShow('email')
-                            setShowModal(true)
+                            setEmail(userInfo.email)
+                            setEmailModal(true)
                         }}
                     />
-                    <InfoColumn 
+                    <InfoColumn
                         label={'Contact Number'}
                         value={userInfo.contact_no}
                         onEditPress={() => {
-                            setModalToShow('contactNo')
-                            setShowModal(true)
+                            setContactNo(userInfo.contact_no)
+                            setContactNoModal(true)
                         }}
                     />
-                    <InfoColumn 
+                    <InfoColumn
                         label={'Address'}
                         value={userInfo.address}
                         onEditPress={() => {
-                            setModalToShow('address')
-                            setShowModal(true)
+                            setAddress(userInfo.address)
+                            setAddressModal(true)
                         }}
                     />
-                    <InfoColumn 
+                    <InfoColumn
                         label={'Password'}
                         value={'********'}
                         onEditPress={() => {
-                            setModalToShow('password')
-                            setShowModal(true)
+                            setChangePasswordModal(true)
                         }}
                     />
 
@@ -390,7 +147,7 @@ const ProfileScreen = () => {
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
-            
+
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <Octicons style={styles.actionIcon} name="info" size={24} color="black" />
@@ -398,7 +155,7 @@ const ProfileScreen = () => {
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
-            
+
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <MaterialIcons style={styles.actionIcon} name="privacy-tip" size={24} color="black" />
@@ -406,7 +163,7 @@ const ProfileScreen = () => {
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
-            
+
                     <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <Ionicons style={styles.actionIcon} name="settings-sharp" size={24} color="black" />
@@ -414,7 +171,7 @@ const ProfileScreen = () => {
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
-            
+
                     <TouchableOpacity style={styles.actionBtn} onPress={ () => logout() }>
                         <View style={styles.actionInfo}>
                             <MaterialIcons style={styles.actionIcon} name="logout" size={24} color={COLORS.red} />
@@ -423,27 +180,237 @@ const ProfileScreen = () => {
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
 
-                </View>            
+                </View>
 
+                {/* Modals */}
 
-                <MyModal 
-                    visible={showModal}
+                {/* email */}
+                <MyModal
+                    visible={emailModal}
                     onCancelPress={() => {
-                        setShowModal(false)
-                        setModalToShow('')
-                        setInputUserInfo({field: 'all', values: userInfo})
-                    }}        
-                    onSavePress={() => {
-                        
-                        modalToShow == 'password'
-                        ? changePassword() 
-                        : updateMyInfo()
-
-                        setShowModal(false)
-                        setModalToShow('')
-                    }}        
+                        setCurrentPassword('') 
+                        setEmailModal(false) 
+                    }}
+                    onSavePress={() => { 
+                        updateUserInfo({...userInfo, email, current_password: currentPassword})
+                        setCurrentPassword('') 
+                        setEmailModal(false)
+                    }}
                 >
-                    { renderInputModal(modalToShow) }
+                    <View>
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Email</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={email}
+                                onChangeText={text => setEmail(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Confirm Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={currentPassword}
+                                onChangeText={ text => setCurrentPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
+                </MyModal>
+
+                {/* Address */}
+                <MyModal
+                    visible={addressModal}
+                    onCancelPress={() => { 
+                        setCurrentPassword('') 
+                        setAddressModal(false) 
+                    }}
+                    onSavePress={() => { 
+                        updateUserInfo({...userInfo, address, current_password: currentPassword})
+                        setCurrentPassword('') 
+                        setAddressModal(false) 
+                    }}
+                >
+                    <View>
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Contact Number</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={address}
+                                onChangeText={text => setAddress(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Confirm Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={currentPassword}
+                                onChangeText={ text => setCurrentPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
+                </MyModal>
+
+                {/* Contact No */}
+                <MyModal
+                    visible={contactNoModal}
+                    onCancelPress={() => { 
+                        setCurrentPassword('') 
+                        setContactNoModal(false) 
+                    }}
+                    onSavePress={() => { 
+                        updateUserInfo({...userInfo, contact_no: contactNo, current_password: currentPassword})
+                        setCurrentPassword('') 
+                        setContactNoModal(false) 
+                    }}
+                >
+                    <View>
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Contact Number</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={contactNo}
+                                onChangeText={text => setContactNo(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Confirm Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={currentPassword}
+                                onChangeText={ text => setCurrentPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
+                </MyModal>
+
+                {/* Fullname */}
+                <MyModal
+                    visible={fullnameModal}
+                    onCancelPress={() => { 
+                        setCurrentPassword('') 
+                        setFullnameModal(false) 
+                    }}
+                    onSavePress={() => { 
+                        updateUserInfo({...userInfo, firstname, middlename, lastname, current_password: currentPassword})
+                        setCurrentPassword('') 
+                        setFullnameModal(false) 
+                    }}
+                >
+                    <View>
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Firstname</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={firstname}
+                                onChangeText={text => setFirstname(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Middlename</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={middlename}
+                                onChangeText={text => setMiddlename(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Lastname</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={lastname}
+                                onChangeText={text => setLastname(text)}
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Confirm Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={currentPassword}
+                                onChangeText={ text => setCurrentPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
+                </MyModal>
+                
+                {/* Change Password */}
+                <MyModal
+                    visible={changePasswordModal}
+                    onCancelPress={() => { 
+                        setCurrentPassword('') 
+                        setChangePasswordModal(false) 
+                    }}
+                    onSavePress={() => { 
+                        changePassword({current_password: currentPassword, new_password: newPassword, new_password_confirmation: confirmNewPassword});
+                        setChangePasswordModal(false) 
+                    }}
+                >
+                    <View>
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Current Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={currentPassword}
+                                onChangeText={text => setCurrentPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>New Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={newPassword}
+                                onChangeText={text => setNewPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+
+                        <View style={styles.modalInputContainer}>
+                            <View style={styles.modalInfoLabel}>
+                                <XText>Confirm New Password</XText>
+                            </View>
+                            <TextInput
+                                style={styles.modalInfoVal}
+                                value={confirmNewPassword}
+                                onChangeText={text => setConfirmNewPassword(text)}
+                                secureTextEntry
+                            />
+                        </View>
+                    </View>
                 </MyModal>
 
             </SafeAreaView>
@@ -471,7 +438,7 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     headerName:{
-        fontSize: 21,
+        fontSize: 18,
         color: COLORS.white
     },
     chipContainer:{
@@ -536,41 +503,3 @@ const styles = StyleSheet.create({
         zIndex: 100
     }
 })
-
-const InputUserReducer = (inputUserInfo, action) => {
-    //action = field,values
-
-    switch (action.field) {
-        case 'all':
-            return {...action.values}
-        case 'email':
-            return {...inputUserInfo, email: action.values}
-        case 'firstname':
-            return {...inputUserInfo, firstname: action.values}
-        case 'middlename':
-            return {...inputUserInfo, middlename: action.values}
-        case 'lastname':
-            return {...inputUserInfo, lastname: action.values}
-        case 'contact_no':
-            return {...inputUserInfo, contact_no: action.values}
-        case 'address':
-            return {...inputUserInfo, address: action.values}
-        case 'confirm_password':
-            return {...inputUserInfo, confirm_password: action.values}
-    }
-}
-
-const passwordReducer = (password, action) => {
-    //action = field,values
-
-    switch (action.field) {
-        case 'current_password':
-            return {...password, current_password: action.values}
-        case 'new_password':
-            return {...password, new_password: action.values}
-        case 'new_password_confirmation':
-            return {...password, new_password_confirmation: action.values}
-        default:
-            return password
-    }
-}

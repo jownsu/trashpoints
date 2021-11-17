@@ -9,14 +9,14 @@ const useTrash = () => {
     const getTrashes = async(id) => {
         setLoading(true)
 
-        await api({token: user.token}).get(`/trashCategories/${id}`)
+        await api({token: user.token}).get(`/users/trashes?category=${id}`)
             .then(response => {
                 let data = response.data.data
                 setTrashes(data)
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error.response.data);
+                console.log(error.response.data)
                 setLoading(false)
             })
     }

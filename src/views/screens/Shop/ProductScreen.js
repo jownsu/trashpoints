@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, ToastAndroid, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, Image, TextInput, ToastAndroid, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import COLORS from '../../../consts/colors'
@@ -8,19 +8,20 @@ import Icon from 'react-native-vector-icons/MaterialIcons'
 import ItemCards from '../../components/ItemCards'
 
 import { AuthContext } from '../../../providers/AuthProvider'
-import { OrderContext } from '../../../providers/OrderProvider'
-
 import useProduct from '../../../api/hooks/useProduct'
+import useCart from '../../../api/hooks/useCart'
 
 const ProductScreen = ({route, navigation}) => {
     let {categoryId} = route.params
-    const { orders, addOrder } = useContext(OrderContext)
     const { user, loading, setLoading } = useContext(AuthContext)
+    const [ products, getProduct, searchProduct ] = useProduct(categoryId);
+    const {addToCart} = useCart();
 
-    const [ products, getProduct ] = useProduct();
+    const [search, setSearch] = useState('');
+
 
     useEffect(()=>{
-        getProduct(categoryId)
+        getProduct()
     },[])
 
     return (
@@ -31,30 +32,27 @@ const ProductScreen = ({route, navigation}) => {
                 <View style={styles.inputSearch}>
                     <Icon name="search" size={28} color={COLORS.dark} style={styles.searchIcon}/>
                     <TextInput 
-                        placeholder={'Search for food...'}
+                        placeholder={'Search...'}
+                        value={search}
+                        onChangeText={setSearch}
+                        onSubmitEditing={() => {searchProduct(search)}}
                     />
                 </View>
 
-                <View style={styles.filterIcon}>
+                <TouchableOpacity style={styles.filterIcon} onPress={() => { searchProduct(search) }}>
                     <Icon 
                         name="tune"
                         size={28}
                         color={COLORS.white}
                     />
-                </View>
+                </TouchableOpacity>
 
             </View>
 
             <ItemCards 
                 items={products}
-                onPress={(item) => {
-                    navigation.navigate('Details', item)
-                    // console.log(item)
-                }}
-                addToCartOnPress={(id) => {
-                    addOrder({id, quantity: 1})
-                    ToastAndroid.show('Added to cart', ToastAndroid.SHORT)
-                    // console.log({id, quantity: 1})
+                addToCartOnPress={(product_id) => {
+                    addToCart({product_id: product_id, quantity: 1})
                 }}
             />
 

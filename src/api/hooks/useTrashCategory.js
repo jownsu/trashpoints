@@ -8,7 +8,7 @@ const useTrashCategory = () => {
 
     const getTrashCategories = async() => {
         setLoading(true)
-        await api({token: user.token}).get('/trashCategories')
+        await api({token: user.token}).get('/users/trashCategories')
             .then(response => {
                 let data = response.data.data
                 setTrashCategories(data)

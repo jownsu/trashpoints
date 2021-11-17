@@ -7,33 +7,46 @@ import { BtnPrimary } from '../components/Button'
 
 import XText from '../components/XText'
 
-import { OrderContext } from '../../providers/OrderProvider'
 import { AuthContext } from '../../providers/AuthProvider'
-
+import useCart from '../../api/hooks/useCart'
 const CartScreen = ({navigation}) => {
 
-    const { orders, getOrders, totalPrice } = useContext(OrderContext)
+    //const { cart, getCart } = useContext(OrderContext)
     const { user } = useContext(AuthContext)
-
+    const {cart, getCart, addToCart, removeToCart, totalPrice, checkout} = useCart();
     // const [orders, setOrders] = useState({});
 
     useEffect(() => {
-        getOrders()
+        getCart()
 
         const listener = navigation.addListener('focus', () => {
-            getOrders()
+            getCart()
         })
 
-        // console.log(orders);
         return listener
     }, []);
+
+    
 
     return (
         <SafeAreaView style={styles.container}>
 
             <View style={{ flex: 4 }}>
                 <OrderItem 
-                    orders={orders}
+                    orders={cart}
+                    onAddPress={cartItem => {
+                            addToCart({product_id: cartItem.products.id, quantity: 1})
+
+                    }}
+                    onMinusPress={cartItem => {
+                        if(cartItem.quantity > 0){
+                            addToCart({product_id: cartItem.products.id, quantity: -1})
+                        }
+                        console.log();
+                    }}
+                    onDeletePress={cartItem => {
+                        removeToCart(cartItem.id)
+                    }}
                 />
             </View>
 
@@ -46,7 +59,7 @@ const CartScreen = ({navigation}) => {
                 <View style={styles.btn}>
                     <BtnPrimary 
                         title={'CHECKOUT'}
-                        onPress={() => console.log(orders)}
+                        onPress={() => checkout()}
                     />
                 </View>
 

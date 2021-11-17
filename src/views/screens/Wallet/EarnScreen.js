@@ -17,7 +17,7 @@ const EarnScreen = () => {
 
     const getMyInfo = async () => {
         setLoading(true)
-        await api({token: user.token}).get('/me')
+        await api({token: user.token}).get('/users')
             .then(response => {
                 let userInfo = response.data.data
                 setUserId(userInfo.id)
