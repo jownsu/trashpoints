@@ -9,7 +9,7 @@ import 'react-native-gesture-handler'
 import CartScreen from '../screens/CartScreen'
 import WalletStack from '../screens/Stacks/WalletStack'
 import HomeScreen from '../screens/HomeScreen'
-import ProfileScreen from '../screens/ProfileScreen'
+import ProfileScreen from '../screens/Profile/ProfileScreen'
 
 import ShopScreenStack from '../screens/Stacks/ShopScreenStack'
 
