@@ -19,7 +19,7 @@ const SigninScreen = ({navigation}) => {
     return (
         <SafeAreaView style={styles.container}>
             
-            { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+            {/* { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null } */}
 
             <View style={styles.topView}>
                 <Image style={styles.imageLogo} source={require('../../../assets/onboardImage.png')} />
@@ -29,20 +29,17 @@ const SigninScreen = ({navigation}) => {
                     <View style={styles.indicator}></View>
                 </View>
             </View>
-                <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 1.5 }}>
+                <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 2.7 }}>
 
                     <View style={styles.formContainer}>
                         {
                             signinShow 
                                 ? <SigninForm
-                                    email={email}
-                                    emailOnChange={email => setEmail(email)}
-                                    password={password}
-                                    passOnChange={pass => setPassword(pass)}
-                                    onSubmit={() => { 
-                                        login(email, password) 
+                                    onSubmit={(values) => { 
+                                         login(values.email, values.password) 
                                     }}
                                     signUpPress={() => { setSigninShow(false) }}
+                                    loading={loading}
                                 />
                                 : <SignupForm
                                     backOnPress={() => { setSigninShow(true) }}

@@ -216,7 +216,7 @@ const ProfileScreen = () => {
                                         onChangeText={handleChange('email')}
                                         onBlur={handleBlur('email')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.email}</XText>
+                                    <XText style={styles.errorText}>{touched.email && errors.email}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -228,10 +228,9 @@ const ProfileScreen = () => {
                                         value={values.currentPassword}
                                         onChangeText={ handleChange('currentPassword') }
                                         onBlur={handleBlur('currentPassword')}
-                                        touched
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.currentPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.currentPassword && errors.currentPassword}</XText>
                                 </View>
                             </View>
                         </MyModal>
@@ -270,7 +269,7 @@ const ProfileScreen = () => {
                                         onChangeText={handleChange('address')}
                                         onBlur={handleBlur('address')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.address}</XText>
+                                    <XText style={styles.errorText}>{touched.address && errors.address}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -284,7 +283,7 @@ const ProfileScreen = () => {
                                         onBlur={ handleBlur('currentPassword') }
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.currentPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.currentPassword && errors.currentPassword}</XText>
                                 </View>
                             </View>
                     </MyModal>
@@ -323,7 +322,7 @@ const ProfileScreen = () => {
                                         onChangeText={ handleChange('contactNo') }
                                         onBlur={handleBlur('contactNo')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.contactNo}</XText>
+                                    <XText style={styles.errorText}>{touched.contactNo && errors.contactNo}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -337,7 +336,7 @@ const ProfileScreen = () => {
                                         onBlur={handleBlur('currentPassword')}
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.currentPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.currentPassword && errors.currentPassword}</XText>
                                 </View>
                             </View>
                         </MyModal>
@@ -385,7 +384,7 @@ const ProfileScreen = () => {
                                         onChangeText={handleChange('firstname')}
                                         onBlur={handleBlur('firstname')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.firstname}</XText>
+                                    <XText style={styles.errorText}>{touched.firstname && errors.firstname}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -398,7 +397,7 @@ const ProfileScreen = () => {
                                         onChangeText={handleChange('middlename')}
                                         onBlur={handleBlur('middlename')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.middlename}</XText>
+                                    <XText style={styles.errorText}>{touched.middlename && errors.middlename}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -411,7 +410,7 @@ const ProfileScreen = () => {
                                         onChangeText={handleChange('lastname')}
                                         onBlur={handleBlur('lastname')}
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.lastname}</XText>
+                                    <XText style={styles.errorText}>{touched.lastname && errors.lastname}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -425,7 +424,7 @@ const ProfileScreen = () => {
                                         onBlur={handleBlur('currentPassword')}
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.currentPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.currentPassword && errors.currentPassword}</XText>
                                 </View>
                             </View>
                         </MyModal>
@@ -468,7 +467,7 @@ const ProfileScreen = () => {
                                         onBlur={handleBlur('currentPassword')}
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.currentPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.currentPassword && errors.currentPassword}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -482,7 +481,7 @@ const ProfileScreen = () => {
                                         onBlur={handleBlur('newPassword')}
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.newPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.newPassword && errors.newPassword}</XText>
                                 </View>
 
                                 <View style={styles.modalInputContainer}>
@@ -496,7 +495,7 @@ const ProfileScreen = () => {
                                         onBlur={handleBlur('confimNewPassword')}
                                         secureTextEntry
                                     />
-                                    <XText style={styles.errorText}>{touched && errors.confirmNewPassword}</XText>
+                                    <XText style={styles.errorText}>{touched.confirmNewPassword && errors.confirmNewPassword}</XText>
                                 </View>
                             </View>
                         </MyModal>

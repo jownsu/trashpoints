@@ -1,55 +1,186 @@
-import React, { useState, useReducer, useContext } from 'react'
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React, { useState, useReducer, useContext, useEffect } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import COLORS from '../../../consts/colors'
 import SignUp1 from './signupForms/SignUp1';
 import SignUp2 from './signupForms/SignUp2'
 import { AuthContext } from '../../../providers/AuthProvider';
+import { Button, TextInput } from 'react-native-paper'
+import { Formik } from 'formik'
+import * as yup from 'yup'
 
 const SignupForm = ({backOnPress}) => {
 
-    const { signup } = useContext(AuthContext)
-    const [showFirst, setShowFirst] = useState(true)
+    const [showPassword, setShowPassword] = useState(true)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(true)
 
-    const [state, dispatch] = useReducer(reducer, {
-        email: '',
-        password: '',
-        password_confirmation: '',
-        firstname: '',
-        lastname: '',
-        contact_no: '',
-        address: ''
+    const { signup, loading } = useContext(AuthContext)
+
+    const signUpSchema = yup.object({
+        email: yup.string().required("Email is required"),
+        password: yup.string().required("Password is required"),
+        password_confirmation: yup.string().required("Confirm Password is required"),
+        firstname: yup.string().required("Firstname is required"),
+        lastname: yup.string().required("Lastname is required"),
+        contact_no: yup.string().required("Contact No is required"),
+        address: yup.string().required("Address is required")
     })
 
     return (
         <View style={styles.container}>
-            {
-                showFirst
-                ? <SignUp1
-                    email={state.email}
-                    emailOnChange={email => dispatch({field: 'email', value: email})}
-                    password={state.password}
-                    passwordOnChange={pass => dispatch({field: 'password', value: pass})}
-                    cPassword={state.password_confirmation}
-                    cPasswordOnChange={cPass => dispatch({field: 'password_confirmation', value: cPass})}
-                    onPressNext = { () => setShowFirst(false) }
-                />
-                : <SignUp2
-                    firstname={state.firstname}
-                    firstnameOnChange={firstname => dispatch({field: 'firstname', value: firstname})}
-                    lastname={state.lastname}
-                    lastnameOnChange={lastname => dispatch({field: 'lastname', value: lastname})}
-                    contactNo={state.contact_no}
-                    contactNoOnChange={contact_no => dispatch({field: 'contact_no', value: contact_no})}
-                    address={state.address}
-                    addressOnChange={address => dispatch({field: 'address', value: address})}
-                    onPressBack = { () => setShowFirst(true) }
-                    signupOnPress = { () => signup(state)}
-                />
-            }
 
-            <TouchableOpacity style={styles.btnLogin} onPress={backOnPress}>
-                <Text style={styles.txtLogin}>Already have an account?</Text>
-            </TouchableOpacity>
+            <Formik
+                initialValues={{
+                                email: '', 
+                                password: '', 
+                                password_confirmation: '',
+                                firstname: '',
+                                lastname: '',
+                                contact_no: '',
+                                address: ''
+                             }}
+                onSubmit={(values, actions) => {
+                    console.log(values);
+                    signup(values)
+                    actions.resetForm()
+                }}
+                validationSchema={signUpSchema}
+            >
+
+                {({handleChange, handleBlur, handleSubmit, values, errors, touched}) => (
+                    <View>
+                        <TextInput
+                            label="Email"
+                            value={values.email}
+                            onChangeText={handleChange('email')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('email')}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.email && errors.email ? true : false}
+                        />
+                        <Text style={ styles.errorText } >{touched.email && errors.email}</Text>
+
+                        <TextInput
+                            label="Password"
+                            value={values.password}
+                            onChangeText={handleChange('password')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('password')}
+                            right={<TextInput.Icon style={{ marginTop: 15 }} name="eye" color="white" onPress={() => setShowPassword(!showPassword)}/>}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.password && errors.password ? true : false}
+                            secureTextEntry={showPassword}
+                        />
+                        <Text style={ styles.errorText } >{touched.password && errors.password}</Text>
+
+                        <TextInput
+                            label="Confirm Pasword"
+                            value={values.password_confirmation}
+                            onChangeText={handleChange('password_confirmation')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('password_confirmation')}
+                            right={<TextInput.Icon style={{ marginTop: 15 }} name="eye" color="white" onPress={() => setShowConfirmPassword(!showConfirmPassword)}/>}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.password_confirmation && errors.password_confirmation ? true : false}
+                            secureTextEntry={showConfirmPassword}
+                        />
+                        <Text style={ styles.errorText } >{touched.password_confirmation && errors.password_confirmation}</Text>
+
+                        <TextInput
+                            label="Firstname"
+                            value={values.firstname}
+                            onChangeText={handleChange('firstname')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('firstname')}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.firstname && errors.firstname ? true : false}
+                        />
+                        <Text style={ styles.errorText } >{touched.firstname && errors.firstname}</Text>
+
+                        <TextInput
+                            label="Lastname"
+                            value={values.lastname}
+                            onChangeText={handleChange('lastname')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('lastname')}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.lastname && errors.lastname ? true : false}
+                        />
+                        <Text style={ styles.errorText } >{touched.lastname && errors.lastname}</Text>
+
+                        <TextInput
+                            label="Contact No"
+                            value={values.contact_no}
+                            onChangeText={handleChange('contact_no')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('contact_no')}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.contact_no && errors.contact_no ? true : false}
+                        />
+                        <Text style={ styles.errorText } >{touched.contact_no && errors.contact_no}</Text>
+
+                        <TextInput
+                            label="Address"
+                            value={values.address}
+                            onChangeText={handleChange('address')}
+                            autoCapitalize={'none'}
+                            autoCorrect={false}
+                            mode='outlined'
+                            style={styles.txtInput}
+                            outlineColor='white'
+                            activeOutlineColor="white"
+                            selectionColor='blue'
+                            onBlur={ handleBlur('address')}
+                            theme={{ colors: { text: "white", placeholder: "white"} }}
+                            error={touched.address && errors.address ? true : false}
+                        />
+                        <Text style={ styles.errorText } >{touched.address && errors.address}</Text>
+                    
+                        <Button mode="contained" onPress={handleSubmit} color={COLORS.white} style={{ }}>
+                            Sign Up
+                        </Button>                
+                    </View>
+                )}
+            </Formik>
+
+            <Button mode="text" onPress={backOnPress} color={COLORS.white}>
+                Already have an account?
+            </Button>
         </View>
     )
 }
@@ -58,42 +189,25 @@ export default SignupForm
 
 const styles = StyleSheet.create({
     container:{
-        flex: 1,
         justifyContent: 'space-between',
     },
     btnLogin: {
         alignItems: 'center',
         paddingHorizontal: 2,
         zIndex: -20
-
     },
     txtLogin:{
         color: COLORS.white,
         fontWeight: 'bold',
         fontSize: 14,
         paddingVertical: 10,
+    },
+    txtInput: {
+        backgroundColor: COLORS.primary,
+        height: 35,
+        justifyContent: 'center'
+    },
+    errorText:{
+        color: COLORS.red,
     }
 })
-
-const reducer = (state, action) => {
-    //action = field, value
-
-    switch (action.field) {
-        case 'email':
-            return {...state, email: action.value }
-        case 'password':
-            return {...state, password: action.value}
-        case 'password_confirmation':
-            return {...state, password_confirmation: action.value}
-        case 'firstname':
-            return {...state, firstname: action.value}
-        case 'lastname':
-            return {...state, lastname: action.value}
-        case 'contact_no':
-            return {...state, contact_no: action.value}
-        case 'address':
-            return {...state, address: action.value}
-        default:
-            return state
-    }
-}
