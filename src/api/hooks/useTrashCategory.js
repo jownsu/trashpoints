@@ -3,8 +3,9 @@ import { AuthContext } from '../../providers/AuthProvider'
 import api from '../api'
 
 const useTrashCategory = () => {
-    const { user, setLoading } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [trashCategories, setTrashCategories] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const getTrashCategories = async() => {
         setLoading(true)
@@ -20,7 +21,7 @@ const useTrashCategory = () => {
             })
     }
 
-    return [trashCategories, getTrashCategories]
+    return {trashCategories, getTrashCategories, loading}
 
 }
 

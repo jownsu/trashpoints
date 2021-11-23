@@ -14,7 +14,7 @@ const SigninScreen = ({navigation}) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const { login, loading, setLoading } = useContext(AuthContext) 
+    const { login, loading } = useContext(AuthContext) 
 
     return (
         <SafeAreaView style={styles.container}>
@@ -28,25 +28,25 @@ const SigninScreen = ({navigation}) => {
                     <View style={styles.indicator}></View>
                     <View style={styles.indicator}></View>
                 </View>
-            </View>
-                <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 2.7 }}>
-
-                    <View style={styles.formContainer}>
-                        {
-                            signinShow 
-                                ? <SigninForm
-                                    onSubmit={(values) => { 
-                                         login(values.email, values.password) 
-                                    }}
-                                    signUpPress={() => { setSigninShow(false) }}
-                                    loading={loading}
-                                />
-                                : <SignupForm
-                                    backOnPress={() => { setSigninShow(true) }}
-                                />
-                        }
-                    </View>
+            </View> 
+            
+            <View style={{ ...styles.bottomView, flex: signinShow ? 1 : 2}}>
+                <View style={styles.formContainer}>
+                    {
+                        signinShow 
+                            ? <SigninForm
+                                onSubmit={(values) => { 
+                                        login(values.email, values.password) 
+                                }}
+                                signUpPress={() => { setSigninShow(false) }}
+                                loading={loading}
+                            />
+                            : <SignupForm
+                                backOnPress={() => { setSigninShow(true) }}
+                            />
+                    }
                 </View>
+            </View>
         </SafeAreaView>
     )
 }
@@ -56,7 +56,7 @@ export default SigninScreen
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.white,
     },
     topView: {
         flex: 1,
@@ -73,10 +73,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
         borderTopLeftRadius: 30,
         paddingHorizontal: 20,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     formContainer: {
-        flex: 1,
+        flex:1,
+        justifyContent: 'center',
     },
     indicatorContainer: {
         flexDirection: 'row',

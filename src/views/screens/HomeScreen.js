@@ -1,15 +1,25 @@
-import React from 'react'
-import { StyleSheet, Text, View, Image, ScrollView } from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../consts/colors'
 
 import XText from '../components/XText'
+import TrashCategoryList from '../components/trashCategories/TrashCategoryList'
+import useTrashCategory from '../../api/hooks/useTrashCategory'
+import Loading from '../components/Loading'
 
-import WeCollectCard from '../components/home/WeCollectCard'
+const HomeScreen = ({navigation}) => {
 
-const HomeScreen = () => {
+    const {trashCategories, getTrashCategories, loading} = useTrashCategory()
+
+    useEffect(() => {
+        getTrashCategories()
+    }, [])
+
     return (
         <SafeAreaView style={styles.container}>
+            { loading ? <Loading /> : null }
+
             <View style={styles.header}>
                 <View style={styles.imgContainer}>
                     <Image
@@ -20,34 +30,10 @@ const HomeScreen = () => {
                 </View>
             </View>
             <XText style={styles.bodyTitle} bold >What we collect</XText>
-            <ScrollView style={styles.body}>
-                <WeCollectCard 
-                    title={'Plastic'}
-                    info={'Plastic waste include mineral bottle, gallon, softdrinks bottle, sachets, and other single-use plastics'}
-                    img={require('../../assets/trashcans/plastic.png')}
-                />
-                <WeCollectCard 
-                    title={'Organic'}
-                    info={'Organic waste include green waste, food waste, food-soiled paper. non-hazardous wood waste, green waste and landscape and pruning'}
-                    img={require('../../assets/trashcans/organic.png')}
-                />
-                <WeCollectCard 
-                    title={'Paper'}
-                    info={'Including white office paper, newspaper ,colored office paper, cardboard, white computer paper, magazines, catalogs, and phone books'}
-                    img={require('../../assets/trashcans/paper.png')}
-                />
-                <WeCollectCard 
-                    title={'Glass'}
-                    info={'Clear and coloured glass bottles and jard of all sizes are recyclable - including beer, wind and soft-drink bottles, food and vitamin jars'}
-                    img={require('../../assets/trashcans/plastic.png')}
-                />
-                <WeCollectCard 
-                    title={'Metal'}
-                    info={'Hard objects made out of metal - a can, toy, tool, or car part'}
-                    img={require('../../assets/trashcans/metal.png')}
-                />
-            </ScrollView>
-
+            <TrashCategoryList 
+                categories={trashCategories}
+                onPress={(id, name) => {navigation.navigate('TrashScreen', {categoryId: id, categoryName: name})}}
+            />
 
         </SafeAreaView>
     )
@@ -63,7 +49,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.secondary,
         borderBottomRightRadius: 50,
-        borderBottomLeftRadius: 50
+        borderBottomLeftRadius: 50,
     },
     imgContainer:{
         height: 200,

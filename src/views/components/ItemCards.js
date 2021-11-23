@@ -16,12 +16,13 @@ const ItemCards = ({items, addToCartOnPress}) => {
             <FlatList 
                 data={items}
                 keyExtractor={item => item.id}
-                numColumns={2}  
+                numColumns={2}
+                removeClippedSubviews={true}  
                 renderItem={({item}) => {
                     return (
                         <View style={styles.cardContainer}>
                             <View>
-                                    <Image style={styles.cardImage} source={{ uri: config.imgPath + '/' + item.image }} />
+                                    <Image resizeMethod='resize' style={styles.cardImage} source={{ uri: config.imgPath + '/' + item.image }} resizeMode={'contain'} />
                                     <XText style={styles.cardName} bold adjustsFontSizeToFit>{item.name}</XText>
                                     <XText style={styles.cardIngredients}>{item.description}</XText>
                                     <XText style={styles.cardIngredients}>{item.quantity} Pcs Available</XText>

@@ -5169,6 +5169,11 @@ react-native-qrcode-svg@^6.1.1:
     prop-types "^15.7.2"
     qrcode "^1.4.4"
 
+react-native-raw-bottom-sheet@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-raw-bottom-sheet/-/react-native-raw-bottom-sheet-2.2.0.tgz#d11dabb86aadb014273767ef7b554924b13633c5"
+  integrity sha512-qL4JKIqvbcVxbkKzeh51hjV7suoJN3ouxzvLmOg0FBUV1yiJAfEbacjQdtRCI6+OU5pyGFBIifLsTXcFDwHggg==
+
 react-native-safe-area-context@3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-3.2.0.tgz#06113c6b208f982d68ab5c3cebd199ca93db6941"
@@ -5188,6 +5193,11 @@ react-native-svg@^12.1.1:
   dependencies:
     css-select "^2.1.0"
     css-tree "^1.0.0-alpha.39"
+
+react-native-toast-notifications@^3.2.3:
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-toast-notifications/-/react-native-toast-notifications-3.2.3.tgz#495f8472f3b9cdbad211c3f9144c5f23a3d33ca3"
+  integrity sha512-fxIQNAp6xN7inGRb/apE71EyqrW9pPIxnzZ7Cacv1XwLtz0bP1zkC4WvPfpxijZg73fhGi0vHMR/7WJez7PYyw==
 
 react-native-web@~0.13.12:
   version "0.13.18"

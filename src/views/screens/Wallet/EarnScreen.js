@@ -1,50 +1,45 @@
 import React, {useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import QRCode from 'react-native-qrcode-svg'
 import XText from '../../components/XText'
 import COLORS from '../../../consts/colors'
+import { AntDesign } from '@expo/vector-icons';
+import useUser from '../../../api/hooks/useUser'
+import Loading from '../../components/Loading'
 
-import { AuthContext } from '../../../providers/AuthProvider'
-import api from '../../../api/api'
 
+const EarnScreen = ({navigation}) => {
 
-const EarnScreen = () => {
-
-    const [userId, setUserId] = useState(0)
-
-    const { user, loading, setLoading } = useContext(AuthContext)
-
-    const getMyInfo = async () => {
-        setLoading(true)
-        await api({token: user.token}).get('/users')
-            .then(response => {
-                let userInfo = response.data.data
-                setUserId(userInfo.id)
-                setLoading(false)
-            })
-            .catch(error => {
-                setLoading(false)
-            })
-    }
+    const { userInfo, getUserInfo, loading } = useUser();
 
     useEffect(() => {
-         getMyInfo()
+         getUserInfo()
     }, [])    
 
     return (
         <SafeAreaView style={styles.container}>
-            { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
 
-            <XText bold style={styles.textStyle} >Show this QR code to the collection booth</XText>
-            <View style={styles.qrContainer}>
-                <QRCode
-                    value={userId.toString()}
-                    color={COLORS.primary}
-                    size={200}
-                />
+            { loading ? <Loading /> : null }
+
+            <View style={styles.headerContainer}>
+                <TouchableOpacity style={styles.backIcon} onPress={() => {navigation.pop()}}>
+                    <AntDesign name="back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text style={styles.headerText}>Earn Points</Text>
             </View>
-            <XText style={styles.userID} >{'TP-'+userId}</XText>
+
+            <View style={styles.bodyContainer}>
+                <XText bold style={styles.textStyle} >Show this QR code to the collection booth</XText>
+                <View style={styles.qrContainer}>
+                    <QRCode
+                        value={userInfo.id.toString()}
+                        color={COLORS.primary}
+                        size={200}
+                    />
+                </View>
+                <XText style={styles.userID} >{'TP-'+userInfo.id}</XText>
+            </View>
         </SafeAreaView>
     )
 }
@@ -54,9 +49,29 @@ export default EarnScreen
 const styles = StyleSheet.create({
     container:{
         flex: 1,
+    },
+    bodyContainer:{
+        flex: 1,
         justifyContent: 'center',
         alignItems:'center'
     },
+    headerContainer:{
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: 50,
+        backgroundColor: COLORS.primary,
+        flexDirection: 'row'
+        },
+      headerText:{
+        textAlign: "center",
+        color: "#ffffff",
+        fontSize: 20,
+      },
+      backIcon:{
+        position: 'absolute',
+        left: 20
+      },
     textStyle:{
         fontSize: 16
     },

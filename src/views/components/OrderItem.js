@@ -3,21 +3,36 @@ import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Touchable } 
 import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../../consts/colors'
 import XText from './XText'
-
+import { TextInput } from 'react-native-paper';
+import Modal from '../components/Modal'
 import config from '../../api/config'
 
-const OrderItem = ({orders, onAddPress, onMinusPress, onDeletePress}) => {
+import { Formik } from 'formik'
+import * as yup from 'yup'
+
+
+const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress}) => {
 
     const [isRender, setIsRender] = useState(false)
-    const [itemId, setItemId] = useState(0)
+    const [visible, setVisible] = useState(false)
+    const [quantity, setQuantity] = useState(1)
+    const [item, setItem] = useState({})
 
-    const handleAddPress = item => {
-        onAddPress(item)
+    const showModal = () => setVisible(true);
+    const hideModal = () => setVisible(false);
+
+    const handleAddPress = (item, quantity) => {
+        onAddPress(item, quantity)
         setIsRender(!isRender);
     }
 
-    const handleMinusPress = item => {
-        onMinusPress(item)
+    const handleMinusPress = (item, quantity) => {
+        onMinusPress(item, quantity)
+        setIsRender(!isRender)
+    }
+    
+    const handleEditPress = (item, quantity) => {
+        onEditPress(item, quantity)
         setIsRender(!isRender)
     }
 
@@ -25,6 +40,13 @@ const OrderItem = ({orders, onAddPress, onMinusPress, onDeletePress}) => {
         onDeletePress(item)
         setIsRender(!isRender)
     }
+
+    const quantitySchema = yup.object({
+        quantity: yup.number()
+                    .typeError('Quantity must be a number')
+                    .min(1, 'Quantity cannot be less than 1')
+                    .required('Quantity is required')
+    })
 
     return (
         <View>
@@ -47,11 +69,25 @@ const OrderItem = ({orders, onAddPress, onMinusPress, onDeletePress}) => {
                             </View>
                             <View style={styles.quantityContainer}>
                                 <View style={styles.quantityController}>
-                                    <TouchableOpacity style={{ ...styles.quantityBtn, borderWidth: 1, borderColor: COLORS.primary }} onPress={() => handleMinusPress(item)}>
+                                    <TouchableOpacity style={{ ...styles.quantityBtn, borderWidth: 1, borderColor: COLORS.primary }} onPress={() => handleMinusPress(item, -1)}>
                                         <AntDesign name="minus" size={12} color="#000" />
                                     </TouchableOpacity>
-                                        <XText style={styles.quantityCount} bold>{item.quantity}</XText>
-                                    <TouchableOpacity style={{...styles.quantityBtn, backgroundColor: COLORS.primary }} onPress={() => handleAddPress(item)}>
+                                        <TouchableOpacity 
+                                            onPress={() => {
+                                                setQuantity(item.quantity)
+                                                setItem(item)
+                                                showModal()
+                                            }}>
+                                            <XText style={styles.quantityCount} bold>{item.quantity}</XText>
+                                        </TouchableOpacity>
+                                        {/* <TextInput 
+                                            value={item.quantity.toString()}
+                                            onSubmitEditing={(text) => {item.quantity = text}}
+                                            keyboardType='numeric'
+                                            textAlign='center'
+                                            style={styles.quantityCount}
+                                        /> */}
+                                    <TouchableOpacity style={{...styles.quantityBtn, backgroundColor: COLORS.primary }} onPress={() => handleAddPress(item, 1)}>
                                         <AntDesign name="plus" size={16} color={COLORS.white} />
                                     </TouchableOpacity>
                                 </View>
@@ -64,10 +100,56 @@ const OrderItem = ({orders, onAddPress, onMinusPress, onDeletePress}) => {
                                 color={COLORS.red} 
                                 onPress={() => handleDeletePress(item)}
                             />
+
                         </View>
                     )
                 }}
             />
+
+        <Formik
+            initialValues={{ quantity: quantity }}
+            validationSchema={quantitySchema}
+            onSubmit={(values, actions) => {
+                handleEditPress(item, values.quantity)
+                setQuantity(1)
+                setItem({})
+                hideModal()
+                actions.resetForm()
+            }}
+            enableReinitialize
+        >
+
+            {({handleChange, handleSubmit, handleBlur, values, resetForm, touched, errors}) => (
+
+                <Modal 
+                    visible={visible}
+                    onCancelPress={() => {
+                        setQuantity(1)
+                        setItem({})
+                        hideModal()
+                    }}
+                    onSavePress={handleSubmit}
+                >
+                    <View style={{ paddingVertical: 20 }}>
+                        <TextInput 
+                            autoFocus
+                            mode='outlined'
+                            value={values.quantity.toString()}
+                            onChangeText={handleChange('quantity')}
+                            onBlur={handleBlur('quantity')}
+                            keyboardType='numeric'
+                            label='Quantity'
+                            outlineColor={COLORS.primary}
+                            activeOutlineColor={COLORS.primary}
+                        />
+                        <XText style={styles.errorText}>{touched.quantity && errors.quantity}</XText>
+                    </View>
+                </Modal>
+
+            )}
+
+        </Formik>
+
         </View>
     )
 }
@@ -143,5 +225,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 10
+    },
+    errorText:{
+        color: COLORS.red,
+        fontSize: 14
     }
 })

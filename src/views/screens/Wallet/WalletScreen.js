@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { FontAwesome, Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome, Feather, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 
 import COLORS from '../../../consts/colors'
 import XText from '../../components/XText';
@@ -17,9 +17,9 @@ const WalletScreen = ({navigation}) => {
 
             <View style={styles.bottomContainer}>
                 <View style={styles.actionContainer}>
-                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('TrashCategory') }}>
-                        <MaterialCommunityIcons name="bottle-soda-classic-outline" size={28} color={COLORS.primary} />
-                        <XText style={styles.btnText}>Categories</XText>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('PendingOrderScreen') }}>
+                        <MaterialIcons name="pending-actions" size={28} color={COLORS.primary} />
+                        <XText style={styles.btnText}>Pending</XText>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('Earn') }}>

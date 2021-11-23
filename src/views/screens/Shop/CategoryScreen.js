@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { StyleSheet, View, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AuthContext } from '../../../providers/AuthProvider'
 import COLORS from '../../../consts/colors'
 import CategoryList from '../../components/CategoryList'
 import XText from '../../components/XText';
 import useProductCategory from '../../../api/hooks/useProductCategory'
+import Loading from '../../components/Loading'
 
 const CategoryScreen = ({navigation}) => {
 
     const [index, setIndex] = useState(1)
 
-    const { loading } = useContext(AuthContext)
-
-    const [productCategories, getProductCategories] = useProductCategory()
+    const {productCategories, getProductCategories, loading} = useProductCategory()
 
     useEffect(() => {
         getProductCategories();
@@ -21,7 +19,8 @@ const CategoryScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-                { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+
+                { loading ? <Loading /> : null }
 
                 <View style={styles.headerContainer}>
                     <XText style={styles.headerText} bold>Categories</XText>

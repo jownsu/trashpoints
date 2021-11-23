@@ -4,15 +4,23 @@ import api from '../api'
 import mime from 'mime'
 
 const useUser = () => {
-    const { user, setLoading } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     //const [userInfo, setUserInfo] = useState({})
 
-    const [userInfo, setUserInfo] = useState({})
+    const [userInfo, setUserInfo] = useState({id:0})
+    const [loading, setLoading] = useState(false)
 
     const getUserInfo = async() =>{
+        setLoading(true)
         await api({token: user.token}).get('/users')
-            .then(response => {setUserInfo(response.data.data)})
-            .catch(error => {})
+            .then(response => {
+                setUserInfo(response.data.data)
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error?.response?.data)
+                setLoading(false)
+            })
     }
 
     const updateUserInfo = async(newInfo) => {
@@ -76,7 +84,7 @@ const useUser = () => {
             })
     }
 
-    return { userInfo, getUserInfo, updateUserInfo, changePassword, updateAvatar }
+    return { userInfo, getUserInfo, updateUserInfo, changePassword, updateAvatar, loading }
 
 }
 

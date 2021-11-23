@@ -3,10 +3,11 @@ import { AuthContext } from '../../providers/AuthProvider'
 import api from '../api'
 
 const useProductCategory = () => {
-    const { user, setLoading } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [productCategories, setProductCategories] = useState([])
+    const [loading, setLoading] = useState(false)
 
-    const getProductCategory = async () => {
+    const getProductCategories = async () => {
         setLoading(true)
         await api({token: user.token}).get('/users/productCategories')
             .then(response => {
@@ -19,7 +20,7 @@ const useProductCategory = () => {
             })
     }
 
-    return [productCategories, getProductCategory]
+    return {productCategories, getProductCategories, loading}
 
 }
 

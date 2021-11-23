@@ -1,30 +1,30 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AuthContext } from '../../../providers/AuthProvider'
-import useUser from '../../../api/hooks/useUser'
+import { AuthContext } from '../../providers/AuthProvider'
+import useUser from '../../api/hooks/useUser'
 
-import COLORS from '../../../consts/colors'
-import Avatar from '../../components/Avatar'
-import InfoColumn from '../../components/InfoColumn'
+import COLORS from '../../consts/colors'
+import Avatar from '../components/Avatar'
+import InfoColumn from '../components/InfoColumn'
 
-import XText from '../../components/XText'
+import XText from '../components/XText'
 
 import * as ImagePicker from 'expo-image-picker';
-import MyModal from '../../components/Modal'
-
+import MyModal from '../components/Modal'
+import Loading from '../components/Loading'
 import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 
-const ProfileScreen = () => {
+const ProfileScreen = ({navigation}) => {
     //functions
 
-    const { userInfo, getUserInfo, updateUserInfo, changePassword, updateAvatar } = useUser();
+    const { userInfo, getUserInfo, updateUserInfo, changePassword, updateAvatar, loading } = useUser();
 
     //end of functions
 
-    const { logout, loading } = useContext(AuthContext)
+    const { logout } = useContext(AuthContext)
 
     const [emailModal, setEmailModal] = useState(false)
     const [contactNoModal, setContactNoModal] = useState(false)
@@ -83,29 +83,35 @@ const ProfileScreen = () => {
 
     return (
         <ScrollView>
-                { loading ? <ActivityIndicator size="large" color="#000" style={styles.loading}/> : null }
+            
+            { loading ? <Loading /> : null }
 
             <SafeAreaView style={styles.container}>
 
                 <View style={styles.headerContainer}>
-                    <View style={styles.avatar}>
-                        <Avatar
-                            imgPath = { userInfo.avatar }
-                            onPress = { () => pickImage() }
-                            height = { 100 }
-                            width = { 100 }
-                            editHeight = { 35 }
-                            editWidth = { 35 }
-                            iconSize = { 21 }
-                        />
-                    </View>
 
-                    <View style={styles.headerInfo}>
-                        <XText bold style={styles.headerName}>{userInfo.fullname}</XText>
-                        <View style={styles.chipContainer}>
-                            <XText style={styles.chipText}>Verified</XText>
+                    <View style={styles.header}>
+                        <View style={styles.avatar}>
+                            <Avatar
+                                imgPath = { userInfo.avatar }
+                                onPress = { () => pickImage() }
+                                height = { 100 }
+                                width = { 100 }
+                                editHeight = { 35 }
+                                editWidth = { 35 }
+                                iconSize = { 21 }
+                            />
+                        </View>
+
+                        <View style={styles.headerInfo}>
+                            <XText bold style={styles.headerName}>{userInfo.fullname}</XText>
+
+                            <XText style={styles.txtContactNo}>{userInfo.contact_no}</XText>
                         </View>
                     </View>
+                    <TouchableOpacity style={styles.chipContainer} onPress={() => navigation.navigate('VerifyScreen', {contact_no: userInfo.contact_no})}>
+                        <XText style={styles.chipText}>Verify now</XText>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.infoContainer}>
@@ -517,12 +523,14 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white,
     },
     headerContainer:{
+        paddingVertical: 50,
+        paddingLeft: 20,
+        backgroundColor: COLORS.primary,
+        borderBottomRightRadius: 150,
+    },
+    header:{
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 50,
-        paddingHorizontal: 10,
-        backgroundColor: COLORS.primary,
-        borderBottomRightRadius: 120,
     },
     avatar:{
         marginRight: 10,
@@ -531,17 +539,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: COLORS.white
     },
+    txtContactNo:{
+        color: '#fff',
+        fontStyle: 'italic',
+        fontSize: 16,
+        paddingVertical: 5
+    },
     chipContainer:{
         borderWidth: 1,
         borderColor: COLORS.white,
-        width: 75,
+        width: 100,
         alignItems: 'center',
         borderRadius: 50,
         padding: 5,
-        marginVertical: 10,
+        marginTop: 15,
     },
     chipText:{
-        color: COLORS.white
+        color: COLORS.white,
     },
     infoContainer:{
         backgroundColor: COLORS.light,

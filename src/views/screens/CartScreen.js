@@ -6,15 +6,11 @@ import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
 
 import XText from '../components/XText'
-
-import { AuthContext } from '../../providers/AuthProvider'
+import Loading from '../components/Loading'
 import useCart from '../../api/hooks/useCart'
 const CartScreen = ({navigation}) => {
 
-    //const { cart, getCart } = useContext(OrderContext)
-    const { user } = useContext(AuthContext)
-    const {cart, getCart, addToCart, removeToCart, totalPrice, checkout} = useCart();
-    // const [orders, setOrders] = useState({});
+    const {cart, getCart, addToCart, removeToCart, totalPrice, checkout, loading} = useCart();
 
     useEffect(() => {
         getCart()
@@ -30,19 +26,22 @@ const CartScreen = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            { loading ? <Loading /> : null }
 
             <View style={{ flex: 4 }}>
                 <OrderItem 
                     orders={cart}
-                    onAddPress={cartItem => {
-                            addToCart({product_id: cartItem.products.id, quantity: 1})
-
+                    onAddPress={(cartItem, quantity) => {
+                            addToCart({product_id: cartItem.products.id, quantity})
                     }}
-                    onMinusPress={cartItem => {
+                    onMinusPress={(cartItem, quantity) => {
                         if(cartItem.quantity > 0){
-                            addToCart({product_id: cartItem.products.id, quantity: -1})
+                            addToCart({product_id: cartItem.products.id, quantity})
                         }
                         console.log();
+                    }}
+                    onEditPress={(cartItem, quantity) => {
+                        addToCart({product_id: cartItem.products.id, quantity, new_quantity: true})
                     }}
                     onDeletePress={cartItem => {
                         removeToCart(cartItem.id)

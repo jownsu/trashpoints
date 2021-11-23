@@ -37,9 +37,8 @@ const SigninForm = ({ onSubmit, signUpPress, loading = false }) => {
             /> */}
             <Formik
                 initialValues={{ email: '', password: '' }}
-                onSubmit={(values, actions) => {
+                onSubmit={(values) => {
                     onSubmit(values)
-                    actions.resetForm()
                 }}
                 validationSchema={signInSchema}
             >

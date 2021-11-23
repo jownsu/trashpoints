@@ -3,8 +3,9 @@ import { AuthContext } from "../../providers/AuthProvider";
 import api from "../api";
 
 const useProduct = (id) => {
-    const { user, setLoading } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [products, setProducts] = useState([])
+    const [loading, setLoading] = useState(false)
 
     const getProduct = async() => {
         setLoading(true)
@@ -34,7 +35,7 @@ const useProduct = (id) => {
             })
     }
 
-    return [products, getProduct, searchProduct]
+    return {products, getProduct, searchProduct, loading}
     
 }
 

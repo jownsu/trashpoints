@@ -1,10 +1,15 @@
 import React, { useState, useContext } from 'react'
 import { AuthContext } from '../../providers/AuthProvider'
 import api from '../api'
+import { useToast } from "react-native-toast-notifications";
+
 
 const useCart = () => {
-    const { user, setLoading } = useContext(AuthContext)
+    const { user } = useContext(AuthContext)
     const [cart, setCart] = useState([])
+    const [loading, setLoading] = useState(false)
+    const toast = useToast();
+
 
     const getCart = async() => {
         setLoading(true)
@@ -20,13 +25,17 @@ const useCart = () => {
             })
     }
 
-    const addToCart = async({product_id = null, quantity = 1} = {}) => {
-        setLoading(true)
-        await api({token: user.token}).post('/users/addToCart', {product_id, quantity})
+    const addToCart = async({product_id = null, quantity = 1, new_quantity = false} = {}) => {
+        setLoading(true) 
+        await api({token: user.token}).post('/users/addToCart', {product_id, quantity, new_quantity : new_quantity ? quantity : 0})
             .then(() => {
                 let newCart = cart.map(item => {
                     if(item.products.id == product_id){
-                        item.quantity += quantity
+                        if(new_quantity){
+                            item.quantity = quantity
+                        }else{
+                            item.quantity += parseInt(quantity)
+                        }
                         return item 
                     }
                 return item
@@ -67,14 +76,16 @@ const useCart = () => {
                 if(response.data.success == true){
                     setCart([])
                     alert('Checkouted')
+                    setLoading(false)
                 }
             })
             .catch(error => {
                 alert(error.message)
+                setLoading(false)
             });
     }
 
-    return {cart, getCart, addToCart, removeToCart, checkout, totalPrice}
+    return {cart, getCart, addToCart, removeToCart, checkout, totalPrice, loading}
 }
 
 export default useCart
