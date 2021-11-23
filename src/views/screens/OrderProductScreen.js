@@ -54,7 +54,8 @@ const OrderProductScreen = ({route, navigation}) => {
       
               <View style={styles.cardText}>      
                 <View style={styles.totalPos}>
-                  <XText style={styles.totalText}>Total: <XText bold style={styles.orderTotal} numberOfLines={1} >{`TP ${item.total_price}`}</XText></XText>
+                  <XText>Total </XText>
+                  <XText bold style={styles.orderTotal} numberOfLines={1} >{`TP ${item.total_price}`}</XText>
                 </View>
               </View>
           </View>
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   },
   orderTotal:{
     color: COLORS.primary,
-    width: 130
+    width: 120,
   },
   totalText:{
     fontSize: 16
