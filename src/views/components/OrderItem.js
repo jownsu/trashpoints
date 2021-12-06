@@ -4,7 +4,7 @@ import { AntDesign } from '@expo/vector-icons'
 import COLORS from '../../consts/colors'
 import XText from './XText'
 import { TextInput } from 'react-native-paper';
-import Modal from '../components/Modal'
+import MyModal from '../components/MyModal'
 import config from '../../api/config'
 
 import { Formik } from 'formik'
@@ -110,7 +110,7 @@ const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress
             initialValues={{ quantity: quantity }}
             validationSchema={quantitySchema}
             onSubmit={(values, actions) => {
-                handleEditPress(item, values.quantity)
+                handleEditPress(item, parseInt(values.quantity))
                 setQuantity(1)
                 setItem({})
                 hideModal()
@@ -121,14 +121,14 @@ const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress
 
             {({handleChange, handleSubmit, handleBlur, values, resetForm, touched, errors}) => (
 
-                <Modal 
+                <MyModal 
                     visible={visible}
                     onCancelPress={() => {
                         setQuantity(1)
                         setItem({})
                         hideModal()
                     }}
-                    onSavePress={handleSubmit}
+                    onConfirmPress={handleSubmit}
                 >
                     <View style={{ paddingVertical: 20 }}>
                         <TextInput 
@@ -144,7 +144,7 @@ const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress
                         />
                         <XText style={styles.errorText}>{touched.quantity && errors.quantity}</XText>
                     </View>
-                </Modal>
+                </MyModal>
 
             )}
 

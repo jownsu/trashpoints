@@ -1,8 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import { Image, StyleSheet } from "react-native";
+
 import CategoryScreen from '../Shop/CategoryScreen'
 import ProductScreen from "../Shop/ProductScreen"
+
+import Header from "../../components/Header";
 
 const Stack = createStackNavigator();
 

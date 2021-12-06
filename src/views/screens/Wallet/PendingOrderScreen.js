@@ -5,7 +5,7 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import COLORS from '../../../consts/colors';
 import useOrder from '../../../api/hooks/useOrder';
 import Loading from '../../components/Loading'
-
+import Header from '../../components/Header';
 const PendingOrderScreen = ({navigation}) => {
 
   const { orders, getOrders, loading } = useOrder()
@@ -26,12 +26,10 @@ const PendingOrderScreen = ({navigation}) => {
 
       { loading ? <Loading /> : null }
 
-      <View style={styles.headerCollector}>
-        <TouchableOpacity style={styles.backIcon} onPress={() => {navigation.pop()}}>
-          <AntDesign name="back" size={24} color="white" />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Pending List</Text>
-      </View>
+      <Header 
+          title={"Pending List"}
+          onBackPress={() => navigation.pop()}
+      />
 
       <FlatList 
             data={orders}
@@ -41,7 +39,7 @@ const PendingOrderScreen = ({navigation}) => {
                 <TouchableOpacity style={styles.cardContainer} onPress={() => {navigation.navigate('OrderProductScreen', {orderId: item.id})}}>
                     <View style={styles.card1}>
                         <Text style={styles.cardTextDate}>{item.checked_out_at}</Text>
-                        <Text style={styles.cardTextID}>Order ID : {item.id}</Text>
+                        <Text style={styles.cardTextID}>Order ID : {item.smug_id}</Text>
                     </View>
                     
                     <View style={styles.card2}>
@@ -65,23 +63,6 @@ export default PendingOrderScreen
 const styles = StyleSheet.create({
   container:{
     flex: 1
-  },
-  headerCollector:{
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    height: 50,
-    backgroundColor: COLORS.primary,
-    flexDirection: 'row'
-    },
-  headerText:{
-    textAlign: "center",
-    color: "#ffffff",
-    fontSize: 20,
-  },
-  backIcon:{
-    position: 'absolute',
-    left: 20
   },
   cardContainer:{
     flexDirection: "row",

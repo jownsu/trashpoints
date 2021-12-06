@@ -8,6 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons';
 import COLORS from '../../../consts/colors'
 import Loading from '../../components/Loading'
+import Header from '../../components/Header'
 
 const TrashScreen = ({route, navigation}) => {
     const {trashes, getTrashes, loading} = useTrash()
@@ -22,12 +23,10 @@ const TrashScreen = ({route, navigation}) => {
         <SafeAreaView style={styles.container}>
             { loading ? <Loading /> : null }
 
-            <View style={styles.headerCollector}>
-                <TouchableOpacity style={styles.backIcon} onPress={() => {navigation.pop()}}>
-                    <AntDesign name="back" size={24} color="white" />
-                </TouchableOpacity>
-                <Text style={styles.headerText}>{categoryName}</Text>
-            </View>
+            <Header 
+                title={categoryName}
+                onBackPress={() => navigation.pop()}
+            />
             <TrashItem
                 items={trashes}
             />
@@ -49,23 +48,4 @@ const styles = StyleSheet.create({
         left: 0,
         zIndex: 100
     },
-    headerCollector:{
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
-        height: 50,
-        backgroundColor: COLORS.primary,
-        flexDirection: 'row',
-        marginBottom: 20
-
-        },
-      headerText:{
-        textAlign: "center",
-        color: "#ffffff",
-        fontSize: 20,
-      },
-      backIcon:{
-        position: 'absolute',
-        left: 20
-      },
 })

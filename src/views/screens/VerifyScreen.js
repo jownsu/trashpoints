@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
   textTitle:{
     textAlign: "center",
     fontSize: 20,
-    marginTop: 20
   },
   numContainer:{
     flexDirection: 'row',
@@ -176,15 +175,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    height: 70,
-    width: 70,
+    height: 60,
+    width: 60,
     borderRadius: 100,
     borderWidth: 1,
     borderColor: "green",
     margin: 10
   },
   textButton:{
-    fontSize: 24,
+    fontSize: 18,
     color: "green"
   },
   textInputView:{

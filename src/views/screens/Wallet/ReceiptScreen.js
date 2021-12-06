@@ -7,12 +7,12 @@ import COLORS from '../../../consts/colors'
 import { AntDesign } from '@expo/vector-icons';
 import useUser from '../../../api/hooks/useUser'
 import Loading from '../../components/Loading'
-import Header from '../../components/Header'
 
 
-const EarnScreen = ({navigation}) => {
+const ReceiptScreen = ({route , navigation}) => {
 
     const { userInfo, getUserInfo, loading } = useUser();
+    let {order} = route.params;
 
     useEffect(() => {
          getUserInfo()
@@ -23,27 +23,32 @@ const EarnScreen = ({navigation}) => {
 
             { loading ? <Loading /> : null }
 
-            <Header 
-                title={"Earn Points"}
-                onBackPress={() => navigation.pop()}
-            />
+            <View style={styles.headerContainer}>
+                <TouchableOpacity style={styles.backIcon} onPress={() => {navigation.pop()}}>
+                    <AntDesign name="back" size={24} color="white" />
+                </TouchableOpacity>
+                <Text style={styles.headerText}>Receipt</Text>
+            </View>
 
             <View style={styles.bodyContainer}>
                 <XText bold style={styles.textStyle} >Show this QR code to the collection booth</XText>
                 <View style={styles.qrContainer}>
                     <QRCode
-                        value={userInfo.id.toString()}
+                        value={order.id.toString()}
                         color={COLORS.primary}
                         size={200}
                     />
                 </View>
-                <XText style={styles.userID}>{userInfo.smug_id}</XText>
+                <XText style={styles.userID} >{'ID: '+ order.smug_id}</XText>
+                <XText>Ordered at {order.checked_out_at}</XText>
+                <XText>Total Item: {order.total_item}</XText>
+                <XText>Total Price: TP {order.total_price}</XText>
             </View>
         </SafeAreaView>
     )
 }
 
-export default EarnScreen
+export default ReceiptScreen
 
 const styles = StyleSheet.create({
     container:{
@@ -54,6 +59,23 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center'
     },
+    headerContainer:{
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+        height: 50,
+        backgroundColor: COLORS.primary,
+        flexDirection: 'row'
+        },
+      headerText:{
+        textAlign: "center",
+        color: "#ffffff",
+        fontSize: 20,
+      },
+      backIcon:{
+        position: 'absolute',
+        left: 20
+      },
     textStyle:{
         fontSize: 16
     },

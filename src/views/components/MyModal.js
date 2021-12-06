@@ -4,7 +4,7 @@ import COLORS from '../../consts/colors'
 
 import XText from './XText'
 
-const MyModal = ({children, visible, onCancelPress, onSavePress}) => {
+const MyModal = ({children, visible, onCancelPress, onConfirmPress}) => {
     return (
         <Modal
         transparent
@@ -22,8 +22,8 @@ const MyModal = ({children, visible, onCancelPress, onSavePress}) => {
                         <TouchableOpacity style={styles.modalBtnCancel} onPress={onCancelPress}>
                             <XText style={styles.modalTextCancel}>Cancel</XText>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.modalBtnSave} onPress={onSavePress}>
-                            <XText style={styles.modalTextSave}>Save</XText>
+                        <TouchableOpacity style={styles.modalBtnSave} onPress={onConfirmPress}>
+                            <XText style={styles.modalTextSave}>Confirm</XText>
                         </TouchableOpacity>
                     </View>
 

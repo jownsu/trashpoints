@@ -14,7 +14,7 @@ const CategoryList = ({categories, onPress}) => {
                 numColumns={3}  
                 renderItem={({item}) => {
                     return (
-                        <TouchableOpacity style={styles.btnContainer} activeOpacity={0.8} onPress={ () => onPress(item.id) }>
+                        <TouchableOpacity style={styles.btnContainer} activeOpacity={0.8} onPress={ () => onPress({categoryId: item.id, categoryName: item.name}) }>
                             <View style={styles.imgContainer} >
                                 <Image style={styles.categoryImage} source={{uri: config.imgPath + '/' + item.image}}/>
                             </View>

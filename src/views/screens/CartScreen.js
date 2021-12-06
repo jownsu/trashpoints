@@ -4,13 +4,15 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import OrderItem from '../components/OrderItem'
 import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
-
+import MyModal from '../components/MyModal'
+import { Button } from 'react-native-paper'
 import XText from '../components/XText'
 import Loading from '../components/Loading'
 import useCart from '../../api/hooks/useCart'
 const CartScreen = ({navigation}) => {
 
     const {cart, getCart, addToCart, removeToCart, totalPrice, checkout, loading} = useCart();
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         getCart()
@@ -35,10 +37,9 @@ const CartScreen = ({navigation}) => {
                             addToCart({product_id: cartItem.products.id, quantity})
                     }}
                     onMinusPress={(cartItem, quantity) => {
-                        if(cartItem.quantity > 0){
+                        if(cartItem.quantity > 1){
                             addToCart({product_id: cartItem.products.id, quantity})
                         }
-                        console.log();
                     }}
                     onEditPress={(cartItem, quantity) => {
                         addToCart({product_id: cartItem.products.id, quantity, new_quantity: true})
@@ -56,14 +57,29 @@ const CartScreen = ({navigation}) => {
                 </View>
 
                 <View style={styles.btn}>
-                    <BtnPrimary 
-                        title={'CHECKOUT'}
-                        onPress={() => checkout()}
-                    />
+                    <Button mode="contained" color={COLORS.primary} 
+                            onPress={ () => {
+                                setShowModal(true)
+                            }} >
+                        <Text style={{ color: '#fff' }}>
+                            Check Out
+                        </Text>
+                    </Button>
                 </View>
-
             </View>
 
+        {/* MODAL */}
+
+        <MyModal 
+            visible={showModal}
+            onCancelPress={() => setShowModal(false)}
+            onConfirmPress={() => {
+                checkout()
+                setShowModal(false)
+            }}
+        >
+            <XText style={styles.txtModal}>Going to Checkout <XText bold>TP {totalPrice()}</XText>?</XText>
+        </MyModal>
 
         </SafeAreaView>
     )
@@ -98,6 +114,10 @@ const styles = StyleSheet.create({
     btn: {
         marginVertical: 10,
         width: 250
+    },
+    txtModal:{
+        paddingVertical: 30,
+        paddingHorizontal: 10
     }
 
 })

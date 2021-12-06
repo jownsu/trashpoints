@@ -20,6 +20,13 @@ const useProductCategory = () => {
             })
     }
 
+    const addCategory = async(name, image) => {
+        await api().post('/admin/prodcutCateody', {name, image})
+            .then(response => {
+                alert(response.data.data.name + " is added")
+            })
+    }
+
     return {productCategories, getProductCategories, loading}
 
 }

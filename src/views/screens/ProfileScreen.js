@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, Button } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, TextInput, ActivityIndicator, ImageBackground } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AuthContext } from '../../providers/AuthProvider'
 import useUser from '../../api/hooks/useUser'
@@ -11,7 +11,7 @@ import InfoColumn from '../components/InfoColumn'
 import XText from '../components/XText'
 
 import * as ImagePicker from 'expo-image-picker';
-import MyModal from '../components/Modal'
+import MyModal from '../components/MyModal'
 import Loading from '../components/Loading'
 import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
 import { Formik } from 'formik'
@@ -70,7 +70,7 @@ const ProfileScreen = ({navigation}) => {
 
     const FullnameSchema = yup.object({
         firstname: yup.string().required("Firstname is required"),
-        middlename: yup.string().required("Middlename is required"),
+        middlename: yup.string(),
         lastname: yup.string().required("Lastname is required"),
         currentPassword: yup.string().required('Please confirm your password')        
     })
@@ -88,7 +88,7 @@ const ProfileScreen = ({navigation}) => {
 
             <SafeAreaView style={styles.container}>
 
-                <View style={styles.headerContainer}>
+                <ImageBackground source={require('../../assets/header.jpg')} style={styles.headerContainer}>
 
                     <View style={styles.header}>
                         <View style={styles.avatar}>
@@ -105,14 +105,14 @@ const ProfileScreen = ({navigation}) => {
 
                         <View style={styles.headerInfo}>
                             <XText bold style={styles.headerName}>{userInfo.fullname}</XText>
-
+                            <XText style={styles.id}>{userInfo.smug_id}</XText>
                             <XText style={styles.txtContactNo}>{userInfo.contact_no}</XText>
                         </View>
                     </View>
                     <TouchableOpacity style={styles.chipContainer} onPress={() => navigation.navigate('VerifyScreen', {contact_no: userInfo.contact_no})}>
                         <XText style={styles.chipText}>Verify now</XText>
                     </TouchableOpacity>
-                </View>
+                </ImageBackground>
 
                 <View style={styles.infoContainer}>
 
@@ -208,7 +208,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setEmailModal(false)
                             }}
-                            onSavePress={handleSubmit}
+                            OnConfirmPress={handleSubmit}
                         >
 
                             <View>
@@ -262,7 +262,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setAddressModal(false) 
                             }}
-                            onSavePress={handleSubmit}
+                            OnConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -315,7 +315,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setContactNoModal(false) 
                             }}
-                            onSavePress={handleSubmit}
+                            OnConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -377,7 +377,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setFullnameModal(false) 
                             }}
-                            onSavePress={handleSubmit}
+                            OnConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -459,7 +459,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setChangePasswordModal(false) 
                             }}
-                            onSavePress={handleSubmit}
+                            OnConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -527,6 +527,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         backgroundColor: COLORS.primary,
         borderBottomRightRadius: 150,
+        overflow: 'hidden'
     },
     header:{
         flexDirection: 'row',
@@ -543,7 +544,11 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontStyle: 'italic',
         fontSize: 16,
-        paddingVertical: 5
+    },
+    id:{
+        color: '#fff',
+        fontStyle: 'italic',
+        fontSize: 16,
     },
     chipContainer:{
         borderWidth: 1,

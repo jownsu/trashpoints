@@ -29,7 +29,7 @@ const CategoryScreen = ({navigation}) => {
                 <CategoryList 
                     categories={productCategories}
                     currentIndex={index}
-                    onPress={ (categoryId) => navigation.navigate('Product', {categoryId})}
+                    onPress={ ({categoryId, categoryName}) => navigation.navigate('Product', {categoryId, categoryName})}
                 />
         </SafeAreaView>
     )

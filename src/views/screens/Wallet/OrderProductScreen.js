@@ -1,20 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons , AntDesign } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import COLORS from '../../consts/colors'
-import XText from '../components/XText';
-import useOrderProduct from '../../api/hooks/useOrderProduct';
-import config from '../../api/config';
+import COLORS from '../../../consts/colors'
+import XText from '../../components/XText';
+import useOrderProduct from '../../../api/hooks/useOrderProduct';
+import config from '../../../api/config';
 import { Button } from 'react-native-paper'
-import Loading from '../components/Loading'
+import Loading from '../../components/Loading'
+import MyModal from '../../components/MyModal'
 
 const OrderProductScreen = ({route, navigation}) => {
 
   let { orderId } = route.params
 
   const { orderProducts, getOrderProducts, deleteOrder, loading } = useOrderProduct();
-
+  const [showModal, setShowModal] = useState(false) 
 
   useEffect(() => {
     getOrderProducts(orderId)
@@ -26,14 +27,17 @@ const OrderProductScreen = ({route, navigation}) => {
       { loading ? <Loading /> : null }
     
       <View style={styles.headerCollector}>
-        <TouchableOpacity style={styles.backIcon} onPress={() => {navigation.pop()}}>
+        <TouchableOpacity onPress={() => {navigation.pop()}}>
           <AntDesign name="back" size={24} color="white" />
         </TouchableOpacity>
         <XText style={styles.headerCart}>Orders</XText>
+        <TouchableOpacity onPress={() => navigation.navigate('ReceiptScreen', {order: orderProducts})}>
+          <MaterialCommunityIcons name="qrcode-scan" size={21} color="white" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.headerIDCont}>
-        <XText style={styles.headerID}>ID: {orderProducts.id}</XText>
+        <XText style={styles.headerID}>ID: {orderProducts.smug_id}</XText>
         <XText style={{position: "absolute", right: 20, fontSize: 20}}>{orderProducts.checked_out_at}</XText>
       </View>
       
@@ -66,14 +70,11 @@ const OrderProductScreen = ({route, navigation}) => {
       <View style={styles.checkoutContainer}>
           <View style={styles.totalContainer}>
               <XText style={styles.totalPrice} bold>Total Price</XText>
-              <XText style={styles.price} bold numberOfLines={1}>TP {orderProducts.total}</XText>
+              <XText style={styles.price} bold numberOfLines={1}>TP {orderProducts.total_price}</XText>
           </View>
 
           <Button mode="contained" color={COLORS.red} 
-                  onPress={ () => { 
-                    deleteOrder(orderId)
-                    navigation.pop()
-                  }} >
+                  onPress={ () => setShowModal(true)} >
             <Text style={{ color: '#fff' }}>
                 Cancel Order
             </Text>
@@ -81,6 +82,19 @@ const OrderProductScreen = ({route, navigation}) => {
 
       </View>
         
+        
+      <MyModal 
+            visible={showModal}
+            onCancelPress={() => setShowModal(false)}
+            onConfirmPress={() => {
+                deleteOrder(orderId)
+                navigation.pop()
+                setShowModal(false)
+            }}
+        >
+            <XText style={styles.txtModal}>Are you sure to cancel order <XText bold>{orderProducts.smug_id}</XText>?</XText>
+        </MyModal>
+
     </SafeAreaView>
 
   )
@@ -93,12 +107,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerCollector:{
-    justifyContent: "center",
-    alignSelf: "center",
+    flexDirection: 'row',
+    justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
     height: 50,
     backgroundColor: COLORS.primary,
+    paddingHorizontal: 20
     },
   headerCart:{
     textAlign: "center",
@@ -197,8 +212,9 @@ btn: {
   marginVertical: 10,
   width: 250
 },
-  backIcon:{
-    position: 'absolute',
-    left: 20
-  }
+txtModal:{
+  paddingVertical: 30,
+  paddingHorizontal: 10
+}
+
 });

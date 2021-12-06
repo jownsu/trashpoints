@@ -32,7 +32,7 @@ const useCart = () => {
                 let newCart = cart.map(item => {
                     if(item.products.id == product_id){
                         if(new_quantity){
-                            item.quantity = quantity
+                            item.quantity = parseInt(quantity)
                         }else{
                             item.quantity += parseInt(quantity)
                         }

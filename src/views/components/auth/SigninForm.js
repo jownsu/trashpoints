@@ -16,25 +16,7 @@ const SigninForm = ({ onSubmit, signUpPress, loading = false }) => {
     return (
         <View style={styles.container}>
             <Text style={styles.headerText}>Sign In</Text>
-            {/* <TextInput 
-                style={styles.txtInput}
-                placeholder={'Email'}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                placeholderTextColor={COLORS.white}
-                value={email}
-                onChangeText={emailOnChange}
-            /> */}
-            {/* <TextInput 
-                style={styles.txtInput}
-                placeholder={'Password'}
-                autoCapitalize={'none'}
-                autoCorrect={false}
-                placeholderTextColor={COLORS.white}
-                secureTextEntry={true}
-                value={password}
-                onChangeText={passOnChange}
-            /> */}
+
             <Formik
                 initialValues={{ email: '', password: '' }}
                 onSubmit={(values) => {
@@ -119,12 +101,6 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     txtInput: {
-        // borderWidth: 2,
-        // borderColor: COLORS.white,
-        // borderRadius: 15,
-        // height: 50,
-        // color: COLORS.white,
-        // paddingLeft: 25,
         backgroundColor: COLORS.primary,
     },
     headerText: {

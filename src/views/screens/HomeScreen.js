@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, ScrollView, TouchableOpacity, ImageBackground } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../consts/colors'
 
@@ -20,7 +20,7 @@ const HomeScreen = ({navigation}) => {
         <SafeAreaView style={styles.container}>
             { loading ? <Loading /> : null }
 
-            <View style={styles.header}>
+            <ImageBackground source={ require('../../assets/home.png') } resizeMode="cover" style={styles.header}>
                 <View style={styles.imgContainer}>
                     <Image
                         style={styles.img} 
@@ -28,7 +28,7 @@ const HomeScreen = ({navigation}) => {
                         resizeMode={'cover'}
                     />
                 </View>
-            </View>
+            </ImageBackground>
             <XText style={styles.bodyTitle} bold >What we collect</XText>
             <TrashCategoryList 
                 categories={trashCategories}
@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.secondary,
         borderBottomRightRadius: 50,
         borderBottomLeftRadius: 50,
+        overflow: 'hidden',
+        elevation: 21
     },
     imgContainer:{
         height: 200,

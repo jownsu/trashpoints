@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext, useRef } from 'react'
-import { StyleSheet, Text, View, Image, TextInput, ToastAndroid, ActivityIndicator, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
 
@@ -7,23 +7,25 @@ import COLORS from '../../../consts/colors'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 import ItemCards from '../../components/ItemCards'
+import Header from '../../components/Header'
 
 import useProduct from '../../../api/hooks/useProduct'
 import useCart from '../../../api/hooks/useCart'
 import Loading from '../../components/Loading'
 import XText from '../../components/XText'
 import { useToast } from 'react-native-toast-notifications'
+import { Searchbar } from 'react-native-paper';
 
-import RBSheet from "react-native-raw-bottom-sheet";
+
 
 const ProductScreen = ({route, navigation}) => {
     let {categoryId} = route.params
+    let {categoryName} = route.params
     const { products, getProduct, searchProduct, loading } = useProduct(categoryId);
     const {addToCart} = useCart();
     const toast = useToast()
 
     const [search, setSearch] = useState('');
-    const refRBSheet = useRef();
 
     const [quantity, setQuantity] = useState(1)
 
@@ -36,26 +38,24 @@ const ProductScreen = ({route, navigation}) => {
 
             { loading ? <Loading /> : null }
 
-            <View style={styles.searchContainer}>
-                <View style={styles.inputSearch}>
-                    <Icon name="search" size={28} color={COLORS.dark} style={styles.searchIcon}/>
-                    <TextInput 
-                        placeholder={'Search...'}
-                        value={search}
-                        onChangeText={setSearch}
-                        onSubmitEditing={() => {searchProduct(search)}}
-                    />
-                </View>
+            <Header 
+                title={categoryName}
+                onBackPress={() => navigation.pop()}
+            />
 
-                <TouchableOpacity style={styles.filterIcon} onPress={() => { searchProduct(search) }}>
-                    <Icon 
-                        name="tune"
-                        size={28}
-                        color={COLORS.white}
-                    />
-                </TouchableOpacity>
+            <Searchbar
+                placeholder="Search"
+                onChangeText={setSearch}
+                value={search}
+                onSubmitEditing={() => {searchProduct(search)}}
+                onIconPress={() => {searchProduct(search)}}
+                onEndEditing={() => {
+                    if(search == ''){
+                        getProduct()
+                    }
+                }}
+            />
 
-            </View>
 
             <ItemCards 
                 items={products}
@@ -64,44 +64,7 @@ const ProductScreen = ({route, navigation}) => {
                     toast.show('Added to cart',{type: 'success'})
                 }}
             />
-      {/* <RBSheet
-        ref={refRBSheet}
-        closeOnDragDown={true}
-        closeOnPressMask={false}
-        height={125}
-        animationType={'slide'}
-        customStyles={{
-          wrapper: {
-            backgroundColor: "transparent"
-          },
-          draggableIcon: {
-            backgroundColor: "#000"
-          },
-          container: {
-            backgroundColor: COLORS.light,
-            paddingHorizontal: 20,
-            paddingVertical: 10
-          }
-        }}
-      >
-            <View style={styles.quantityContainer}>
-                <View style={styles.quantityController}>
-                    <TouchableOpacity style={{ ...styles.quantityBtn, borderWidth: 1, borderColor: COLORS.primary }} onPress={() => {setQuantity(quantity - 1)}}>
-                        <AntDesign name="minus" size={12} color="#000" />
-                    </TouchableOpacity>
-                        <TextInput 
-                            value={quantity.toString()}
-                            onChangeText={(text) => { setQuantity(text) }}
-                            keyboardType='numeric'
-                            textAlign='center'
-                            style={styles.quantityCount}
-                        />
-                    <TouchableOpacity style={{...styles.quantityBtn, backgroundColor: COLORS.primary }} onPress={() => {setQuantity(quantity + 1)}}>
-                        <AntDesign name="plus" size={16} color={COLORS.white} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-      </RBSheet> */}
+
         </SafeAreaView>
     )
 }
