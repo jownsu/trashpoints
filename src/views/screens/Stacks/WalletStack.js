@@ -8,6 +8,7 @@ import EarnScreen from "../Wallet/EarnScreen"
 import PendingOrderScreen from "../Wallet/PendingOrderScreen"
 import OrderProductScreen from "../Wallet/OrderProductScreen"
 import TransactionProductScreen from "../Wallet/TransactionProductScreen"
+import RecycledProductScreen from "../Wallet/RecycledProductScreen"
 import ReceiptScreen from "../Wallet/ReceiptScreen"
 
 const Stack = createStackNavigator()
@@ -22,6 +23,7 @@ const WalletStack = () =>{
             <Stack.Screen name={'PendingOrderScreen'} component={PendingOrderScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name={'OrderProductScreen'} component={OrderProductScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name={'TransactionProductScreen'} component={TransactionProductScreen} options={{ headerShown: false }}></Stack.Screen>
+            <Stack.Screen name={'RecycledProductScreen'} component={RecycledProductScreen} options={{ headerShown: false }}></Stack.Screen>
             <Stack.Screen name={'ReceiptScreen'} component={ReceiptScreen} options={{ headerShown: false }}></Stack.Screen>
         </Stack.Navigator>
     )

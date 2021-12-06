@@ -8,54 +8,74 @@ import COLORS from '../../../consts/colors'
 import XText from '../../components/XText';
 import Loading from '../../components/Loading';
 
+import TabViewExample from '../../components/TabViewExample'
+import { TabView, SceneMap } from 'react-native-tab-view';
+import useRecycled from '../../../api/hooks/useRecycled';
+
 const WalletScreen = ({navigation}) => {
 
     const { wallet, getWallet, loading } = useWallet()
     const { transactions, getTransactions } = useTransaction()
+    const { recycled, getRecycled } = useRecycled()
 
     useEffect(() => {
         getWallet()
         getTransactions()
+        getRecycled()
 
         const listener = navigation.addListener('focus', () => {
             getWallet()
             getTransactions()
+            getRecycled()
+
         });
 
         return listener
         
     }, [])
-
     return (
         <SafeAreaView style={styles.container}>
-            <ImageBackground source={require('../../../assets/header.jpg')} style={{ zIndex: -10, height: '100%', width: '100%', zIndex:-4, position: 'absolute'}}/>
 
             { loading ? <Loading /> : null }
 
-            <View style={styles.balanceContainer}>
-                <XText style={styles.title}>My Wallet</XText>
+            <ImageBackground source={require('../../../assets/header.jpg')} style={styles.balanceContainer}>
+                <XText style={styles.title}>Current Balance</XText>
                 <XText style={styles.balance} bold={true}>TP {wallet.balance.toFixed(2)}</XText>
-                <XText style={styles.label}>Current Balance</XText>
-            </View>
-            <View style={styles.bottomContainer}>
+
                 <View style={styles.actionContainer}>
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('PendingOrderScreen') }}>
-                        <MaterialIcons name="pending-actions" size={28} color={COLORS.primary} />
+                        <MaterialIcons name="pending-actions" size={32} color={COLORS.primary} />
                         <XText style={styles.btnText}>Pending</XText>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('Earn') }}>
-                            <FontAwesome name="qrcode" size={28} color={COLORS.primary} />
+                            <FontAwesome name="qrcode" size={32} color={COLORS.primary} />
                         <XText style={styles.btnText}>Earn</XText>
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.btn} activeOpacity={0.7}>
-                        <Feather name="camera" size={28} color={COLORS.primary} />
+                        <Feather name="camera" size={32} color={COLORS.primary} />
                         <XText style={styles.btnText}>Scan</XText>
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.redeemContainer}>
+            </ImageBackground>
+
+            <View style={styles.bottomContainer}>
+
+                <TabViewExample 
+                    redeems={transactions}
+                    onRedeemCardPress={(id) => {
+                        navigation.navigate('TransactionProductScreen', {transactionId: id} )
+                    }}
+                    recycled={recycled}
+                    onRecycledCardPress={(id) => {
+                        navigation.navigate('RecycledProductScreen', {recycledId: id} )
+                    }}
+                />
+
+
+                {/* <View style={styles.redeemContainer}>
                     <XText>
                         Redeem History
                     </XText>
@@ -83,11 +103,9 @@ const WalletScreen = ({navigation}) => {
                                 }}
                             
                             />
-
-
                         </View>
  
-                </View>
+                </View> */}
             </View>
         </SafeAreaView>
     )
@@ -98,67 +116,68 @@ export default WalletScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: COLORS.primary,
     },
     balanceContainer: {
         alignItems: 'center',
-        marginTop: 30,
+        justifyContent: 'center',
+        flex:1,
+        backgroundColor: COLORS.primary,
+        borderWidth: 1,
+        zIndex: 10
     },
     title: {
         color: COLORS.white,
-        fontSize: 26,
+        fontSize: 16,
         fontFamily: 'Montserrat-bold',
     },
     balance: {
-        marginTop: 50,
-        marginBottom: 20,
         color: COLORS.white,
-        fontSize: 42
+        fontSize: 32
     },
     label: {
         color: COLORS.white,
     },
     bottomContainer: {
         backgroundColor: COLORS.white,
-        flex: 1,
-        marginTop: 75,
-        borderTopRightRadius: 50,
-        borderTopLeftRadius: 50,
-        paddingHorizontal: 20,
+        flex: 2.5,
+        // borderTopRightRadius: 50,
+        // borderTopLeftRadius: 50,
+        //paddingHorizontal: 20,
+        marginTop: 40
     },
     actionContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        paddingVertical: 25,
-        backgroundColor: COLORS.secondary,
-        borderRadius: 20,
+        position: 'absolute',
+        backgroundColor: COLORS.white,
+        borderRadius: 7,
         elevation: 7,
         borderWidth: 1,
-        top: -50,
-
-        borderColor: COLORS.light
+        bottom: -40,
+        borderColor: COLORS.light,
+        marginHorizontal: 20
     },
     btn: {
-        backgroundColor: COLORS.white,
         height: 70,
-        width: 70,
+        width: 60,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 8,
-        elevation: 7
+        flex: 1,
+        // borderRadius: 8,
     },
     btnText: {
         color: COLORS.primary,
-        fontSize: 12  
+        fontSize: 13  
     },
     redeemContainer:{
         flex: 1,
-        top: -40,
+       // top: -25,
+       marginTop: 50,
     },
     redeemcard:{
         backgroundColor: COLORS.white,
         height: 75,
-        marginVertical: 10,
+        marginVertical: 5,
         borderRadius: 5,
         borderWidth: 1,
         borderColor: COLORS.light,

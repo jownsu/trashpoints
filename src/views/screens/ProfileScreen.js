@@ -208,7 +208,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setEmailModal(false)
                             }}
-                            OnConfirmPress={handleSubmit}
+                            onConfirmPress={handleSubmit}
                         >
 
                             <View>
@@ -262,7 +262,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setAddressModal(false) 
                             }}
-                            OnConfirmPress={handleSubmit}
+                            onConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -315,7 +315,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setContactNoModal(false) 
                             }}
-                            OnConfirmPress={handleSubmit}
+                            onConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -377,7 +377,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setFullnameModal(false) 
                             }}
-                            OnConfirmPress={handleSubmit}
+                            onConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
@@ -459,7 +459,7 @@ const ProfileScreen = ({navigation}) => {
                                 resetForm()
                                 setChangePasswordModal(false) 
                             }}
-                            OnConfirmPress={handleSubmit}
+                            onConfirmPress={handleSubmit}
                         >
                             <View>
                                 <View style={styles.modalInputContainer}>
