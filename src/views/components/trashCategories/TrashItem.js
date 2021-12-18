@@ -16,7 +16,7 @@ const TrashItem = ({items}) => {
                     return (
                         <View style={styles.itemContainer}>
                             <View style={styles.imgContainer}>
-                                <Image style={styles.img} source={{uri: config.imgPath + '/' + item.image}} />
+                                <Image style={styles.img} source={{ uri: item.image }} />
                             </View>
                             <XText adjustsFontSizeToFit numberOfLines={1} style={styles.itemText}>{item.name}</XText>
                             <XText adjustsFontSizeToFit numberOfLines={1} style={styles.itemText}>{`TP ${item.points} / ${item.unit}`}</XText>

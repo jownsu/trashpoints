@@ -116,6 +116,7 @@ export default WalletScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: COLORS.white
     },
     balanceContainer: {
         alignItems: 'center',

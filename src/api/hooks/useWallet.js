@@ -20,7 +20,7 @@ const useWallet = () => {
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error?.response?.data);
+                console.log(error);
                 setLoading(false)
             })
     }

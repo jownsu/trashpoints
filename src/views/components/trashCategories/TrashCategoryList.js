@@ -15,7 +15,7 @@ const TrashCategoryList = ({categories, onPress}) => {
                             <WeCollectCard 
                                 title={item.name}
                                 info={item.description}
-                                img={{ uri: config.imgPath + '/' + item.image }}
+                                img={{ uri: item.image }}
                             />
                         </TouchableOpacity>
                     )

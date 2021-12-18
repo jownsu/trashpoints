@@ -2,12 +2,12 @@ import React, {useState, useContext} from "react"
 import { AuthContext } from "../../providers/AuthProvider";
 import api from "../api";
 
-const useProduct = (id) => {
+const useProduct = () => {
     const { user } = useContext(AuthContext)
     const [products, setProducts] = useState([])
     const [loading, setLoading] = useState(false)
 
-    const getProduct = async() => {
+    const getProduct = async(id) => {
         setLoading(true)
         await api({token: user.token}).get(`/users/products?category=${id}`)
             .then(response => {
@@ -23,7 +23,7 @@ const useProduct = (id) => {
 
     const searchProduct = async(search) => {
         setLoading(true)
-        await api({token:user.token}).get(`/users/products?category=${id}&search=${search}`)
+        await api({token:user.token}).get(`/users/products?search=${search}`)
             .then(response => {
                 let data = response.data.data;
                 setProducts(data)

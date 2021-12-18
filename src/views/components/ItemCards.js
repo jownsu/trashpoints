@@ -10,7 +10,7 @@ import config from '../../api/config'
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;
 
-const ItemCards = ({items, addToCartOnPress}) => {
+const ItemCards = ({items, addToCartOnPress, cardOnPress}) => {
     return (
         <View style={styles.container}>
             <FlatList 
@@ -21,21 +21,20 @@ const ItemCards = ({items, addToCartOnPress}) => {
                 renderItem={({item}) => {
                     return (
                         <View style={styles.cardContainer}>
-                            <View>
-                                    <Image resizeMethod='resize' style={styles.cardImage} source={{ uri: config.imgPath + '/' + item.image }} resizeMode={'contain'} />
-                                    <XText style={styles.cardName} bold adjustsFontSizeToFit>{item.name}</XText>
-                                    <XText style={styles.cardIngredients}>{item.description}</XText>
-                                    <XText style={styles.cardIngredients}>{item.quantity} Pcs Available</XText>
-
+                            <TouchableOpacity onPress={() => {cardOnPress(item)}} style={styles.card}>
+                                <Image resizeMethod='resize' style={styles.cardImage} source={{ uri: item.image }} resizeMode={'contain'} />
+                                <View style={styles.cardDetails}>
+                                    <XText style={styles.cardName} bold adjustsFontSizeToFit numberOfLines={3}>{item.name}</XText>
                                     <View style={styles.cardFooter}>
-                                        <XText style={styles.cardPrice} bold>TP {item.price}</XText>
+                                        <XText style={styles.cardPrice}>TP {item.price}</XText>
                                         <TouchableOpacity onPress={() => addToCartOnPress(item.id)}>
                                             <View style={styles.addToCartBtn}>
-                                                <AntDesign style={styles.plusIcon} name="pluscircle" size={32} color={COLORS.primary} />
+                                                <AntDesign style={styles.plusIcon} name="pluscircle" size={24} color={COLORS.primary} />
                                             </View>
                                         </TouchableOpacity>
                                     </View>
-                            </View>
+                                </View>
+                            </TouchableOpacity>
                         </View>
 
                     )
@@ -62,7 +61,11 @@ const styles = StyleSheet.create({
         elevation: 13,
         borderRadius: 15,
         paddingHorizontal: 20,
-        paddingBottom: 20
+        paddingBottom: 20,
+    },
+    card:{
+        flex: 1,
+        justifyContent: 'space-between',
     },
     cardImage: {
         height: 120,
@@ -70,8 +73,12 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         top: -50
     },
+    cardDetails:{
+        justifyContent: 'space-between',
+        flex: 1
+    },
     cardName: {
-        fontSize: 16,
+        fontSize: 14,
     },
     cardIngredients: {
         fontSize: 12,
@@ -85,7 +92,7 @@ const styles = StyleSheet.create({
     cardFooter: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
     }
 
 })

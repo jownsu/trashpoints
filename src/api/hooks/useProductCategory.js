@@ -4,7 +4,7 @@ import api from '../api'
 
 const useProductCategory = () => {
     const { user } = useContext(AuthContext)
-    const [productCategories, setProductCategories] = useState([])
+    const [productCategories, setProductCategories] = useState([{id: 1}])
     const [loading, setLoading] = useState(false)
 
     const getProductCategories = async () => {

@@ -4,12 +4,11 @@ import { Feather } from '@expo/vector-icons';
 import COLORS from '../../consts/colors';
 import config from '../../api/config';
 
-const Avatar = ({ imgPath, onPress, height = 60, width = 60, editHeight = 25, editWidth = 25, iconSize = 14 }) => {
+const Avatar = ({ img, onPress, height = 60, width = 60, editHeight = 25, editWidth = 25, iconSize = 14 }) => {
 
-    let avatar = imgPath ? {uri: config.imgPath + '/' + imgPath} : require('../../assets/person.jpg')
     return (
         <View style={{...styles.container, height, width}}>
-            <Image style={styles.headerImg} source={avatar} />
+            <Image style={styles.headerImg} source={{ uri: img }} />
                 <TouchableOpacity style={{ ...styles.editContainer, height:editHeight, width:editWidth }} onPress={onPress} >
                     <Feather name="edit" size={iconSize} color="black" />
                 </TouchableOpacity>

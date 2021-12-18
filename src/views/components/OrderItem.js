@@ -11,7 +11,7 @@ import { Formik } from 'formik'
 import * as yup from 'yup'
 
 
-const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress}) => {
+const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress, onCardPress}) => {
 
     const [isRender, setIsRender] = useState(false)
     const [visible, setVisible] = useState(false)
@@ -41,6 +41,10 @@ const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress
         setIsRender(!isRender)
     }
 
+    const handleCardPress = item => {
+        onCardPress(item)
+    }
+
     const quantitySchema = yup.object({
         quantity: yup.number()
                     .typeError('Quantity must be a number')
@@ -57,13 +61,12 @@ const OrderItem = ({orders, onAddPress, onMinusPress,onEditPress,  onDeletePress
                 renderItem={({item}) => {
                     return (
                         <View style={styles.orderContainer}>
-                            <View style={styles.imgContainer}>
-                                <Image style={styles.orderImage} source={{ uri: config.imgPath + '/' + item.products.image }} />
-                            </View>
+                            <TouchableOpacity style={styles.imgContainer} onPress={() => handleCardPress(item.products)}>
+                                <Image style={styles.orderImage} source={{ uri: item.products.image }} />
+                            </TouchableOpacity>
                             <View style={styles.orderDetailsContainer}>
                                 <View style={styles.orderDetails}>
-                                    <XText style={styles.orderName} bold >{item.products.name}</XText>
-                                    <XText style={styles.orderIngredients}>{item.products.description}</XText>
+                                    <XText style={styles.orderName} bold numberOfLines={2}>{item.products.name}</XText>
                                 </View>
                                 <XText style={styles.orderPrice} bold>TP {item.products.price}</XText>
                             </View>
@@ -192,7 +195,7 @@ const styles = StyleSheet.create({
 
     },
     orderName: {
-        fontSize: 18,
+        fontSize: 16,
     },
     orderIngredients: {
         fontSize: 12,

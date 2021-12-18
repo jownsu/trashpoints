@@ -9,10 +9,15 @@ import { Button } from 'react-native-paper'
 import XText from '../components/XText'
 import Loading from '../components/Loading'
 import useCart from '../../api/hooks/useCart'
+import ProductDetailsModal from '../components/ProductDetailsModal'
+
 const CartScreen = ({navigation}) => {
 
     const {cart, getCart, addToCart, removeToCart, totalPrice, checkout, loading} = useCart();
     const [showModal, setShowModal] = useState(false)
+
+    const [showDetailsModal, setShowDetailsModal] = useState(false)
+    const [product, setProduct] = useState({})
 
     useEffect(() => {
         getCart()
@@ -47,6 +52,10 @@ const CartScreen = ({navigation}) => {
                     onDeletePress={cartItem => {
                         removeToCart(cartItem.id)
                     }}
+                    onCardPress={item => {
+                        setShowDetailsModal(true)
+                        setProduct(item)
+                    }}
                 />
             </View>
 
@@ -80,6 +89,13 @@ const CartScreen = ({navigation}) => {
         >
             <XText style={styles.txtModal}>Going to Checkout <XText bold>TP {totalPrice()}</XText>?</XText>
         </MyModal>
+
+        <ProductDetailsModal 
+                visible={showDetailsModal}
+                onBackPress={ () => setShowDetailsModal(false)}
+                product={product}
+                showAddToCartBtn={false}
+        />
 
         </SafeAreaView>
     )

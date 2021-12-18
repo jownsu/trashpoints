@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Modal } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { AntDesign } from '@expo/vector-icons'
 
@@ -10,27 +10,34 @@ import ItemCards from '../../components/ItemCards'
 import Header from '../../components/Header'
 
 import useProduct from '../../../api/hooks/useProduct'
+import useProductCartegory from '../../../api/hooks/useProductCategory'
 import useCart from '../../../api/hooks/useCart'
 import Loading from '../../components/Loading'
 import XText from '../../components/XText'
 import { useToast } from 'react-native-toast-notifications'
 import { Searchbar } from 'react-native-paper';
-
+import CategoryTabs from '../../components/CategoryTabs'
+import ProductDetailsModal from '../../components/ProductDetailsModal'
 
 
 const ProductScreen = ({route, navigation}) => {
-    let {categoryId} = route.params
-    let {categoryName} = route.params
-    const { products, getProduct, searchProduct, loading } = useProduct(categoryId);
+    const { products, getProduct, searchProduct, loading } = useProduct();
+    const {productCategories, getProductCategories} = useProductCartegory();
     const {addToCart} = useCart();
     const toast = useToast()
 
+    const [tabIndex, setTabIndex] = useState(0)
+    
     const [search, setSearch] = useState('');
 
+    
     const [quantity, setQuantity] = useState(1)
-
+    const [showModal, setShowModal] = useState(false)
+    const [product, setProduct] = useState({})
+    
     useEffect(()=>{
-        getProduct()
+        getProductCategories()
+        getProduct(productCategories[0].id)
     },[])
 
     return (
@@ -38,22 +45,31 @@ const ProductScreen = ({route, navigation}) => {
 
             { loading ? <Loading /> : null }
 
-            <Header 
-                title={categoryName}
-                onBackPress={() => navigation.pop()}
-            />
-
             <Searchbar
                 placeholder="Search"
                 onChangeText={setSearch}
                 value={search}
-                onSubmitEditing={() => {searchProduct(search)}}
-                onIconPress={() => {searchProduct(search)}}
-                onEndEditing={() => {
-                    if(search == ''){
-                        getProduct()
+                onSubmitEditing={() => {
+                    if(search != ''){
+                        searchProduct(search)
+                        setTabIndex(-1)
                     }
                 }}
+                onIconPress={() => {searchProduct(search)}}
+                // onEndEditing={() => {
+                //     if(search == ''){
+                //         getProduct()
+                //     }
+                // }}
+            />
+
+            <CategoryTabs
+                categories={productCategories}
+                onPress={(id, index) => { 
+                    getProduct(id)
+                    setTabIndex(index)
+                }}
+                catIndex={tabIndex}
             />
 
 
@@ -62,6 +78,20 @@ const ProductScreen = ({route, navigation}) => {
                 addToCartOnPress={(product_id) => {
                     addToCart({product_id: product_id, quantity: 1})
                     toast.show('Added to cart',{type: 'success'})
+                }}
+                cardOnPress={(item) => {
+                    setShowModal(true)
+                    setProduct(item)
+                }}
+            />
+
+            <ProductDetailsModal 
+                visible={showModal}
+                onBackPress={ () => setShowModal(false)}
+                product={product}
+                onSubmitPress={(id, quantity) => {
+                    addToCart({product_id: id, quantity})
+                    setShowModal(false)
                 }}
             />
 

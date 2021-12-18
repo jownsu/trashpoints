@@ -44,7 +44,7 @@ const TransactionProductScreen = ({route, navigation}) => {
             <View style={styles.cardContainer}>
 
               <View style={styles.cardImage}>
-                <Image source={{ uri: config.imgPath + "/" + item.image }} style={styles.imageCart}/>
+                <Image source={ { uri: item.image } } style={styles.imageCart}/>
                 <View>
                   <XText bold style={styles.textProp} numberOfLines={1}>{item.name}</XText>
                   <XText style={styles.textQuant}>{`${item.quantity} PCS x TP ${item.price}`}</XText>
