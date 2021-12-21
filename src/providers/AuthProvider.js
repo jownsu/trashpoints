@@ -19,7 +19,7 @@ const AuthProvider = ({children}) => {
         login: async (email, password) => {
             setLoading(true)
 
-            await api().post('/login', {
+            await api().post('/token/login', {
                 email,
                 password
             }).then(response => {
@@ -48,7 +48,7 @@ const AuthProvider = ({children}) => {
                 })
         },
         logout: async () => {
-            await api({token: user.token}).post('/logout', {})
+            await api({token: user.token}).post('/token/logout', {})
                 .then(response => {
                     SecureStore.deleteItemAsync('user')
                     setUser(null)
@@ -59,7 +59,7 @@ const AuthProvider = ({children}) => {
         },
         signup: async (signUpInfo) => {
             setLoading(true)
-            await api().post('/register', signUpInfo)
+            await api().post('/token/register', signUpInfo)
                 .then( response => {
                     const userData = {
                         ...response.data.data.user,
