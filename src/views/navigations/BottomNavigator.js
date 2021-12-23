@@ -8,11 +8,9 @@ import { AntDesign, Fontisto } from '@expo/vector-icons';
 import 'react-native-gesture-handler'
 import CartScreen from '../screens/CartScreen'
 import WalletStack from '../screens/Stacks/WalletStack'
-// import HomeScreen from '../screens/HomeScreen'
 import HomeStack from '../screens/Stacks/HomeStack'
 import ProfileStack from '../screens/Stacks/ProfileStack'
-
-import ShopScreenStack from '../screens/Stacks/ShopScreenStack'
+import ShopScreen from '../screens/ShopScreen'
 
 
 
@@ -36,7 +34,7 @@ const BottomNavigator = () => {
                 />
                 <Tab.Screen 
                     name={'Shop'} 
-                    component={ShopScreenStack}
+                    component={ShopScreen}
                     options={{ tabBarIcon: ({color}) => <Fontisto name="shopping-store" size={24} color={color} /> }}
                 />
                 <Tab.Screen 

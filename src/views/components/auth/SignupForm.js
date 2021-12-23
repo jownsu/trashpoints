@@ -44,7 +44,6 @@ const SignupForm = ({backOnPress}) => {
                                 address: ''
                              }}
                 onSubmit={(values) => {
-                    console.log(values);
                     signup(values)
                     // actions.resetForm()
                 }}

@@ -1,9 +1,8 @@
 import React, {useState} from 'react'
 import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native'
-import COLORS from '../../consts/colors'
+import COLORS from '../../../consts/colors'
 
-import XText from './XText'
-import config from '../../api/config'
+import XText from '../XText'
 
 const CategoryTabs = ({categories, onPress, catIndex = 0}) => {
 

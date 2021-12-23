@@ -1,11 +1,10 @@
-import React, {useState, useContext} from 'react'
-import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity, Touchable } from 'react-native'
+import React, {useState} from 'react'
+import { StyleSheet, View, FlatList, Image, TouchableOpacity } from 'react-native'
 import { AntDesign } from '@expo/vector-icons'
-import COLORS from '../../consts/colors'
-import XText from './XText'
+import COLORS from '../../../consts/colors'
+import XText from '../XText'
 import { TextInput } from 'react-native-paper';
-import MyModal from '../components/MyModal'
-import config from '../../api/config'
+import MyModal from '../modals/MyModal'
 
 import { Formik } from 'formik'
 import * as yup from 'yup'
@@ -195,14 +194,14 @@ const styles = StyleSheet.create({
 
     },
     orderName: {
-        fontSize: 16,
+        fontSize: 14,
     },
     orderIngredients: {
         fontSize: 12,
         color: COLORS.grey
     },
     orderPrice: {
-        fontSize: 18,
+        fontSize: 16,
     },
     quantityContainer: {
         alignItems: 'center',

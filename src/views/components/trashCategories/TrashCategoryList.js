@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'
-import WeCollectCard from '../home/WeCollectCard'
+import WeCollectCard from '../lists/WeCollectCard'
 import config from '../../../api/config'
 
 const TrashCategoryList = ({categories, onPress}) => {

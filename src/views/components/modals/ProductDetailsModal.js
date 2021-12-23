@@ -1,20 +1,19 @@
 import React, { useState } from 'react'
 import { StyleSheet, View, Text, Modal, TouchableOpacity, ScrollView, Image } from 'react-native'
-import { BtnSecondary} from '../components/Button'
-import { TextInput } from 'react-native-paper';
-import COLORS from '../../consts/colors';
-import XText from './XText';
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { BtnSecondary } from '../Button'
+import { TextInput } from 'react-native-paper'
+import COLORS from '../../../consts/colors'
+import XText from '../XText'
+import { AntDesign } from '@expo/vector-icons'
+import PlainHeader from '../headers/PlainHeader'
 import MyModal from './MyModal'
-import useCart from '../../api/hooks/useCart';
 
 import { useToast } from 'react-native-toast-notifications'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import config from '../../api/config';
 
 
-function ProductDetailsModal({visible = false, onBackPress, product, onSubmitPress, onBackButtonPress, showAddToCartBtn = true}) {
+function ProductDetailsModal({visible = false, onBackPress, product, onSubmitPress, showAddToCartBtn = true}) {
     const toast = useToast()
 
     const [modal, setModal] = useState(false)
@@ -32,9 +31,9 @@ function ProductDetailsModal({visible = false, onBackPress, product, onSubmitPre
             onRequestClose={() => onBackPress()}
         >
             <View style={styles.container}>
-                <TouchableOpacity onPress={() => onBackPress()}>
-                    <AntDesign name="back" size={38} color="black" style={styles.backIcon} />
-                </TouchableOpacity>
+                <PlainHeader 
+                    onBackPress={() => onBackPress()}
+                />
 
                 <View style={styles.imgContainer}>
                     <Image style={styles.itemImage}  source={ { uri: product.image } } />
@@ -210,10 +209,5 @@ const styles = StyleSheet.create({
     errorText:{
         color: COLORS.red,
         fontSize: 14
-    },
-    backIcon:{
-        color: COLORS.primary,
-        marginTop: 10,
-        marginLeft: 10,
     }
 })

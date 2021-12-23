@@ -5,7 +5,8 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import COLORS from '../../../consts/colors';
 import useOrder from '../../../api/hooks/useOrder';
 import Loading from '../../components/Loading'
-import Header from '../../components/Header';
+import Header from '../../components/headers/Header'
+
 const PendingOrderScreen = ({navigation}) => {
 
   const { orders, getOrders, loading } = useOrder()
@@ -13,11 +14,11 @@ const PendingOrderScreen = ({navigation}) => {
   useEffect(() => {
     getOrders()
 
-    const listener = navigation.addListener('focus', () => {
-      getOrders()
-    })
+    // const listener = navigation.addListener('focus', () => {
+    //   getOrders()
+    // })
 
-    return listener
+    // return listener
     
   }, [])
 

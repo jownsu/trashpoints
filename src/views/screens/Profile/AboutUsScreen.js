@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View, ScrollView, Image, FlatList } from 'react-native'
-import Header from '../../components/Header'
+import Header from '../../components/headers/Header'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../../consts/colors'
 import XText from '../../components/XText'
@@ -27,7 +27,7 @@ const AboutUsScreen = ({navigation}) => {
                     <XText style={styles.imgText}>TrashPoints</XText>
                 </View>
 
-                <XText bold style={styles.memberBlockTitle}>Members</XText>
+                {/* <XText bold style={styles.memberBlockTitle}>Members</XText>
 
                 <View style={styles.membersContainer}>
 
@@ -67,7 +67,7 @@ const AboutUsScreen = ({navigation}) => {
                         </View>
                     </View>
 
-                </View>
+                </View> */}
                 
             </ScrollView>
         </SafeAreaView>

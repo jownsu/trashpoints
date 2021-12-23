@@ -5,17 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../../../consts/colors'
 import XText from '../../components/XText';
 import useOrderProduct from '../../../api/hooks/useOrderProduct';
-import config from '../../../api/config';
 import { Button } from 'react-native-paper'
 import Loading from '../../components/Loading'
-import MyModal from '../../components/MyModal'
+import MyModal from '../../components/modals/MyModal';
+import ReceiptModal from '../../components/modals/ReceiptModal'
+import Header from '../../components/headers/Header';
 
 const OrderProductScreen = ({route, navigation}) => {
 
   let { orderId } = route.params
 
   const { orderProducts, getOrderProducts, deleteOrder, loading } = useOrderProduct();
-  const [showModal, setShowModal] = useState(false) 
+  const [showModal, setShowModal] = useState({confirm: false, qr: false}) 
 
   useEffect(() => {
     getOrderProducts(orderId)
@@ -25,16 +26,16 @@ const OrderProductScreen = ({route, navigation}) => {
   return(
     <SafeAreaView style={styles.container}>
       { loading ? <Loading /> : null }
-    
-      <View style={styles.headerCollector}>
-        <TouchableOpacity onPress={() => {navigation.pop()}}>
-          <AntDesign name="back" size={24} color="white" />
-        </TouchableOpacity>
-        <XText style={styles.headerCart}>Orders</XText>
-        <TouchableOpacity onPress={() => navigation.navigate('ReceiptScreen', {order: orderProducts})}>
-          <MaterialCommunityIcons name="qrcode-scan" size={21} color="white" />
-        </TouchableOpacity>
-      </View>
+
+      <Header
+        title='Orders'
+        onBackPress={() => navigation.pop()}
+        rightIcon={() => 
+                <TouchableOpacity onPress={() => setShowModal({...showModal, qr:true})}>
+                  <MaterialCommunityIcons name="qrcode-scan" size={21} color="white" />
+                </TouchableOpacity>
+              }
+      />
 
       <View style={styles.headerIDCont}>
         <XText style={styles.headerID}>ID: {orderProducts.smug_id}</XText>
@@ -49,18 +50,16 @@ const OrderProductScreen = ({route, navigation}) => {
             <View style={styles.cardContainer}>
 
               <View style={styles.cardImage}>
-                <Image source={{ uri: config.imgPath + "/" + item.image }} style={styles.imageCart}/>
-                <View>
-                  <XText bold style={styles.textProp} numberOfLines={1}>{item.name}</XText>
-                  <XText style={styles.textQuant}>{`${item.quantity} PCS x TP ${item.price}`}</XText>
-                </View>
+                <Image source={{ uri: item.image }} style={styles.imageCart}/>
               </View>
       
-              <View style={styles.cardText}>      
-                <View style={styles.totalPos}>
-                  <XText>Total </XText>
-                  <XText bold style={styles.orderTotal} numberOfLines={1} >{`TP ${item.total_price}`}</XText>
-                </View>
+              <View style={styles.cardInfo}>      
+                  <XText bold style={styles.textProp} numberOfLines={2} >{item.name}</XText>
+                  <XText style={styles.textQuant}>{`${item.quantity} PCS x TP ${item.price}`}</XText>
+                  <View style={styles.cardTotal}>
+                    <XText bold style={styles.orderTotal}>Total: </XText>
+                    <XText style={{ color: '#000' }} >{`TP ${item.total_price}`}</XText>
+                  </View>
               </View>
           </View>
           )
@@ -74,7 +73,7 @@ const OrderProductScreen = ({route, navigation}) => {
           </View>
 
           <Button mode="contained" color={COLORS.red} 
-                  onPress={ () => setShowModal(true)} >
+                  onPress={ () => setShowModal({...showModal, confirm: true})} >
             <Text style={{ color: '#fff' }}>
                 Cancel Order
             </Text>
@@ -84,16 +83,22 @@ const OrderProductScreen = ({route, navigation}) => {
         
         
       <MyModal 
-            visible={showModal}
-            onCancelPress={() => setShowModal(false)}
+            visible={showModal.confirm}
+            onCancelPress={() => setShowModal({...showModal, confirm: false})}
             onConfirmPress={() => {
                 deleteOrder(orderId)
                 navigation.pop()
-                setShowModal(false)
+                setShowModal({...showModal, confirm: false})
             }}
         >
             <XText style={styles.txtModal}>Are you sure to cancel order <XText bold>{orderProducts.smug_id}</XText>?</XText>
-        </MyModal>
+      </MyModal>
+
+      <ReceiptModal
+        visible={showModal.qr}
+        onBackPress={ () => setShowModal({...showModal, qr: false})}
+        order={orderProducts}
+      />
 
     </SafeAreaView>
 
@@ -122,21 +127,29 @@ const styles = StyleSheet.create({
   },
   cardContainer:{
     flexDirection: "row",
-    height: 75,
     backgroundColor: "#E5E8E8",
     borderRadius: 10,
+    padding: 10,
     marginVertical: 3,
     marginHorizontal: 15
   },
   cardImage:{
-    flex: 2,
+    width: '25%',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center'
   },
   imageCart:{
     width: 60,
     height: 60,
     marginHorizontal: 15
+  },
+    cardTotal:{
+    flexDirection: 'row'
+  },
+  cardInfo:{
+    flex: 1,
+    justifyContent: 'center',
   },
   cardText:{
     flex: 1.2,
@@ -144,7 +157,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textProp:{
-    fontSize: 16,
+    fontSize: 14,
   },
   textQuant:{
     color: "green"
@@ -166,12 +179,8 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     bottom: 0,
   },
-  totalPos:{
-
-  },
   orderTotal:{
     color: COLORS.primary,
-    width: 120,
   },
   totalText:{
     fontSize: 16
@@ -215,6 +224,12 @@ btn: {
 txtModal:{
   paddingVertical: 30,
   paddingHorizontal: 10
+},
+qrBtn:{
+  position: 'absolute',
+  top: 30,
+  right: 10,
+  zIndex: 100,
 }
 
 });

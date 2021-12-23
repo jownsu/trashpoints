@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet } from 'react-native'
 
-import TrashItem from '../../components/trashCategories/TrashItem'
+import TrashItem from '../components/trashCategories/TrashItem'
 
-import useTrash from '../../../api/hooks/useTrash'
+import useTrash from '../../api/hooks/useTrash'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AntDesign } from '@expo/vector-icons';
-import COLORS from '../../../consts/colors'
-import Loading from '../../components/Loading'
-import Header from '../../components/Header'
+import Loading from '../components/Loading'
+import Header from '../components/headers/Header'
 
 const TrashScreen = ({route, navigation}) => {
     const {trashes, getTrashes, loading} = useTrash()

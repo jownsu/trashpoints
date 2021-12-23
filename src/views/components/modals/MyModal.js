@@ -1,8 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View, Modal, TouchableOpacity } from 'react-native'
-import COLORS from '../../consts/colors'
+import { StyleSheet, View, Modal, TouchableOpacity } from 'react-native'
+import COLORS from '../../../consts/colors'
 
-import XText from './XText'
+import XText from '../XText'
 
 const MyModal = ({children, visible, onCancelPress, onConfirmPress}) => {
     return (

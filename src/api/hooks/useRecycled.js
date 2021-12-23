@@ -26,7 +26,6 @@ const useRecycled = () => {
         await api({token: user.token}).get(`/users/collects/${id}`)
             .then(response => { 
                 setRecycled(response.data.data)
-                console.log(response.data.data);
                 setLoading(false)
             })
             .catch(error => {

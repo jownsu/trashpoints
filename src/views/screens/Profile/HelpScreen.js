@@ -3,7 +3,8 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-nati
 import { SafeAreaView } from 'react-native-safe-area-context'
 import XText from '../../components/XText'
 import COLORS from '../../../consts/colors'
-import Header from '../../components/Header'
+import Header from '../../components/headers/Header'
+
 import { FontAwesome5  } from '@expo/vector-icons'
 
 const HelpScreen = ({navigation}) => {

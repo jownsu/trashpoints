@@ -1,15 +1,14 @@
-import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, ImageBackground } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, View, TouchableOpacity, ImageBackground } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { FontAwesome, Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { FontAwesome, Feather, MaterialIcons } from '@expo/vector-icons';
 import useWallet from '../../../api/hooks/useWallet'
 import useTransaction from '../../../api/hooks/useTransaction';
 import COLORS from '../../../consts/colors'
 import XText from '../../components/XText';
 import Loading from '../../components/Loading';
-
-import TabViewExample from '../../components/TabViewExample'
-import { TabView, SceneMap } from 'react-native-tab-view';
+import EarnModal from '../../components/modals/EarnModal'
+import WalletTabView from '../../components/WalletTabView'
 import useRecycled from '../../../api/hooks/useRecycled';
 
 const WalletScreen = ({navigation}) => {
@@ -17,6 +16,7 @@ const WalletScreen = ({navigation}) => {
     const { wallet, getWallet, loading } = useWallet()
     const { transactions, getTransactions } = useTransaction()
     const { recycled, getRecycled } = useRecycled()
+    const [showModal, setShowModal] = useState(false)
 
     useEffect(() => {
         getWallet()
@@ -48,7 +48,7 @@ const WalletScreen = ({navigation}) => {
                         <XText style={styles.btnText}>Pending</XText>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => { navigation.navigate('Earn') }}>
+                    <TouchableOpacity style={styles.btn} activeOpacity={0.7} onPress={() => setShowModal(true)}>
                             <FontAwesome name="qrcode" size={32} color={COLORS.primary} />
                         <XText style={styles.btnText}>Earn</XText>
                     </TouchableOpacity>
@@ -63,7 +63,7 @@ const WalletScreen = ({navigation}) => {
 
             <View style={styles.bottomContainer}>
 
-                <TabViewExample 
+                <WalletTabView 
                     redeems={transactions}
                     onRedeemCardPress={(id) => {
                         navigation.navigate('TransactionProductScreen', {transactionId: id} )
@@ -74,39 +74,12 @@ const WalletScreen = ({navigation}) => {
                     }}
                 />
 
-
-                {/* <View style={styles.redeemContainer}>
-                    <XText>
-                        Redeem History
-                    </XText>
-
-                        <View styles={styles.redeemCardContainer}>
-                            <FlatList 
-                                data={transactions}
-                                keyExtractor={transactions  => transactions.id.toString()}
-                                renderItem={({item}) => {
-                                    return (
-                                        <TouchableOpacity style={styles.redeemcard} onPress={() => { navigation.navigate('TransactionProductScreen', {transactionId: item.id} ) }}>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Image source={require('../../../assets/tp.png')} style={styles.redeemImg} />
-                                                <View>
-                                                    <XText>{item.transtracted_at}</XText>
-                                                    <XText>Total Item: {item.total_item}</XText>
-                                                    <XText>Total Price: {item.total_price}</XText>
-                                                </View>
-                                            </View>
-                                            <View style={ styles.redeemIcon }>
-                                                <Ionicons name="chevron-forward-outline" size={28} color="green"/>
-                                            </View>
-                                        </TouchableOpacity>
-                                    )
-                                }}
-                            
-                            />
-                        </View>
- 
-                </View> */}
             </View>
+
+            <EarnModal
+                visible={showModal}
+                onBackPress={() => setShowModal(false)}
+            />
         </SafeAreaView>
     )
 }
@@ -141,9 +114,6 @@ const styles = StyleSheet.create({
     bottomContainer: {
         backgroundColor: COLORS.white,
         flex: 2.5,
-        // borderTopRightRadius: 50,
-        // borderTopLeftRadius: 50,
-        //paddingHorizontal: 20,
         marginTop: 40
     },
     actionContainer: {
@@ -164,7 +134,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flex: 1,
-        // borderRadius: 8,
     },
     btnText: {
         color: COLORS.primary,
@@ -172,7 +141,6 @@ const styles = StyleSheet.create({
     },
     redeemContainer:{
         flex: 1,
-       // top: -25,
        marginTop: 50,
     },
     redeemcard:{

@@ -2,7 +2,7 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 
 import HomeScreen from '../HomeScreen'
-import TrashScreen from '../Wallet/TrashScreen'
+import TrashScreen from '../TrashScreen'
 const Stack = createStackNavigator()
 
 const HomeStack = () => {

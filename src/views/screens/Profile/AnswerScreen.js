@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import COLORS from '../../../consts/colors'
-import Header from '../../components/Header'
+import Header from '../../components/headers/Header'
 import XText from '../../components/XText'
 const AnswerScreen = ({navigation, route}) => {
 

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, useWindowDimensions, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
-import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+import { TabView, TabBar } from 'react-native-tab-view';
 
-import { FontAwesome, Feather, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 
 import COLORS from '../../consts/colors';
 
@@ -79,7 +79,7 @@ const renderTabBar = props => (
 
 
 
-export default function TabViewExample({redeems, onRedeemCardPress, recycled, onRecycledCardPress }) {
+export default function WalletTabView({redeems, onRedeemCardPress, recycled, onRecycledCardPress }) {
   const layout = useWindowDimensions();
 
   const renderScene = ({ route }) => {

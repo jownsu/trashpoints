@@ -1,11 +1,9 @@
 import React from 'react'
-import { StyleSheet, Text, View, FlatList, Dimensions, Image, TouchableOpacity} from 'react-native'
-import COLORS from '../../consts/colors';
+import { StyleSheet, View, FlatList, Dimensions, Image, TouchableOpacity} from 'react-native'
+import COLORS from '../../../consts/colors';
 import { AntDesign } from '@expo/vector-icons';
 
-import XText from './XText';
-
-import config from '../../api/config'
+import XText from '../XText';
 
 const { width } = Dimensions.get('screen');
 const cardWidth = (width / 2 ) - 20;

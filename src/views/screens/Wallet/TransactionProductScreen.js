@@ -1,14 +1,11 @@
 import React, { useEffect } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { View, StyleSheet, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import COLORS from '../../../consts/colors';
 import XText from '../../components/XText';
 import useTransaction from '../../../api/hooks/useTransaction';
-import config from '../../../api/config';
-import { Button } from 'react-native-paper'
 import Loading from '../../components/Loading'
-import Header from '../../components/Header';
+import Header from '../../components/headers/Header';
 
 const TransactionProductScreen = ({route, navigation}) => {
 
@@ -43,20 +40,17 @@ const TransactionProductScreen = ({route, navigation}) => {
           return(
             <View style={styles.cardContainer}>
 
-              <View style={styles.cardImage}>
-                <Image source={ { uri: item.image } } style={styles.imageCart}/>
-                <View>
-                  <XText bold style={styles.textProp} numberOfLines={1}>{item.name}</XText>
-                  <XText style={styles.textQuant}>{`${item.quantity} PCS x TP ${item.price}`}</XText>
+                <View style={styles.cardImage}>
+                    <Image source={ { uri: item.image } } style={styles.imageCart}/>
                 </View>
-              </View>
-      
-              <View style={styles.cardText}>      
-                <View style={styles.totalPos}>
-                  <XText>Total </XText>
-                  <XText bold style={styles.orderTotal} numberOfLines={1} >{`TP ${item.total_price}`}</XText>
+                <View style={styles.cardInfo}>
+                    <XText bold style={styles.textProp} numberOfLines={1} adjustsFontSizeToFit={true}>{item.name}</XText>
+                    <XText style={styles.textQuant}>{`${item.quantity} PCS x TP ${item.price}`}</XText>
+                    <View style={styles.cardTotal}>
+                        <XText bold style={styles.orderTotal}>Total: </XText>
+                        <XText style={{ color: '#000' }} >{`TP ${item.total_price}`}</XText>
+                    </View>
                 </View>
-              </View>
           </View>
           )
         }}
@@ -67,16 +61,6 @@ const TransactionProductScreen = ({route, navigation}) => {
               <XText style={styles.totalPrice} bold>Total Price</XText>
               <XText style={styles.price} bold numberOfLines={1}>TP {transactions.total}</XText>
           </View>
-
-          {/* <Button mode="contained" color={COLORS.red} 
-                  onPress={ () => { 
-                    deleteOrder(orderId)
-                    navigation.pop()
-                  }} >
-            <Text style={{ color: '#fff' }}>
-                Cancel Order
-            </Text>
-          </Button> */}
 
       </View>
         
@@ -100,14 +84,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 15
   },
   cardImage:{
-    flex: 2,
+    width: '25%',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center'
   },
   imageCart:{
     width: 60,
     height: 60,
     marginHorizontal: 15
+  },
+  cardInfo:{
+    flex: 1,
+    justifyContent: 'center',
+  },
+  cardTotal:{
+    flexDirection: 'row'
   },
   cardText:{
     flex: 1.2,
@@ -115,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   textProp:{
-    fontSize: 16,
+    fontSize: 14,
   },
   textQuant:{
     color: "green"
@@ -137,12 +129,8 @@ const styles = StyleSheet.create({
     backgroundColor: "red",
     bottom: 0,
   },
-  totalPos:{
-
-  },
   orderTotal:{
     color: COLORS.primary,
-    width: 120,
   },
   totalText:{
     fontSize: 16

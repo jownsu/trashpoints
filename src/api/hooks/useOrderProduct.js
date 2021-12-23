@@ -24,8 +24,9 @@ const useOrderProduct = () => {
     const deleteOrder = async(id) => {
         setLoading(true)
         await api({token: user.token}).delete(`/users/orders/${id}`)
-            .then(response => {
-                console.log(response.data);
+            .then(() => {
+                let newOrderProduct = orderProducts.filter(item => item.id != id)
+                setOrderProducts(newOrderProduct)
                 setLoading(false)
             })
             .catch(error => {

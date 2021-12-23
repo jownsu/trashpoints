@@ -1,37 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ImageBackground, Modal } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AntDesign } from '@expo/vector-icons'
-
-import COLORS from '../../../consts/colors'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-
-import ItemCards from '../../components/ItemCards'
-import Header from '../../components/Header'
-
-import useProduct from '../../../api/hooks/useProduct'
-import useProductCartegory from '../../../api/hooks/useProductCategory'
-import useCart from '../../../api/hooks/useCart'
-import Loading from '../../components/Loading'
-import XText from '../../components/XText'
+import COLORS from '../../consts/colors'
+import ItemCards from '../components/lists/ItemCards'
+import useProduct from '../../api/hooks/useProduct'
+import useProductCartegory from '../../api/hooks/useProductCategory'
+import useCart from '../../api/hooks/useCart'
+import Loading from '../components/Loading'
 import { useToast } from 'react-native-toast-notifications'
 import { Searchbar } from 'react-native-paper';
-import CategoryTabs from '../../components/CategoryTabs'
-import ProductDetailsModal from '../../components/ProductDetailsModal'
+import CategoryTabs from '../components/lists/CategoryTabs'
+import ProductDetailsModal from '../components/modals/ProductDetailsModal'
 
 
-const ProductScreen = ({route, navigation}) => {
+const ShopScreen = () => {
     const { products, getProduct, searchProduct, loading } = useProduct();
     const {productCategories, getProductCategories} = useProductCartegory();
     const {addToCart} = useCart();
     const toast = useToast()
 
     const [tabIndex, setTabIndex] = useState(0)
-    
     const [search, setSearch] = useState('');
-
-    
-    const [quantity, setQuantity] = useState(1)
     const [showModal, setShowModal] = useState(false)
     const [product, setProduct] = useState({})
     
@@ -55,12 +44,7 @@ const ProductScreen = ({route, navigation}) => {
                         setTabIndex(-1)
                     }
                 }}
-                onIconPress={() => {searchProduct(search)}}
-                // onEndEditing={() => {
-                //     if(search == ''){
-                //         getProduct()
-                //     }
-                // }}
+                onIconPress={() => searchProduct(search)}
             />
 
             <CategoryTabs
@@ -99,7 +83,7 @@ const ProductScreen = ({route, navigation}) => {
     )
 }
 
-export default ProductScreen
+export default ShopScreen
  
 const styles = StyleSheet.create({
     container: {

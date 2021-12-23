@@ -11,7 +11,7 @@ import InfoColumn from '../../components/InfoColumn'
 import XText from '../../components/XText'
 
 import * as ImagePicker from 'expo-image-picker';
-import MyModal from '../../components/MyModal'
+import MyModal from '../../components/modals/MyModal'
 import Loading from '../../components/Loading'
 import { Ionicons, MaterialIcons, Octicons, Entypo } from '@expo/vector-icons'
 import { Formik } from 'formik'
@@ -161,7 +161,7 @@ const ProfileScreen = ({navigation}) => {
                         <Entypo name="chevron-thin-right" size={24} color="black" />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.actionBtn}>
+                    {/* <TouchableOpacity style={styles.actionBtn}>
                         <View style={styles.actionInfo}>
                             <MaterialIcons style={styles.actionIcon} name="privacy-tip" size={24} color="black" />
                             <XText style={styles.actionText}>Privacy Policy</XText>
@@ -175,7 +175,7 @@ const ProfileScreen = ({navigation}) => {
                             <XText style={styles.actionText}>Settings</XText>
                         </View>
                         <Entypo name="chevron-thin-right" size={24} color="black" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
 
                     <TouchableOpacity style={styles.actionBtn} onPress={ () => logout() }>
                         <View style={styles.actionInfo}>

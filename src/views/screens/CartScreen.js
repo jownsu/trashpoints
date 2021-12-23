@@ -1,15 +1,15 @@
 import React, {useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import OrderItem from '../components/OrderItem'
+import OrderItem from '../components/lists/OrderItem'
 import COLORS from '../../consts/colors'
 import { BtnPrimary } from '../components/Button'
-import MyModal from '../components/MyModal'
+import MyModal from '../components/modals/MyModal'
 import { Button } from 'react-native-paper'
 import XText from '../components/XText'
 import Loading from '../components/Loading'
 import useCart from '../../api/hooks/useCart'
-import ProductDetailsModal from '../components/ProductDetailsModal'
+import ProductDetailsModal from '../components/modals/ProductDetailsModal'
 
 const CartScreen = ({navigation}) => {
 
