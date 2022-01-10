@@ -25,7 +25,7 @@ const ReceiptScreen = ({visible=false, onBackPress, order}) => {
                     <XText bold style={styles.textStyle} >Show this QR code to the collection booth</XText>
                     <View style={styles.qrContainer}>
                         <QRCode
-                            value={order.id ? order.id.toString() : '0'}
+                            value={order.smug_id ? order.smug_id.toString() : '0'}
                             color={COLORS.primary}
                             size={200}
                         />

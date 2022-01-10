@@ -14,11 +14,11 @@ const PendingOrderScreen = ({navigation}) => {
   useEffect(() => {
     getOrders()
 
-    // const listener = navigation.addListener('focus', () => {
-    //   getOrders()
-    // })
+    const listener = navigation.addListener('focus', () => {
+      getOrders()
+    })
 
-    // return listener
+    return listener
     
   }, [])
 

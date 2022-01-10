@@ -66,6 +66,7 @@ const ShopScreen = () => {
                 cardOnPress={(item) => {
                     setShowModal(true)
                     setProduct(item)
+                    console.log(item)
                 }}
             />
 

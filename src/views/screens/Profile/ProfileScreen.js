@@ -34,6 +34,7 @@ const ProfileScreen = ({navigation}) => {
 
     useEffect(() => {
         getUserInfo()
+        console.log(userInfo.avatar)
     }, [])
 
     const pickImage = async () => {

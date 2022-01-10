@@ -1,4 +1,4 @@
-const link = "http://192.168.1.13:80"
+const link = "http://192.168.1.18:80"
 
 const config = {
     api: link+"/api",
